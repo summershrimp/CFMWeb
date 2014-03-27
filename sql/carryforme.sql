@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2014 年 03 月 24 日 13:30
+-- 生成日期: 2014 年 03 月 27 日 12:00
 -- 服务器版本: 5.6.12-log
--- PHP 版本: 5.4.16
+-- PHP 版本: 5.4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -28,6 +28,7 @@ USE `carryforme`;
 -- 表的结构 `cfm_admin_log`
 --
 
+DROP TABLE IF EXISTS `cfm_admin_log`;
 CREATE TABLE IF NOT EXISTS `cfm_admin_log` (
   `log_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `log_time` int(10) unsigned NOT NULL DEFAULT '0',
@@ -45,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `cfm_admin_log` (
 -- 表的结构 `cfm_admin_privilage`
 --
 
+DROP TABLE IF EXISTS `cfm_admin_privilage`;
 CREATE TABLE IF NOT EXISTS `cfm_admin_privilage` (
   `action_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(10) unsigned DEFAULT '0',
@@ -59,6 +61,7 @@ CREATE TABLE IF NOT EXISTS `cfm_admin_privilage` (
 -- 表的结构 `cfm_admin_users`
 --
 
+DROP TABLE IF EXISTS `cfm_admin_users`;
 CREATE TABLE IF NOT EXISTS `cfm_admin_users` (
   `admin_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `admin_name` varchar(32) NOT NULL,
@@ -80,6 +83,7 @@ CREATE TABLE IF NOT EXISTS `cfm_admin_users` (
 -- 表的结构 `cfm_ants`
 --
 
+DROP TABLE IF EXISTS `cfm_ants`;
 CREATE TABLE IF NOT EXISTS `cfm_ants` (
   `ant_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(60) NOT NULL DEFAULT '',
@@ -125,6 +129,7 @@ CREATE TABLE IF NOT EXISTS `cfm_ants` (
 -- 表的结构 `cfm_ants_log`
 --
 
+DROP TABLE IF EXISTS `cfm_ants_log`;
 CREATE TABLE IF NOT EXISTS `cfm_ants_log` (
   `log_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `log_time` int(10) unsigned NOT NULL DEFAULT '0',
@@ -142,6 +147,7 @@ CREATE TABLE IF NOT EXISTS `cfm_ants_log` (
 -- 表的结构 `cfm_customers`
 --
 
+DROP TABLE IF EXISTS `cfm_customers`;
 CREATE TABLE IF NOT EXISTS `cfm_customers` (
   `user_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(60) NOT NULL DEFAULT '',
@@ -185,6 +191,7 @@ CREATE TABLE IF NOT EXISTS `cfm_customers` (
 -- 表的结构 `cfm_order_details`
 --
 
+DROP TABLE IF EXISTS `cfm_order_details`;
 CREATE TABLE IF NOT EXISTS `cfm_order_details` (
   `rec_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -205,6 +212,7 @@ CREATE TABLE IF NOT EXISTS `cfm_order_details` (
 -- 表的结构 `cfm_order_info`
 --
 
+DROP TABLE IF EXISTS `cfm_order_info`;
 CREATE TABLE IF NOT EXISTS `cfm_order_info` (
   `order_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `order_sn` varchar(20) NOT NULL DEFAULT '',
@@ -219,6 +227,7 @@ CREATE TABLE IF NOT EXISTS `cfm_order_info` (
   `goods_amount` decimal(10,2) NOT NULL DEFAULT '0.00',
   `tips_amount` decimal(10,2) NOT NULL,
   `add_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `add_date` date NOT NULL,
   `confirm_time` int(10) unsigned NOT NULL DEFAULT '0',
   `pay_time` int(10) unsigned NOT NULL DEFAULT '0',
   `shipping_time` int(10) unsigned NOT NULL DEFAULT '0',
@@ -237,6 +246,7 @@ CREATE TABLE IF NOT EXISTS `cfm_order_info` (
 -- 表的结构 `cfm_payment`
 --
 
+DROP TABLE IF EXISTS `cfm_payment`;
 CREATE TABLE IF NOT EXISTS `cfm_payment` (
   `pay_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -259,6 +269,7 @@ CREATE TABLE IF NOT EXISTS `cfm_payment` (
 -- 表的结构 `cfm_providers`
 --
 
+DROP TABLE IF EXISTS `cfm_providers`;
 CREATE TABLE IF NOT EXISTS `cfm_providers` (
   `provider_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(60) NOT NULL DEFAULT '',
@@ -303,6 +314,7 @@ CREATE TABLE IF NOT EXISTS `cfm_providers` (
 -- 表的结构 `cfm_shop`
 --
 
+DROP TABLE IF EXISTS `cfm_shop`;
 CREATE TABLE IF NOT EXISTS `cfm_shop` (
   `shop_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `owner_id` int(11) DEFAULT NULL,
@@ -325,6 +337,7 @@ CREATE TABLE IF NOT EXISTS `cfm_shop` (
 -- 表的结构 `cfm_shop_goods`
 --
 
+DROP TABLE IF EXISTS `cfm_shop_goods`;
 CREATE TABLE IF NOT EXISTS `cfm_shop_goods` (
   `good_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `own_shop` int(11) NOT NULL,
@@ -339,9 +352,26 @@ CREATE TABLE IF NOT EXISTS `cfm_shop_goods` (
 -- --------------------------------------------------------
 
 --
+-- 表的结构 `cfm_tokens`
+--
+
+DROP TABLE IF EXISTS `cfm_tokens`;
+CREATE TABLE IF NOT EXISTS `cfm_tokens` (
+  `token` varchar(32) NOT NULL,
+  `id` int(11) NOT NULL,
+  `role` int(11) NOT NULL,
+  `gen_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`token`),
+  UNIQUE KEY `token` (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- 表的结构 `cfm_user_address`
 --
 
+DROP TABLE IF EXISTS `cfm_user_address`;
 CREATE TABLE IF NOT EXISTS `cfm_user_address` (
   `addr_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_phone` varchar(13) DEFAULT NULL,

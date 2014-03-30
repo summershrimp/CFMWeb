@@ -2,7 +2,7 @@
 if (!defined('IN_CFM')) {
 	die('Hacking attempt');
 }
-
+require "init.inc.php";
 class Shop {
 	private $shop_id;
 	private $shop_name;

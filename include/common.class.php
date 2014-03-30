@@ -42,7 +42,7 @@ class apicommon
         }
         $sql = "Select * From ".$GLOBALS['cfm']->table($db_table)." Where `$db_id_column` = $id LIMIT 1";
         $arr = $GLOBALS['db']->getRow($sql);
-        unset($arr[password]);
+        unset($arr['password']);
         unset($arr[$db_id_column]);
         return $arr;
     }

@@ -77,14 +77,18 @@ class apicommon
         return $return;
     }
 
-    public function check_access_code($token,$id)
+    public function check_access_code($token)
     {
-        $sql="Select * From "/$GLOBALS['cfm']->table('tokens')." Where `token` = '$access_code' LIMIT 1";
+        $sql="Select * From ".$GLOBALS['cfm']->table('tokens')." Where `token` = '$access_code' LIMIT 1";
         $arr=$GLOBALS['db']->getRow($sql);
-        if($arr['id']!=$id) return false;
         if($arr['gen_time']>time()+86400*2) return false;
-        return $arr['id'];
+        unset($arr['gen_time']);
+        unset($arr['token']);
+        return $arr;
     }
+
+    public function 
+
     private function access_code_gen($user_id, $role)
     {
          $access_code=$this->genToken();
@@ -92,6 +96,9 @@ class apicommon
          $GLOBALS['db']->query($sql);
          return $access_code;
     }
+
+
+
     private function genToken( $len = 32, $md5 = true ) {  
        # Seed random number generator  
           # Only needed for PHP versions prior to 4.2  
@@ -169,6 +176,10 @@ class apicommon
         if ($password == $arr['password'])
             return $arr[$db_id_column];
         else return false;
+    }
+    private funcion error_msg($str)
+    {
+        echo $str;
     }
 }
 

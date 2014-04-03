@@ -4,15 +4,20 @@ if (! defined('IN_CFM')) {
 }
 require_once './common.class.php';
 
-class user extends apicommon;
+class user extends apicommon
 {
 
     public $user_id;
 
-    public function user($wxid)
+    public function user($accesscode=NULL)
     {
-        $user_id = $this -> check_user($wxid,Role_User);
-        if (! $userid) $this -> error_msg(Bad_Pass);
+        if(isset($accsscode))
+        {
+        	$ans=$this->check_access_code($accesscode);
+        	if($ans['status']==STATUS_SUCCESS)
+        		$this->user_id = $ans['id'];
+        }
+        
     }
 
 
@@ -27,7 +32,10 @@ class user extends apicommon;
         //TODO:继续等短信接口
     }
 
-    
+    public function check_unpaid()
+    {
+        //TODO:还没完成哟
+    }
 
     public function get_shop_menu($limit_start=0,$limit_end=20)
     {
@@ -62,9 +70,9 @@ class user extends apicommon;
             $good_price=$arr['price'];
             $good_name=$arr['good_name'];
 
-            $sql="Insert INTO ".GLOBALS['cfm']->table('order_details').
+            $sql="Insert INTO ". $GLOBALS['cfm'] -> table('order_details') .
             " (`order_id`, `good_id`,`good_name`,`good_number`,`good_price`) 
-             VALUES('".$order_id."','".$goodid."','"$good_name"', '".$goodcount."',
+             VALUES('".$order_id."','".$goodid."','".$good_name."', '".$goodcount."',
                '".$good_price."' )";
             $GLOBALS['db']->query($sql);
             $rec_id=$GLOBALS['db']->insert_id();

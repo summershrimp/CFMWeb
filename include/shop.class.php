@@ -67,7 +67,7 @@ class Shop extends apicommon {
 		$result['sex'] = $r['sex'];
 		$result['last_time'] = $r['last_time'];
 		$result['last_ip'] = $r['last_ip'];
-		//$result['pic_url'] = $r['pic_url'];
+		$result['pic_url'] = $r['user_pic_url'];
 		$phone = $r['mobile_phone'];
 		$phone = substr($phone, 0, 3) . "****" . substr($phone, -4);
 		$result['phone'] = $phone;
@@ -78,10 +78,27 @@ class Shop extends apicommon {
 		$t = $GLOBALS['db']->query($sql);
 		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("shop_goods") . " WHERE `good_id` = $good_id LIMIT 1";
 		$t = $GLOBALS['db']->query($sql);
-		return $t['onsales'];
+		if (!isset($t['onsales'])) {
+			return 0;
+		}
+		else {
+			return $t['onsales'];
+		}
+	}
+	function accept_order($order_id) {
+		$sql = "UPDATE " . $GLOBALS['cfm']->table("order_info") . "SET `order_status` = 1 WHERE `order_id` = $order_id LIMIT 1";
+		$t = $GLOBALS['db']->query($sql);
+		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("order_info") . " WHERE `order_id` = $order_id LIMIT 1";
+		$t = $GLOBALS['db']->query($sql);
+		if (!isset($t['order_status'])) {
+			return 0;
+		}
+		else {
+			return $t['order_status'];
+		}
 	}
 	function get_food_menu($id) {
-		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("shop_goods") . " WHERE `owner_shop` = $id LIMIT 1";
+		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("shop_goods") . " WHERE `shop_id` = $id LIMIT 1";
 		$t = $GLOBALS['db']->getRow($sql);
 		$result['good_name'] = $t['good_name'];
 		$result['good_desc'] = $t['good_desc'];

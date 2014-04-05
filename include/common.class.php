@@ -17,7 +17,7 @@ class apicommon {
 			return $this->access_code_gen ( $username, $role );
 		else {
 			$user_id = check_login ( $username, $password, $role );
-		  if (! user_id)
+			if (!$user_id)
 				return false;
 			return access_code_gen ( $user_id, $role );
 		}

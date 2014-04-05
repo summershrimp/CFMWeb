@@ -6,72 +6,91 @@ switch ($content['act']) {
 case "shop_login":
 	$t = $shop->shop_login($content['username'], $content['password']);
 	if ($t == false) {
-		$result['status'] = RETURN_FAILED;
+		$result['status'] = UNAVAIL_USER;
 	}
 	else {
-		$result['status'] = RETURN_SUCCESSFUL;
 		$result['accesscode'] = $t;
-		$t = $this->get_info($t, Role_Shop);
+		$t = $shop->get_info($t, Role_Shop);
 		$result['user_nick'] = $t['provider_name'];
 		//$result['user_pic_url'] = $t[''];
+		$result['status'] = STATUS_SUCCESS;
 	}
 	break;
 case "shop_static":
-	$t = $this->check_access_code($content['accesscode']);
+	$t = $shop->check_access_code($content['accesscode']);
 	if ($t == false) {
-		$result['status'] = RETURN_FAILED;
+		$result['status'] = ILLIGAL_ACCESSTOKEN;
 	}
 	else {
-		$result['status'] = RETURN_SUCCESSFUL;
-		
-		$result['day_count'] = "";
-		$result['day_amount'] = "";
-		$result['week_count'] = "";
-		$result['week_amount'] = "";
-		$result['month_count'] = "";
-		$result['month_amount'] = "";
+		$result = $shop->get_shop_info($t['id']);
+		$result['status'] = STATUS_SUCCESS;
 	}
 	break;
 case "shop_history":
-	$t = $this->check_access_code($content['accesscode']);
-	$result['status'] = 0;
-	$result['orders']['order_id'] = "";
-	$result['orders']['price'] = "";
-	$result['orders']['time'] = "";
-	$result['orders']['shop_name'] = "";
-	$result['orders']['cust_name'] = "";
+	$t = $shop->check_access_code($content['accesscode']);
+	if ($t == false) {
+		$result['status'] = ILLIGAL_ACCESSTOKEN;
+	}
+	else {
+		$result['orders'] = $shop->shop_history($t['id'], $content['periodstart'], $content['periodend']);
+		$result['status'] = STATUS_SUCCESS;
+	}
 	break;
 case "order_details":
-	$t = $this->check_access_code($content['accesscode']);
-	$result['status'] = 0;
-	$result['order_id'] = 0;
-	$result['shop_name'] = 0;
-	$result['cust_name'] = 0;
-	$result['price'] = 0;
-	$result['time'] = 0;
-	$result['order_stat'] = 0;
-	$result['goods']['good_name'] = "";
-	$result['goods']['good_desc'] = "";
-	$result['goods']['good_price'] = "";
-	$result['goods']['good_price'] = "";
-	$result['goods']['good_amount'] = "";
+	$t = $shop->check_access_code($content['accesscode']);
+	if ($t == false) {
+		$result['stauts'] = ILLIGAL_ACCESSTOKEN;
+	}
+	else {
+		$result = $shop->order_details($content['order_sn'], $content['order_detail']);
+		$result['status'] = STATUS_SUCCESS;
+	}
 	break;
 case "shop_info":
-	$t = $this->check_access_code($content['accesscode']);
-	$result['status'] = 0;
-	$result['order_id'] = 0;
-	$result['shop_name'] = 0;
-	$result['cust_name'] = 0;
-	$result['price'] = 0;
+	$t = $shop->check_access_code($content['accesscode']);
+	if ($t == false) {
+		$result['status'] = ILLIGAL_ACCESSTOKEN;
+	}
+	else {
+		$result = $shop->shop_info($t['id']);
+		$result['status'] = STATUS_SUCCESS;
+	}
 	break;
 case "switch_good_status":
-	# code
+	$t = $shop->check_access_code($content['accesscode']);
+	if ($t == false) {
+		$result['status'] = ILLIGAL_ACCESSTOKEN;
+	}
+	else {
+		$result['good_id'] = $content['good_id'];
+		$result['ant_status'] = $shop->switch_good_status($content['good_id'], $content['good_status']);
+		$result['status'] = STATUS_SUCCESS;
+	}
 	break;
 case "accept_order":
-	# code
+	$t = $shop->check_access_code($content['accesscode']);
+	if ($t == false) {
+		$result['status'] = ILLIGAL_ACCESSTOKEN;
+	}
+	else {
+		#######################################################
+		# unfinished
+		#######################################################
+		$result['status'] = STATUS_SUCCESS;
+	}
 	break;
-case "get_good_menu":
-	# code
+case "get_food_menu":
+	$t = $shop->check_access_code($content['accesscode']);
+	if ($t == false) {
+		$result['status'] = ILLIGAL_ACCESSTOKEN;
+	}
+	else {
+		$result = $shop->get_food_menu($t['id']);
+		$result['status'] = STATUS_SUCCESS;
+	}
+	break;
+default:
+	$result['status'] = ERROR_CONTENT;
 	break;
 }
 return json_encode($result);

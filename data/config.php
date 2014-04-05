@@ -1,15 +1,15 @@
 <?php
 // database host
-$db_host   = "localhost:3306";
+$db_host   = "localhost";
 
 // database name
-$db_name   = "Test2";
+$db_name   = "carryforme";
 
 // database username
-$db_user   = "root";
+$db_user   = "rexskz";
 
 // database password
-$db_pass   = "ZYB941023";
+$db_pass   = "2147483647";
 
 // table prefix
 $prefix    = "ecs_";

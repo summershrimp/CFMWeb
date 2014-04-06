@@ -1,4 +1,10 @@
 <?php
+
+/*
+	Author: Rex Zeng
+	Describtion: Shop class
+*/
+
 if (!defined('IN_CFM')) {
 	die('Hacking attempt');
 }
@@ -8,6 +14,9 @@ require "include/defines.inc.php";
 require "include/common.class.php";
 
 class Shop extends apicommon {
+	/*
+	 * 统计销售总额
+	 */
 	function get_amount($r) {
 		$result = 0;
 		foreach ($r as $item) {
@@ -16,6 +25,9 @@ class Shop extends apicommon {
 		}
 		return $result;
 	}
+	/*
+	 * 商店信息（销售数量和销售总额）
+	 */
 	function get_shop_info($id) {
 		$cur_date = $GLOBALS['db']->getRow("SELECT CURDATE() result");
 		$cur_date = $cur_date['result'];
@@ -34,6 +46,9 @@ class Shop extends apicommon {
 		$result['month_amount'] = $this->get_amount($r);
 		return $result;
 	}
+	/*
+	 * 获取一段时间的历史记录
+	 */
 	function shop_history($id, $start, $end) {
 		$r = $this->history($id, Role_Shop, $start, $end);
 		$result = array();
@@ -52,6 +67,9 @@ class Shop extends apicommon {
 		}
 		return $result;
 	}
+	/*
+	 * 获取商店业主信息
+	 */
 	function shop_info($id) {
 		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("shop") . " WHERE `shop_id` = $id LIMIT 1";
 		$r = $GLOBALS['db']->getRow($sql);
@@ -68,6 +86,9 @@ class Shop extends apicommon {
 		$result['phone'] = $phone;
 		return $result;
 	}
+	/*
+	 * 切换商品状态
+	 */
 	function switch_good_status($good_id, $good_status) {
 		$sql = "UPDATE " . $GLOBALS['cfm']->table("shop_goods") . " SET `onsales` = $good_status WHERE `good_id` = $good_id LIMIT 1";
 		$t = $GLOBALS['db']->query($sql);
@@ -80,6 +101,9 @@ class Shop extends apicommon {
 			return $t['onsales'];
 		}
 	}
+	/*
+	 * 商店接单
+	 */
 	function accept_order($order_id) {
 		$sql = "UPDATE " . $GLOBALS['cfm']->table("order_info") . "SET `order_status` = 1 WHERE `order_id` = $order_id LIMIT 1";
 		$t = $GLOBALS['db']->query($sql);
@@ -92,6 +116,9 @@ class Shop extends apicommon {
 			return $t['order_status'];
 		}
 	}
+	/*
+	 * 获取商品列表
+	 */
 	function get_food_menu($id) {
 		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("shop_goods") . " WHERE `shop_id` = $id LIMIT 1";
 		$t = $GLOBALS['db']->getRow($sql);

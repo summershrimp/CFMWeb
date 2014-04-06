@@ -1,9 +1,16 @@
 <?php
+
+/*
+	Author: Rex Zeng
+	Describtion: Shop API
+*/
+
 require "include/shop.class.php";
 
 $content = json_decode($SERVER['HTTP_RAW_POST_DATA']);
 $shop = new Shop();
 
+// Check if action is login
 if ($content['act'] == "shop_login") {
 	$t = $shop->login($content['username'], $content['password'], Role_Shop);
 	if ($t == false) {
@@ -18,6 +25,7 @@ if ($content['act'] == "shop_login") {
 	}
 }
 else {
+	// Check the accesscode
 	if (!isset($content['accesscode'])) {
 		$result['status'] = ILLIGAL_ACCESSTOKEN;
 	}
@@ -26,6 +34,7 @@ else {
 		$result['status'] = ILLIGAL_ACCESSTOKEN;
 	}
 	else {
+		// Check correct, take action
 		$id = $t['id'];
 		switch ($content['act']) {
 		case "shop_static":

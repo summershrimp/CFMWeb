@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<buildpath>
-	<buildpathentry kind="src" path="data"/>
-	<buildpathentry kind="src" path="include"/>
-	<buildpathentry kind="src" path="sdks/Baidu-Push-SDK-Php-2.0.4-advanced"/>
-	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
-</buildpath>

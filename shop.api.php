@@ -5,7 +5,7 @@ $content = json_decode($SERVER['HTTP_RAW_POST_DATA']);
 $shop = new Shop();
 
 if ($content['act'] == "shop_login") {
-	$t = $shop->shop_login($content['username'], $content['password']);
+	$t = $shop->login($content['username'], $content['password'], Role_Shop);
 	if ($t == false) {
 		$result['status'] = UNAVAIL_USER;
 	}

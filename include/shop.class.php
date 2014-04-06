@@ -4,15 +4,10 @@ if (!defined('IN_CFM')) {
 }
 
 require "init.inc.php";
+require "include/defines.inc.php";
 require "include/common.class.php";
 
 class Shop extends apicommon {
-	function shop_login($shop_user, $shop_pass) {
-		return  $this->login($shop_user, $shop_pass, Role_Shop);
-	}
-	function get_count($r) {
-		return count($r);
-	}
 	function get_amount($r) {
 		$result = 0;
 		foreach ($r as $item) {
@@ -25,17 +20,17 @@ class Shop extends apicommon {
 		$cur_date = $GLOBALS['db']->getRow("SELECT CURDATE() result");
 		$cur_date = $cur_date['result'];
 		$r = $this->history($id, Role_Shop, $cur_date, $cur_date);
-		$result['day_count'] = $this->get_count($r);
+		$result['day_count'] = count($r);
 		$result['day_amount'] = $this->get_amount($r);
 		$first_day = $GLOBALS['db']->getRow("SELECT DATE_ADD(CURDATE(),INTERVAL -WEEKDAY(CURDATE()) DAY) result");
 		$first_day = $first_day['result'];
 		$r = $this->history($id, Role_Shop, $first_day, $cur_date);
-		$result['week_count'] = $this->get_count($r);
+		$result['week_count'] = count($r);
 		$result['week_amount'] = $this->get_amount($r);
 		$first_day = $GLOBALS['db']->getRow("SELECT DATE_ADD(DATE_ADD(LAST_DAY(CURDATE()),INTERVAL 1 DAY),INTERVAL -1 MONTH) result");
 		$first_day = $first_day['result'];
 		$r = $this->history($id, Role_Shop, $first_day, $cur_date);
-		$result['month_count'] = $this->get_count($r);
+		$result['month_count'] = count($r);
 		$result['month_amount'] = $this->get_amount($r);
 		return $result;
 	}

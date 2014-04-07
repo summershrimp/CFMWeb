@@ -57,6 +57,7 @@ define('NO_MEDIAID_PARA', '41006'); // 缺少media_id参数
 define('NO_SUBMENU_CONTENT', '41007'); // 缺少子菜单数据
 define('NO_AUTH_CODE', '41008'); // 缺少oauth code
 define('NO_OPENOID', '41009'); // 缺少openid
+define('NO_ORDER_ID', '41010'); // 缺少openid
 
 define('TIMEOUT_ACCESS_TOKEN', '42001'); // access_token超时
 define('TIMEOUT_REFRESH_TOKEN', '42002'); // refresh_token超时
@@ -68,10 +69,10 @@ define('NEED_HTTPS', '43003'); // 需要HTTPS请求
 define('NEED_RECEIVR_FOLLOW', '43004'); // 需要接收者关注
 define('NEED_FRIEND_RELATION', '43005'); // 需要好友关系
 
-define('EMPTY_', '44001'); // 多媒体文件为空
-define('EMPTY_', '44002'); // POST的数据包为空
-define('EMPTY_', '44003'); // 图文消息内容为空
-define('EMPTY_', '44004'); // 文本消息内容为空
+define('EMPTY_MEDIA_FILE', '44001'); // 多媒体文件为空
+define('EMPTY_POST_CONTENT', '44002'); // POST的数据包为空
+define('EMPTY_NEWS', '44003'); // 图文消息内容为空
+define('EMPTY_TEXT', '44004'); // 文本消息内容为空
 
 define('LIMIT_MEDIA_SIZE', '45001'); // 多媒体文件大小超过限制
 define('LIMIT_MSG_CONTENT', '45002'); // 消息内容超过限制
@@ -92,6 +93,7 @@ define('UNAVAIL_MEDIA_CONTENT', '46001'); // 不存在媒体数据
 define('UNAVAIL_MENU_VER', '46002'); // 不存在的菜单版本
 define('UNAVAIL_MENU_CONTENT', '46003'); // 不存在的菜单数据
 define('UNAVAIL_USER', '46004'); // 不存在的用户
+define('UNAVAIL_NEW_ORDER', '46005'); // 不允许新订单
 
 define('ERROR_CONTENT', '47001'); // 解析JSON/XML内容错误
 define('NO_ACCESS_TO_FUNC', '48001'); // api功能未授权

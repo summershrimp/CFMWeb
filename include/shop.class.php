@@ -20,7 +20,7 @@ class Shop extends apicommon {
 	function get_amount($r) {
 		$result = 0;
 		foreach ($r as $item) {
-			$t = $this->order_details($item['order_sn']);
+			$t = $this->order_details($item['order_id']);
 			$result += $t['goods_price'];
 		}
 		return $result;
@@ -53,12 +53,12 @@ class Shop extends apicommon {
 		$r = $this->history($id, Role_Shop, $start, $end);
 		$result = array();
 		foreach ($r as $item) {
-			$t = $this->order_details($item['order_sn']);
+			$t = $this->order_details($item['order_id']);
 			$temp['order_id'] = $t['order_id'];
 			$temp['price'] = $t['goods_price'];
 			$temp['time'] = $item['pay_time'];
-			$sql = "SELECT `ant_name` FROM " . $GLOBALS['cfm']->table("providers") . "WHERE `provider_id` = " . $item['user_id'] . "LIMIT 1";
-			$t = $GLOBALS['db']->getRow($sql);
+			$sql = "SELECT `ant_name` FROM " . $GLOBALS['cfm']->table("providers") . "WHERE `provider_id` = " . $item['user_id'];
+			$t = $GLOBALS['db']->getOne($sql);
 			$temp['shop_name'] = $t['provider_name'];
 			$sql = "SELECT `ant_name` FROM " . $GLOBALS['cfm']->table("ants") . "WHERE `ant_id` = " . $item['ant_id'] . "LIMIT 1";
 			$t = $GLOBALS['db']->getRow($sql);
@@ -93,7 +93,7 @@ class Shop extends apicommon {
 		$sql = "UPDATE " . $GLOBALS['cfm']->table("shop_goods") . " SET `onsales` = $good_status WHERE `good_id` = $good_id LIMIT 1";
 		$t = $GLOBALS['db']->query($sql);
 		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("shop_goods") . " WHERE `good_id` = $good_id LIMIT 1";
-		$t = $GLOBALS['db']->query($sql);
+		$t = $GLOBALS['db']->getRow($sql);
 		if (!isset($t['onsales'])) {
 			return 0;
 		}
@@ -108,24 +108,12 @@ class Shop extends apicommon {
 		$sql = "UPDATE " . $GLOBALS['cfm']->table("order_info") . "SET `order_status` = 1 WHERE `order_id` = $order_id LIMIT 1";
 		$t = $GLOBALS['db']->query($sql);
 		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("order_info") . " WHERE `order_id` = $order_id LIMIT 1";
-		$t = $GLOBALS['db']->query($sql);
+		$t = $GLOBALS['db']->getRow($sql);
 		if (!isset($t['order_status'])) {
 			return 0;
 		}
 		else {
 			return $t['order_status'];
 		}
-	}
-	/**
-	 * 获取商品列表
-	 */
-	function get_food_menu($id) {
-		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("shop_goods") . " WHERE `shop_id` = $id LIMIT 1";
-		$t = $GLOBALS['db']->getRow($sql);
-		$result['good_name'] = $t['good_name'];
-		$result['good_desc'] = $t['good_desc'];
-		$result['good_price'] = $t['price'];
-		$result['good_status'] = $t['onsales'];
-		return $result;
 	}
 }

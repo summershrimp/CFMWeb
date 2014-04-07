@@ -5,7 +5,7 @@
 	Describtion: Shop API
 */
 
-require "include/shop.class.php";
+require "shop.class.php";
 
 $content = json_decode($SERVER['HTTP_RAW_POST_DATA']);
 $shop = new Shop();
@@ -61,8 +61,8 @@ else {
 			$result['take_status'] = $shop->accept_order($content['order_id']);
 			$result['status'] = STATUS_SUCCESS;
 			break;
-		case "get_food_menu":
-			$result = $shop->get_food_menu($id);
+		case "get_good_menu":
+			$result = $shop->get_good_menu($id);
 			$result['status'] = STATUS_SUCCESS;
 			break;
 		default:

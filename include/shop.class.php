@@ -9,23 +9,23 @@ if (!defined('IN_CFM')) {
 	die('Hacking attempt');
 }
 
-require "init.inc.php";
+require "include/init.inc.php";
 require "include/defines.inc.php";
 require "include/common.class.php";
 
 class Shop extends apicommon {
-	/*
+	/**
 	 * 统计销售总额
 	 */
 	function get_amount($r) {
 		$result = 0;
 		foreach ($r as $item) {
-			$t = $this->order_details($item['order_sn']));
+			$t = $this->order_details($item['order_sn']);
 			$result += $t['goods_price'];
 		}
 		return $result;
 	}
-	/*
+	/**
 	 * 商店信息（销售数量和销售总额）
 	 */
 	function get_shop_info($id) {
@@ -46,7 +46,7 @@ class Shop extends apicommon {
 		$result['month_amount'] = $this->get_amount($r);
 		return $result;
 	}
-	/*
+	/**
 	 * 获取一段时间的历史记录
 	 */
 	function shop_history($id, $start, $end) {
@@ -57,24 +57,24 @@ class Shop extends apicommon {
 			$temp['order_id'] = $t['order_id'];
 			$temp['price'] = $t['goods_price'];
 			$temp['time'] = $item['pay_time'];
-			$sql = "SELECT `ant_name` FROM " . $GLOBALS['cfm']->table("providers") . "WHERE `provider_id` = $item['user_id'] LIMIT 1";
+			$sql = "SELECT `ant_name` FROM " . $GLOBALS['cfm']->table("providers") . "WHERE `provider_id` = " . $item['user_id'] . "LIMIT 1";
 			$t = $GLOBALS['db']->getRow($sql);
 			$temp['shop_name'] = $t['provider_name'];
-			$sql = "SELECT `ant_name` FROM " . $GLOBALS['cfm']->table("ants") . "WHERE `ant_id` = $item['ant_id'] LIMIT 1";
+			$sql = "SELECT `ant_name` FROM " . $GLOBALS['cfm']->table("ants") . "WHERE `ant_id` = " . $item['ant_id'] . "LIMIT 1";
 			$t = $GLOBALS['db']->getRow($sql);
 			$temp['cust_name'] = $t['ant_name'];
 			$result[] = $temp;
 		}
 		return $result;
 	}
-	/*
+	/**
 	 * 获取商店业主信息
 	 */
 	function shop_info($id) {
 		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("shop") . " WHERE `shop_id` = $id LIMIT 1";
 		$r = $GLOBALS['db']->getRow($sql);
 		$result['shop_name'] = $r['shop_name'];
-		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("providers") . " WHERE `provider_id` = $r['owner_id'] LIMIT 1";
+		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("providers") . " WHERE `provider_id` = " . $r['owner_id'] . "LIMIT 1";
 		$r = $GLOBALS['db']->getRow($sql);
 		$result['shop_real_name'] = $r['provider_name'];
 		$result['sex'] = $r['sex'];
@@ -86,7 +86,7 @@ class Shop extends apicommon {
 		$result['phone'] = $phone;
 		return $result;
 	}
-	/*
+	/**
 	 * 切换商品状态
 	 */
 	function switch_good_status($good_id, $good_status) {
@@ -101,7 +101,7 @@ class Shop extends apicommon {
 			return $t['onsales'];
 		}
 	}
-	/*
+	/**
 	 * 商店接单
 	 */
 	function accept_order($order_id) {
@@ -116,7 +116,7 @@ class Shop extends apicommon {
 			return $t['order_status'];
 		}
 	}
-	/*
+	/**
 	 * 获取商品列表
 	 */
 	function get_food_menu($id) {

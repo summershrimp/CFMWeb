@@ -31,7 +31,7 @@ else
 	@ini_set('include_path', '.:' . ROOT_PATH);
 }
 
-require (ROOT_PATH . 'data/config.php');
+require ('data/config.php');
 
 if (defined('DEBUG_MODE') == false)
 {

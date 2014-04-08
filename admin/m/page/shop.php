@@ -82,7 +82,8 @@ $db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 			?>
 		</table>
 		<p class="psubmit">
-			<input class="button" type="submit" value="删除">
+			<input class="button" type="button" value="添加新商家">
+			<input class="button" type="submit" value="删除已选">
 			<input class="button" type="reset">
 		</p>
 	</form>

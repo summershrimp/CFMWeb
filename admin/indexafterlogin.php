@@ -1,9 +1,15 @@
+<?php
+if (!defined("IN_CFM")) {
+	exit("Hacking attempt");
+}
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>管理主页</title>
-	<link rel="stylesheet" type="text/css" href="css/common.css" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>管理中心</title>
+	<link rel="stylesheet" type="text/css" href="css/common.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
 	<div id="whole">
@@ -14,7 +20,6 @@
 			<?php require "m/banner.php"; ?>
 			<?php require "m/content.php"; ?>
 		</div>
-		<?php require "m/footer.php"; ?>
 	</div>
 </body>
 </html>

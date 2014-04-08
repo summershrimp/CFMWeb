@@ -1,0 +1,68 @@
+*{
+	font-family:	"微软雅黑" !important;
+}
+a {
+	text-decoration:	none;
+}
+a:hover {
+	text-decoration:	underline;
+}
+.titlespan {
+	top:	-10px;
+	left:	40px;
+	border:	1px solid #BBB;
+	padding:	2px 8px;
+	position:	relative;
+	font-weight:	bold;
+	background-color:	white;
+	-webkit-border-radius:	8px;
+	-moz-border-radius:	8px;
+	border-radius:	8px;
+	-webkit-box-shadow:	#BBB 0px 0px 5px;
+	-moz-box-shadow:	#BBB 0px 0px 5px;
+	box-shadow:	#BBB 0px 0px 5px;
+}
+.boxdiv {
+	margin-top:	30px;
+	border:	1px solid #BBB;
+	/*-webkit-border-radius:	10px;
+	-moz-border-radius:	10px;
+	border-radius:	10px;*/
+	-webkit-box-shadow:	#BBB 0px 0px 5px;
+	-moz-box-shadow:	#BBB 0px 0px 5px;
+	box-shadow:	#BBB 0px 0px 5px;
+	color:	#333;
+	background-color:	#EEE;
+}
+.fixed {
+	width:	100px;
+	display:	inline-block;
+	margin-left:	20px;
+	margin-right:	40px;
+	line-height:	32px;
+}
+.button {
+	width:	80px;
+	margin:	20px auto;
+}
+.psubmit {
+	background-color:	#DDD;
+	text-align:	right;
+	padding-right:	40px;
+	margin-bottom:	0px;
+	border-top:	1px solid #999;
+}
+.returnsuccess {
+	border:	1px solid #A2D246;
+	margin-top:	10px;
+	line-height:	32px;
+	padding-left:	10px;
+	background-color:	#EBF8A4;
+}
+.returnerror {
+	border:	1px solid maroon;
+	margin-top:	10px;
+	line-height:	32px;
+	padding-left:	10px;
+	background-color:	pink;
+}

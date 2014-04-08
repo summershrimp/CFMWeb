@@ -66,3 +66,7 @@ a:hover {
 	padding-left:	10px;
 	background-color:	pink;
 }
+.link {
+	color:	#235A81;
+	text-shadow:	0px 1px 0px #FFF;
+}

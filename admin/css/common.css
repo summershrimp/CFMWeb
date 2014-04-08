@@ -10,7 +10,7 @@ a:hover {
 .titlespan {
 	top:	-10px;
 	left:	40px;
-	border:	1px solid #BBB;
+	border:	1px solid #AAA;
 	padding:	2px 8px;
 	position:	relative;
 	font-weight:	bold;
@@ -18,21 +18,18 @@ a:hover {
 	-webkit-border-radius:	8px;
 	-moz-border-radius:	8px;
 	border-radius:	8px;
-	-webkit-box-shadow:	#BBB 0px 0px 5px;
-	-moz-box-shadow:	#BBB 0px 0px 5px;
-	box-shadow:	#BBB 0px 0px 5px;
+	-webkit-box-shadow:	#BBB 0px 0px 10px;
+	-moz-box-shadow:	#BBB 0px 0px 10px;
+	box-shadow:	#BBB 0px 0px 10px;
 }
 .boxdiv {
-	margin-top:	30px;
-	border:	1px solid #BBB;
-	/*-webkit-border-radius:	10px;
-	-moz-border-radius:	10px;
-	border-radius:	10px;*/
-	-webkit-box-shadow:	#BBB 0px 0px 5px;
-	-moz-box-shadow:	#BBB 0px 0px 5px;
-	box-shadow:	#BBB 0px 0px 5px;
 	color:	#333;
+	border:	1px solid #AAA;
+	margin-top:	30px;
 	background-color:	#EEE;
+	-webkit-box-shadow:	#BBB 0px 0px 10px;
+	-moz-box-shadow:	#BBB 0px 0px 10px;
+	box-shadow:	#BBB 0px 0px 10px;
 }
 .fixed {
 	width:	100px;
@@ -46,7 +43,7 @@ a:hover {
 	margin:	20px auto;
 }
 .psubmit {
-	background-color:	#DDD;
+	background-color:	#CCE;
 	text-align:	right;
 	padding-right:	40px;
 	margin-bottom:	0px;
@@ -69,4 +66,8 @@ a:hover {
 .link {
 	color:	#235A81;
 	text-shadow:	0px 1px 0px #FFF;
+}
+.text {
+	width:	150px;
+	color:	black;
 }

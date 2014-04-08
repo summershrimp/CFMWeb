@@ -18,7 +18,6 @@ case 'logout':
 	require "f/action/logout.php";
 	break;
 default:
-	echo "<script>alert('行为未定义！');</script>";
 	echo "<meta http-equiv=\"refresh\" content=\"0; url=?\">";
 	break;
 }

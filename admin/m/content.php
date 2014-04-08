@@ -22,7 +22,6 @@ if (!defined("IN_CFM")) {
 		require "m/page/$page.php";
 		break;
 	default:
-		echo "<script>alert('行为未定义！');</script>";
 		echo "<meta http-equiv=\"refresh\" content=\"0; url=?\">";
 		break;
 	}

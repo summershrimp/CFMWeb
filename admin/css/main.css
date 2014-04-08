@@ -20,6 +20,9 @@
 	border-right:	1px solid white;
 	background-color:	#F3F3F3;
 }
+#leftcheck {
+	background-color:	#DDD;
+}
 #right {
 	width:	auto;
 	height:	100%;
@@ -73,15 +76,19 @@
 	font-weight:	bold;
 	line-height:	24px;
 	border-bottom:	1px solid #999;
-	background-color:	#CCC;
+	background-color:	#CCD;
+}
+td {
+	padding-left:	5px;
+	padding-right:	5px;
 }
 .tr0 {
-	text-align:	center;
+	/*text-align:	center;*/
 	border-bottom:	1px solid #999;
-	background-color:	white;
+	background-color:	#EFEFF3;
 }
 .tr1 {
-	text-align:	center;
+	/*text-align:	center;*/
 	border-bottom:	1px solid #999;
-	background-color:	#E3E3E3;
+	background-color:	#E3E3EF;
 }

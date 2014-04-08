@@ -34,6 +34,11 @@ class Database {
 		$result = mysql_query($sql);
 		return $result;
 	}
+	function insert($table_name, $values) {
+		$sql = "INSERT INTO `" . DB_TABLE_PRE . "$table_name` VALUES($values)";
+		$result = mysql_query($sql);
+		return $result;
+	}
 }
 
 ?>

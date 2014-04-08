@@ -9,7 +9,7 @@ if (!defined("IN_CFM")) {
 	if (isset($_GET['page'])) {
 		$page = $_GET['page'];
 		$str .= " » ";
-		switch ($_GET['page']) {
+		switch ($page) {
 		case "personal":
 			$str .= "<a href='?page=$page'>个人信息</a>";
 			break;
@@ -28,6 +28,21 @@ if (!defined("IN_CFM")) {
 		case "user":
 			$str .= "<a href='?page=$page'>用户管理</a>";
 			break;
+		}
+		if (isset($_GET['function'])) {
+			$function = $_GET['function'];
+			$str .= " » ";
+			switch ($function) {
+			case "newshop":
+				$str .= "<a href='?page=$page&function=$function'>添加商家</a>";
+				break;
+			case "edit":
+				$str .= "<a href='?page=$page&function=$function'>编辑商家信息</a>";
+				break;
+			case "delete":
+				$str .= "<a href='?page=$page&function=$function'>删除商家</a>";
+				break;
+			}
 		}
 	}
 	echo "<span>当前位置： $str</span>";

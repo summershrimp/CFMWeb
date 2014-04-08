@@ -1,6 +1,5 @@
 <?php
-if (!isset($_POST['old']) || !isset($_POST['new']) || !isset($_POST['rep']) ||
-	$_POST['old'] == "" || $_POST['new'] == "" || $_POST['rep'] == "") {
+if ($_POST['old'] == "" || $_POST['new'] == "" || $_POST['rep'] == "") {
 	$str = "旧密码、新密码和重复密码均不能为空！";
 	$status = "error";
 }

@@ -105,15 +105,15 @@ class Shop extends apicommon {
 	 * 商店接单
 	 */
 	function accept_order($order_id) {
-		$sql = "UPDATE " . $GLOBALS['cfm']->table("order_info") . "SET `order_status` = 1 WHERE `order_id` = $order_id LIMIT 1";
-		$t = $GLOBALS['db']->query($sql);
-		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("order_info") . " WHERE `order_id` = $order_id LIMIT 1";
+		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("order_info") . " WHERE `order_id` = $order_id AND `order_status` = 0 LIMIT 1";
 		$t = $GLOBALS['db']->getRow($sql);
-		if (!isset($t['order_status'])) {
+		if ($t == false || empty($t)) {
 			return 0;
 		}
 		else {
-			return $t['order_status'];
+			$sql = "UPDATE " . $GLOBALS['cfm']->table("order_info") . "SET `order_status` = 1 WHERE `order_id` = $order_id LIMIT 1";
+			$t = $GLOBALS['db']->query($sql);
+			return 1;
 		}
 	}
 }

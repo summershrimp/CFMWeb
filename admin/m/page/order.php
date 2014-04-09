@@ -14,6 +14,8 @@ if (isset($_GET['function'])) {
 <div class="boxdiv">
 	<span class="titlespan">订单搜索</span>
 	<form action="?page=order&function=filter" method="post">
+		<span class="fixed">订单号：</span>
+		<input class="text" type="text" name="order_id" placeholder="依据订单号过滤" value="<?php if (isset($_POST['name'])) echo $_POST['name']; ?>"><br>
 		<span class="fixed">商家：</span>
 		<input class="text" type="text" name="name" placeholder="依据商家名称过滤" value="<?php if (isset($_POST['name'])) echo $_POST['name']; ?>"><br>
 		<span class="fixed">Ant：</span>
@@ -27,16 +29,22 @@ if (isset($_GET['function'])) {
 			<option <?php if (isset($_POST['date']) && $_POST['date'] == "本周") echo 'selected="selected"'; ?>>本周</option>
 			<option <?php if (isset($_POST['date']) && $_POST['date'] == "本月") echo 'selected="selected"'; ?>>本月</option>
 		</select><br>
-		<span class="fixed">订单状态：</span>
-		<select style="width:180px;" name="status">
-			<option <?php if (isset($_POST['status']) && substr($_POST['status'], 0, 1) == '1') echo 'selected="selected"'; ?>>1.已下单，未接单</option>
-			<option <?php if (isset($_POST['status']) && substr($_POST['status'], 0, 1) == '2') echo 'selected="selected"'; ?>>2.已接单，店家未确认</option>
-			<option <?php if (isset($_POST['status']) && substr($_POST['status'], 0, 1) == '3') echo 'selected="selected"'; ?>>3.已接单，已确认，未取</option>
-			<option <?php if (isset($_POST['status']) && substr($_POST['status'], 0, 1) == '4') echo 'selected="selected"'; ?>>4.已接单，已确认，已取</option>
-			<option <?php if (isset($_POST['status']) && substr($_POST['status'], 0, 1) == '5') echo 'selected="selected"'; ?>>5.已确认，已送达，未付款</option>
-			<option <?php if (isset($_POST['status']) && substr($_POST['status'], 0, 1) == '6') echo 'selected="selected"'; ?>>6.已确认，已送达，已付款</option>
-			<option <?php if (isset($_POST['status']) && substr($_POST['status'], 0, 1) == '7') echo 'selected="selected"'; ?>>7.数据错误</option>
-		</select>
+		<span class="fixed">是否下单：</span>
+		<span><input type="radio" name="ordered" value="-1" <?php if (!isset($_POST['ordered']) || $_POST['ordered'] == -1) echo "checked"; ?>>全部</span>&nbsp;
+		<span><input type="radio" name="ordered" value="1" <?php if (isset($_POST['ordered']) && $_POST['ordered'] == 1) echo "checked"; ?>>是</span>&nbsp;
+		<span><input type="radio" name="ordered" value="0" <?php if (isset($_POST['ordered']) && $_POST['ordered'] == 0) echo "checked"; ?>>否</span><br>
+		<span class="fixed">是否接单：</span>
+		<span><input type="radio" name="shipped" value="-1" <?php if (!isset($_POST['shipped']) || $_POST['shipped'] == -1) echo "checked"; ?>>全部</span>&nbsp;
+		<span><input type="radio" name="shipped" value="1" <?php if (isset($_POST['shipped']) && $_POST['shipped'] == 1) echo "checked"; ?>>是</span>&nbsp;
+		<span><input type="radio" name="shipped" value="0" <?php if (isset($_POST['shipped']) && $_POST['shipped'] == 0) echo "checked"; ?>>否</span><br>
+		<span class="fixed">是否取货：</span>
+		<span><input type="radio" name="taken" value="-1" <?php if (!isset($_POST['taken']) || $_POST['taken'] == -1) echo "checked"; ?>>全部</span>&nbsp;
+		<span><input type="radio" name="taken" value="1" <?php if (isset($_POST['taken']) && $_POST['taken'] == 1) echo "checked"; ?>>是</span>&nbsp;
+		<span><input type="radio" name="taken" value="0" <?php if (isset($_POST['taken']) && $_POST['taken'] == 0) echo "checked"; ?>>否</span><br>
+		<span class="fixed">是否付款：</span>
+		<span><input type="radio" name="paid" value="-1" <?php if (!isset($_POST['paid']) || $_POST['paid'] == -1) echo "checked"; ?>>全部</span>&nbsp;
+		<span><input type="radio" name="paid" value="1" <?php if (isset($_POST['paid']) && $_POST['paid'] == 1) echo "checked"; ?>>是</span>&nbsp;
+		<span><input type="radio" name="paid" value="0" <?php if (isset($_POST['paid']) && $_POST['paid'] == 0) echo "checked"; ?>>否</span><br>
 		<p class="psubmit">
 			<input class="button" type="submit" value="搜索">
 			<input class="button" type="reset">
@@ -48,11 +56,15 @@ if (isset($_GET['function'])) {
 	<table class="table" style="margin-right:20px;">
 		<tr class="trtitle">
 			<td style="width:20px;">#</td>
+			<td>订单ID</td>
 			<td>商家</td>
 			<td>时间</td>
 			<td>Ant</td>
 			<td>用户ID</td>
-			<td>订单状态</td>
+			<td>是否下单</td>
+			<td>是否接单</td>
+			<td>是否取货</td>
+			<td>是否付款</td>
 		</tr>
 		<?php
 		$db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
@@ -68,17 +80,17 @@ if (isset($_GET['function'])) {
 				$ant = $db->fetch($ant);
 				$match = true;
 				if ($filter == true) {
+					if (isset($_POST['order_id']) && $_POST['order_id'] != "" && !strstr($order['order_id'], $_POST['order_id'])) {
+						$match = false;
+					}
 					if (isset($_POST['name']) && $_POST['name'] != "" && !strstr($shop['shop_name'], $_POST['name'])) {
 						$match = false;
-						echo "name";
 					}
 					if (isset($_POST['ant']) && $_POST['ant'] != "" && !strstr($ant['ant_name'], $_POST['ant'])) {
 						$match = false;
-						echo "ant";
 					}
 					if (isset($_POST['user']) && $_POST['user'] != "" && !strstr($order['user_id'], $_POST['user'])) {
 						$match = false;
-						echo "user";
 					}
 					if (isset($_POST['date'])) {
 						switch ($_POST['date']) {
@@ -103,7 +115,16 @@ if (isset($_GET['function'])) {
 							}
 						}
 					}
-					if (isset($_POST['status']) && $_POST['status'] != "" && $order['order_status'] != substr($_POST['status'], 0, 1)) {
+					if (isset($_POST['ordered']) && $_POST['ordered'] >= 0 && $_POST['ordered'] != $order['order_status']) {
+						$match = false;
+					}
+					if (isset($_POST['shipped']) && $_POST['shipped'] >= 0 && $_POST['shipped'] != $order['shipping_status']) {
+						$match = false;
+					}
+					if (isset($_POST['taken']) && $_POST['taken'] >= 0 && $_POST['taken'] != $order['taking_status']) {
+						$match = false;
+					}
+					if (isset($_POST['paid']) && $_POST['paid'] >= 0 && $_POST['paid'] != $order['pay_status']) {
 						$match = false;
 					}
 				}
@@ -114,33 +135,15 @@ if (isset($_GET['function'])) {
 				$style = ($count - 1) % 2;
 				echo "<tr class='tr$style'>";
 				echo "<td>$count</td>";
+				echo "<td>" . $order['order_id'] . "</td>";
 				echo "<td>" . $shop['shop_name'] . "</td>";
 				echo "<td>" . $order['add_date'] . "</td>";
 				echo "<td>" . $ant['ant_name'] . "</td>";
 				echo "<td>" . $order['user_id'] . "</td>";
-				switch ($order['order_status']) {
-				case '1':
-					$str = "已下单，未接单";
-					break;
-				case '2':
-					$str = "已接单，店家未确认";
-					break;
-				case '3':
-					$str = "已接单，已确认，未取";
-					break;
-				case '4':
-					$str = "已接单，已确认，已取";
-					break;
-				case '5':
-					$str = "已确认，已送达，未付款";
-					break;
-				case '6':
-					$str = "已确认，已送达，已付款";
-					break;
-				default:
-					$str = "数据错误";
-				}
-				echo "<td>" . $str . "</td>";
+				echo "<td>" . ($order['order_status'] == 1 ? "是" : "否") . "</td>";
+				echo "<td>" . ($order['shipping_status'] == 1 ? "是" : "否") . "</td>";
+				echo "<td>" . ($order['taking_status'] == 1 ? "是" : "否") . "</td>";
+				echo "<td>" . ($order['pay_status'] == 1 ? "是" : "否") . "</td>";
 				echo "</tr>";
 			}
 		}

@@ -39,7 +39,7 @@ if (!defined("IN_CFM")) {
 			case "edit":
 				$str .= "<a href='?page=$page&function=$function'>编辑商家信息</a>";
 				break;
-			case "delete":
+			case "delete": case "deletes":
 				$str .= "<a href='?page=$page&function=$function'>删除商家</a>";
 				break;
 			}

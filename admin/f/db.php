@@ -1,5 +1,4 @@
 <?php
-
 class Database {
 	function Database($host, $username, $password, $name) {
 		$db = mysql_connect($host, $username, $password);
@@ -39,6 +38,13 @@ class Database {
 		$result = mysql_query($sql);
 		return $result;
 	}
+	function delete($table_name, $condition, $limit) {
+		$sql = "DELETE FROM `" . DB_TABLE_PRE . "$table_name` WHERE $condition";
+		if ($limit > 0) {
+			$sql .= " LIMIT $limit";
+		}
+		$result = mysql_query($sql);
+		return $result;
+	}
 }
-
 ?>

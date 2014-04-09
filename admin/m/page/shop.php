@@ -2,15 +2,18 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-function check($db, $alt, $page, $row) {
+function check($db, $alt, $page, $row, $exit) {
 	if (isset($_GET[$alt])) {
 		$get = $_GET[$alt];
 		$result = $db->select("*", "shop", "`$row`='$get'", 1);
 		if ($result != false) {
 			$r = $db->fetch($result);
 			if (!empty($r)) {
-				require "m/shop/$page.php";
-				exit;
+				require $page;
+				if ($exit == true) {
+					exit;
+				}
+				return;
 			}
 		}
 		echo "<div class=\"returnerror\">商家未找到！</div>";
@@ -23,18 +26,17 @@ $db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'edit':
-		check($db, 'detail', "editshop", 'shop_id');
+		check($db, 'detail', "m/shop/editshop.php", 'shop_id', true);
 		break;
 	case 'delete':
-		check($db, 'detail', "deleteshop", 'shop_id');
+		check($db, 'detail', "f/shop/deleteshop.php", 'shop_id', false);
 		break;
 	case 'newshop':
 		require "m/shop/newshop.php";
 		exit;
 		break;
 	case 'deletes':
-		require "m/shop/deleteshops.php";
-		exit;
+		require "f/shop/deleteshops.php";
 		break;
 	}
 }
@@ -85,7 +87,7 @@ else if ($condition != NULL) {
 </div>
 <div class="boxdiv">
 	<span class="titlespan">商家列表</span>
-	<form action="?page=shop" method="post">
+	<form action="?page=shop&function=deletes" method="post">
 		<table class="table" style="margin-right:20px;">
 			<tr class="trtitle">
 				<td></td>
@@ -104,7 +106,7 @@ else if ($condition != NULL) {
 					$count++;
 					$style = ($count - 1) % 2;
 					echo "<tr class='tr$style'>";
-					echo "<td><input type='checkbox' name='chk[]'></td>";
+					echo "<td><input type='checkbox' name='chk[]' value='" . $r['shop_id'] . "'></td>";
 					echo "<td>$count</td>";
 					$id = $r['owner_id'];
 					$t = $db->select("provider_name", "providers", "`provider_id`='$id'", 1);

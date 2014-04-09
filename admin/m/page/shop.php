@@ -26,6 +26,8 @@ $db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'edit':
+	case 'deletes':
+		require "f/shop/deleteshops.php";
 		check($db, 'detail', "m/shop/editshop.php", 'shop_id', true);
 		break;
 	case 'delete':
@@ -35,8 +37,6 @@ if (isset($_GET['function'])) {
 		require "m/shop/newshop.php";
 		exit;
 		break;
-	case 'deletes':
-		require "f/shop/deleteshops.php";
 		break;
 	}
 }

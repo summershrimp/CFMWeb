@@ -37,10 +37,13 @@ if (!defined("IN_CFM")) {
 				$str .= "<a href='?page=$page&function=$function'>添加商家</a>";
 				break;
 			case "edit":
-				$str .= "<a href='?page=$page&function=$function'>编辑商家信息</a>";
+				$str .= "编辑商家信息";
 				break;
 			case "delete": case "deletes":
 				$str .= "<a href='?page=$page&function=$function'>删除商家</a>";
+				break;
+			case "filter":
+				$str .= "条件过滤";
 				break;
 			}
 		}

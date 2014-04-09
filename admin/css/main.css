@@ -9,7 +9,10 @@
 }
 #logo {
 	width:	100%;
-	height:	100px;
+	height:	82px;
+	font-size:	48px;
+	text-align:	center;
+	padding-top:	18px;
 }
 #left {
 	width:	256px;
@@ -54,7 +57,7 @@
 	background-color:	#888;
 	line-height:	32px;
 	padding-left:	10px;
-	text-shadow:	0px 1px 0px #000;
+	/*text-shadow:	0px 1px 0px #000;*/
 	border-left:	1px solid white;
 	border-bottom:	1px solid white;
 }
@@ -67,28 +70,26 @@
 	padding:	10px 25px;
 }
 .table {
-	border:	1px solid #999;
+	border:	1px solid rgb(204, 204, 204);
 	margin:	10px 20px;
-	text-shadow:	0px 1px 0px #FFF;
+	/*text-shadow:	0px 1px 0px #FFF;*/
 }
 .trtitle {
 	text-align:	center;
 	font-weight:	bold;
 	line-height:	24px;
 	border-bottom:	1px solid #999;
-	background-color:	#CCD;
+	background-color:	#DDD;
 }
 td {
 	padding-left:	5px;
 	padding-right:	5px;
 }
 .tr0 {
-	/*text-align:	center;*/
 	border-bottom:	1px solid #999;
-	background-color:	#EFEFF3;
+	background-color:	#FFF;
 }
 .tr1 {
-	/*text-align:	center;*/
 	border-bottom:	1px solid #999;
-	background-color:	#E3E3EF;
+	background-color:	#EEE;
 }

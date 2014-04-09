@@ -3,7 +3,7 @@ if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
 ?>
-<div id="logo"><img src="images/logo.png" alt="logo"></div>
+<div id="logo">管理中心</div>
 <div id="pager">
 	<span class="pagerbutton"<?php if (isset($_GET['page']) && $_GET['page'] == "personal") echo "id='leftcheck'"; ?>><a href="?page=personal">个人信息</a></span>
 	<span class="pagerbutton"<?php if (isset($_GET['page']) && $_GET['page'] == "shop") echo "id='leftcheck'"; ?>><a href="?page=shop">商家信息管理</a></span>

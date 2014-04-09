@@ -8,7 +8,7 @@ $result = $db->fetch($result);
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'changepassword':
-		require "f/changepassword.php";
+		require "f/personal/changepassword.php";
 		break;
 	}
 }

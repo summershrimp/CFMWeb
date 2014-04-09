@@ -3,12 +3,14 @@ if (! defined('IN_CFM')) {
     die('Hacking attempt');
 }
 require_once './common.class.php';
+require_once './Channel.class.php';
+require_once '../data/config.php';
 
 class user extends apicommon;
 {
 
     public $user_id;
-
+    private $bae_channel = new Channel(CHANNEL_API_KEY,CHANNEL_SECRET_KEY);
     public function user($wxid)
     {
         $user_id = $this -> check_user($wxid,Role_User);

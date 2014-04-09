@@ -32,4 +32,9 @@ define('OLD_AUTH_KEY', '');
 
 define('API_TIME', '');
 
+
+define('CHANNEL_API_KEY','DGv8TZhmZyGglKQojU2Uo6BI');
+
+define('CHANNEL_SECRET_KEY','8okSd8tTmpU8c9KVNDXGudiRiS3PlhSB');
+
 ?>

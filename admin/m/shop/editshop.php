@@ -13,7 +13,7 @@ $t = $db->fetch($t);
 ?>
 <div class="boxdiv">
 	<span class="titlespan">编辑商家信息（id=<?php echo $result['shop_id']; ?>）</span>
-	<form action="?page=shop&function=edit&detail=<?php echo $result['shop_id']; ?>" method="post">
+	<form action="?page=shop&function=editshop&detail=<?php echo $result['shop_id']; ?>" method="post">
 		<table class="table">
 			<tr class="trtitle">
 				<td style="width:100px;">属性</td>

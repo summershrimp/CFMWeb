@@ -25,22 +25,28 @@ function check($db, $alt, $page, $row, $exit) {
 $db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
-	case 'edit':
-	case 'deletes':
-		require "f/shop/deleteshops.php";
+	case 'editshop':
 		check($db, 'detail', "m/shop/editshop.php", 'shop_id', true);
 		break;
-	case 'delete':
+	case 'deleteshop':
 		check($db, 'detail', "f/shop/deleteshop.php", 'shop_id', false);
+		break;
+	case 'deleteshops':
+		require "f/shop/deleteshops.php";
 		break;
 	case 'newshop':
 		require "m/shop/newshop.php";
 		exit;
 		break;
-		break;
 	}
 }
 $condition = "";
+if (isset($_POST['shop_id']) && $_POST['shop_id'] != "") {
+	if ($condition != "") {
+		$condition .= " AND ";
+	}
+	$condition .= "`shop_id`='" . $_POST['shop_id'] . "'";
+}
 if (isset($_POST['name']) && $_POST['name'] != "") {
 	if ($condition != "") {
 		$condition .= " AND ";
@@ -64,7 +70,7 @@ if ($condition == "") {
 }
 $result = $db->select("*", "shop", $condition);
 if ($result == false) {
-	echo "<div class='returnsuccess'>查询成功（结果为空）！</div>";
+	echo "<div class='returnsuccess'>结果为空！</div>";
 }
 else if ($condition != NULL) {
 	echo "<div class='returnsuccess'>查询成功！</div>";	
@@ -73,12 +79,14 @@ else if ($condition != NULL) {
 <div class="boxdiv">
 	<span class="titlespan">搜索商家</span>
 	<form action="?page=shop" method="post">
+		<span class="fixed">商家ID：</span>
+		<input class="text" type="text" name="shop_id" placeholder="依据商家ID过滤" value="<?php if (isset($_POST['shop_id'])) echo $_POST['shop_id']; ?>"><br>
 		<span class="fixed">名称：</span>
-		<input class="text" type="text" name="name" placeholder="依据商家名称过滤"><br>
+		<input class="text" type="text" name="name" placeholder="依据商家名称过滤" value="<?php if (isset($_POST['name'])) echo $_POST['name']; ?>"><br>
 		<span class="fixed">电话：</span>
-		<input class="text" type="text" name="phone" placeholder="依据业主电话过滤"><br>
+		<input class="text" type="text" name="phone" placeholder="依据业主电话过滤" value="<?php if (isset($_POST['phone'])) echo $_POST['phone']; ?>"><br>
 		<span class="fixed">位置：</span>
-		<input class="text" type="text" name="pos" placeholder="依据商家位置过滤"><br>
+		<input class="text" type="text" name="pos" placeholder="依据商家位置过滤" value="<?php if (isset($_POST['pos'])) echo $_POST['pos']; ?>"><br>
 		<p class="psubmit">
 			<input class="button" type="submit" value="搜索">
 			<input class="button" type="reset">
@@ -87,11 +95,12 @@ else if ($condition != NULL) {
 </div>
 <div class="boxdiv">
 	<span class="titlespan">商家列表</span>
-	<form action="?page=shop&function=deletes" method="post">
+	<form action="?page=shop&function=deleteshops" method="post">
 		<table class="table" style="margin-right:20px;">
 			<tr class="trtitle">
 				<td></td>
 				<td style="width:20px;">#</td>
+				<td>商家ID</td>
 				<td>名称</td>
 				<td>电话</td>
 				<td>位置</td>
@@ -111,6 +120,7 @@ else if ($condition != NULL) {
 					$id = $r['owner_id'];
 					$t = $db->select("provider_name", "providers", "`provider_id`='$id'", 1);
 					$t = $db->fetch($t);
+					echo "<td>" . $r['shop_id'] . "</td>";
 					echo "<td>" . $r['shop_name'] . "</td>";
 					echo "<td>" . $r['shop_phone'] . "</td>";
 					echo "<td>" . $r['shop_pos'] . "</td>";
@@ -120,7 +130,7 @@ else if ($condition != NULL) {
 					echo "<a href='?page=shop&function=edit&detail=" . $r['shop_id'] . "'>";
 					echo "<img src='images/icon_edit' alt='修改'>";
 					echo "<span class='link'>修改</span></a>&nbsp;";
-					echo "<a href='?page=shop&function=delete&detail=" . $r['shop_id'] . "'>";
+					echo "<a href='?page=shop&function=deleteshop&detail=" . $r['shop_id'] . "'>";
 					echo "<img src='images/icon_del' alt='删除'>";
 					echo "<span class='link'>删除</span></a>";
 					echo "&nbsp;</td>";

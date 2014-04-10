@@ -14,8 +14,8 @@ if (isset($_GET['function'])) {
 <div class="boxdiv">
 	<span class="titlespan">订单搜索</span>
 	<form action="?page=order&function=filter" method="post">
-		<span class="fixed">订单号：</span>
-		<input class="text" type="text" name="order_id" placeholder="依据订单号过滤" value="<?php if (isset($_POST['name'])) echo $_POST['name']; ?>"><br>
+		<span class="fixed">订单ID：</span>
+		<input class="text" type="text" name="order_id" placeholder="依据订单ID过滤" value="<?php if (isset($_POST['order_id'])) echo $_POST['order_id']; ?>"><br>
 		<span class="fixed">商家：</span>
 		<input class="text" type="text" name="name" placeholder="依据商家名称过滤" value="<?php if (isset($_POST['name'])) echo $_POST['name']; ?>"><br>
 		<span class="fixed">Ant：</span>
@@ -29,19 +29,19 @@ if (isset($_GET['function'])) {
 			<option <?php if (isset($_POST['date']) && $_POST['date'] == "本周") echo 'selected="selected"'; ?>>本周</option>
 			<option <?php if (isset($_POST['date']) && $_POST['date'] == "本月") echo 'selected="selected"'; ?>>本月</option>
 		</select><br>
-		<span class="fixed">是否下单：</span>
+		<span class="fixed">已下单：</span>
 		<span><input type="radio" name="ordered" value="-1" <?php if (!isset($_POST['ordered']) || $_POST['ordered'] == -1) echo "checked"; ?>>全部</span>&nbsp;
 		<span><input type="radio" name="ordered" value="1" <?php if (isset($_POST['ordered']) && $_POST['ordered'] == 1) echo "checked"; ?>>是</span>&nbsp;
 		<span><input type="radio" name="ordered" value="0" <?php if (isset($_POST['ordered']) && $_POST['ordered'] == 0) echo "checked"; ?>>否</span><br>
-		<span class="fixed">是否接单：</span>
+		<span class="fixed">已接单：</span>
 		<span><input type="radio" name="shipped" value="-1" <?php if (!isset($_POST['shipped']) || $_POST['shipped'] == -1) echo "checked"; ?>>全部</span>&nbsp;
 		<span><input type="radio" name="shipped" value="1" <?php if (isset($_POST['shipped']) && $_POST['shipped'] == 1) echo "checked"; ?>>是</span>&nbsp;
 		<span><input type="radio" name="shipped" value="0" <?php if (isset($_POST['shipped']) && $_POST['shipped'] == 0) echo "checked"; ?>>否</span><br>
-		<span class="fixed">是否取货：</span>
+		<span class="fixed">已取货：</span>
 		<span><input type="radio" name="taken" value="-1" <?php if (!isset($_POST['taken']) || $_POST['taken'] == -1) echo "checked"; ?>>全部</span>&nbsp;
 		<span><input type="radio" name="taken" value="1" <?php if (isset($_POST['taken']) && $_POST['taken'] == 1) echo "checked"; ?>>是</span>&nbsp;
 		<span><input type="radio" name="taken" value="0" <?php if (isset($_POST['taken']) && $_POST['taken'] == 0) echo "checked"; ?>>否</span><br>
-		<span class="fixed">是否付款：</span>
+		<span class="fixed">已付款：</span>
 		<span><input type="radio" name="paid" value="-1" <?php if (!isset($_POST['paid']) || $_POST['paid'] == -1) echo "checked"; ?>>全部</span>&nbsp;
 		<span><input type="radio" name="paid" value="1" <?php if (isset($_POST['paid']) && $_POST['paid'] == 1) echo "checked"; ?>>是</span>&nbsp;
 		<span><input type="radio" name="paid" value="0" <?php if (isset($_POST['paid']) && $_POST['paid'] == 0) echo "checked"; ?>>否</span><br>
@@ -61,10 +61,10 @@ if (isset($_GET['function'])) {
 			<td>时间</td>
 			<td>Ant</td>
 			<td>用户ID</td>
-			<td>是否下单</td>
-			<td>是否接单</td>
-			<td>是否取货</td>
-			<td>是否付款</td>
+			<td>已下单</td>
+			<td>已接单</td>
+			<td>已取货</td>
+			<td>已付款</td>
 		</tr>
 		<?php
 		$db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);

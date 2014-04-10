@@ -36,11 +36,20 @@ if (!defined("IN_CFM")) {
 			case "newshop":
 				$str .= "<a href='?page=$page&function=$function'>添加商家</a>";
 				break;
-			case "edit":
+			case "editshop":
 				$str .= "编辑商家信息";
 				break;
-			case "delete": case "deletes":
-				$str .= "<a href='?page=$page&function=$function'>删除商家</a>";
+			case "deleteshop": case "deleteshops":
+				$str .= "删除商家";
+				break;
+			case "newant":
+				$str .= "<a href='?page=$page&function=$function'>添加Ant</a>";
+				break;
+			case "editant":
+				$str .= "编辑Ant信息";
+				break;
+			case "deleteant": case "deleteants":
+				$str .= "删除Ant";
 				break;
 			case "filter":
 				$str .= "条件过滤";

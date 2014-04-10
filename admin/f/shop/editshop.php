@@ -2,8 +2,6 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$result = $db->select("*", "shop", "`$row`='$get'", 1);
-$result = $db->fetch($result);
 $t = $db->update("shop", "`shop_name`='" . $_POST['name'] .
 	"' , `shop_phone`='" . $_POST['phone'] .
 	"' , `shop_pos`='" . $_POST['pos'] .

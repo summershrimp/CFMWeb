@@ -13,9 +13,9 @@ if ( ! defined ( 'API_ROOT_PATH' ) )
 {
 	define ( 'API_ROOT_PATH', dirname( __FILE__));
 }
-require_once ( API_ROOT_PATH . '/RequestCore.class.php' );
-require_once ( API_ROOT_PATH . '/ChannelException.class.php' );
-require_once ( API_ROOT_PATH . '/BaeBase.class.php' );
+require_once ( API_ROOT_PATH . '/lib/RequestCore.class.php' );
+require_once ( API_ROOT_PATH . '/lib/ChannelException.class.php' );
+require_once ( API_ROOT_PATH . '/lib/BaeBase.class.php' );
 
 /**
  * 

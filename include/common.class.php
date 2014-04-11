@@ -11,9 +11,11 @@ if (! defined('IN_CFM'))
     die('Hacking attempt');
 }
 
+require_once './modules/channel/Channel.class.php' ;
+
 class apicommon
 {
-
+    
     public function login($username, $password, $role)
     {
         if ($role == Role_User)

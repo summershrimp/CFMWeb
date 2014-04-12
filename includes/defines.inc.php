@@ -58,6 +58,7 @@ define('NO_SUBMENU_CONTENT', '41007'); // 缺少子菜单数据
 define('NO_AUTH_CODE', '41008'); // 缺少oauth code
 define('NO_OPENOID', '41009'); // 缺少openid
 define('NO_ORDER_ID', '41010'); // 缺少openid
+define('NO_JSON_KEY', '41011' );//缺少必要的json键值
 
 define('TIMEOUT_ACCESS_TOKEN', '42001'); // access_token超时
 define('TIMEOUT_REFRESH_TOKEN', '42002'); // refresh_token超时

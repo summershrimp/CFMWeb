@@ -39,15 +39,15 @@ class database
     }
     function affected_rows ( )
     {
-        return mysql_affected_rows ( $this -> link_id );
+        return mysql_affected_rows ( $this -> con );
     }
     function error ( )
     {
-        return mysql_error ( $this -> link_id );
+        return mysql_error ( $this -> con );
     }
     function errno ( )
     {
-        return mysql_errno ( $this -> link_id );
+        return mysql_errno ( $this -> con );
     }
     function result ($query, $row)
     {
@@ -67,7 +67,7 @@ class database
     }
     function insert_id ( )
     {
-        return mysql_insert_id ( $this -> link_id );
+        return mysql_insert_id ( $this -> con );
     }
     function fetchRow ($query)
     {
@@ -85,7 +85,7 @@ class database
     {
         if (PHP_VERSION >= '4.3')
         {
-            return mysql_ping ( $this -> link_id );
+            return mysql_ping ( $this -> con );
         }
         else
         {
@@ -105,7 +105,7 @@ class database
     }
     function close ( )
     {
-        return mysql_close ( $this -> link_id );
+        return mysql_close ( $this -> con );
     }
     function selectLimit ($sql, $num, $start = 0)
     {

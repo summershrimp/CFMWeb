@@ -44,14 +44,14 @@ class user extends apicommon
 
     public function get_shop_menu($limit_start = 0, $limit_end = 20)
     {
-        $sql = "SELECT `shop_id`, `shop_name`,`shop_pos` From " . $GLOBALS['cfm']->table('shop') . "LIMIT $limit_start, $limit_end";
+        $sql = "SELECT * From " . $GLOBALS['cfm']->table('shop') . "LIMIT $limit_start, $limit_end";
         $arr = $GLOBALS['db']->getAll($sql);
         return $arr;
     }
 
     public function get_shop_count()
     {
-        $sql = "SELECT Conut(*) From " . $GLOBALS['cfm']->table('shop');
+        $sql = "SELECT Count(*) From " . $GLOBALS['cfm']->table('shop');
         $count = $GLOBALS['db']->getOne($sql);
         return intval($count);
     }

@@ -12,17 +12,17 @@ $return = Array();
 // 登录操作
 if (! isset($content['accesscode']))
 {
-    if ($content['act'] == 'ant_login'&&isset($content['username']))
+    if ($content['act'] == 'user_login'&&isset($content['openid']))
     {
         $user = new user();
-        $accesscode = $user->login($content['username'], '', Role_Ant);
+        $accesscode = $user->login($content['openid'], '', Role_User);
         if ($accesscode)
         {
             $return['accesscode'] = $accesscode;
             $return['status'] = STATUS_SUCCESS;
         }
     }
-    elseif(!isset($content['username']))
+    elseif(!isset($content['openid']))
         $return['status'] = NO_JSON_KEY;
     else
         $return['status'] = NO_TOKEN_PARA;
@@ -72,7 +72,7 @@ elseif ($content['act'] == 'check_unpaid')
 }
 elseif ($content['act'] == 'get_shop_menu')
 {
-    $get_c=isset($content['getcount'])?false:true;
+    $get_c=(isset($content['getcount'])&&$content['getcount']==1)?false:true;
     if ($get_c)
     {
         $l_st=isset($content['limitstart'])?intval($content['limitstart']):0;

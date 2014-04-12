@@ -18,13 +18,19 @@ class apicommon
     public function login($username, $password, $role)
     {
         if ($role == Role_User)
-            $ans = $this->check_user($username, $role);
-        if ($ans)
-            return $this->access_code_gen($username, $role);
+        {
+            $ans = $this->check_user_exist($username, $role);
+            if ($ans)
+            {
+                $sql="UPDATE ".$GLOBALS['cfm']->table("customers")." SET `last_ip` = '".$this->get_IP()."' Where `user_id` = '$ans' LIMIT 1";
+                $GLOBALS['db']->query($sql);
+                return $this->access_code_gen($ans, $role);
+            }
+        }
         else
         {
             $user_id = $this->check_login($username, $password, $role);
-            if (! user_id)
+            if (! $user_id)
                 return false;
             return $this->access_code_gen($user_id, $role);
         }
@@ -134,6 +140,8 @@ class apicommon
 
     private function access_code_gen($user_id, $role)
     {
+        $sql = "DELETE From " . $GLOBALS['cfm']->table('tokens') . "Where `id`='$user_id' AND `role`='$role' LIMIT 1";
+        $GLOBALS['db']->query($sql);
         $access_code = $this->genToken();
         $sql = "Insert Into " . $GLOBALS['cfm']->table('tokens') . " (`token`,`id`,`role`)VALUES('$access_code','$user_id','$role')";
         $GLOBALS['db']->query($sql);
@@ -169,7 +177,7 @@ class apicommon
         return $token;
     }
 
-    private function check_user($username, $role)
+    private function check_user_exist($username, $role)
     {
         if ($role === Role_Shop)
         {
@@ -191,8 +199,15 @@ class apicommon
         }
         $sql = "Select `$db_id_column`  From " . $GLOBALS['cfm']->table($db_table) . " Where `$db_uname_column` = '$username' LIMIT 1";
         $arr = $GLOBALS['db']->getRow($sql);
-        if (! isset($arr))
-            return $arr[$db_id_column];
+        if (isset($arr[$db_id_column]))
+           return $arr[$db_id_column];
+        elseif($role == Role_User)
+        {
+            $sql="INSERT Into ".$GLOBALS['cfm']->table("customers")." (`last_ip`,`is_validated`,`openid`) VALUES ('".$this->get_IP()."','0','$username') "; 
+            echo $sql;
+            $GLOBALS['db']->query($sql);
+            return $GLOBALS['db']->insert_id();
+        }
         return false;
     }
 
@@ -223,11 +238,32 @@ class apicommon
         if (isset($arr['salt']))
             $password = md5($password + $arr['salt']);
         if ($password == $arr['password'])
+        {
+            $sql="UPDATE ".$GLOBALS['cfm']->table($db_table)." SET `last_ip` = '".$this->get_IP()."' Where `$db_uname_column` = '$username' LIMIT 1";
+            $GLOBALS['db']->query($sql);
             return $arr[$db_id_column];
+        }
         else
             return false;
     }
-
+    private function get_IP() 
+    { 
+        if (@$_SERVER["HTTP_X_FORWARDED_FOR"]) 
+            $ip = $_SERVER["HTTP_X_FORWARDED_FOR"]; 
+        else if (@$_SERVER["HTTP_CLIENT_IP"]) 
+            $ip = $_SERVER["HTTP_CLIENT_IP"]; 
+        else if (@$_SERVER["REMOTE_ADDR"]) 
+            $ip = $_SERVER["REMOTE_ADDR"]; 
+        else if (@getenv("HTTP_X_FORWARDED_FOR"))
+            $ip = getenv("HTTP_X_FORWARDED_FOR"); 
+        else if (@getenv("HTTP_CLIENT_IP")) 
+            $ip = getenv("HTTP_CLIENT_IP"); 
+        else if (@getenv("REMOTE_ADDR")) 
+            $ip = getenv("REMOTE_ADDR"); 
+        else 
+            $ip = "Unknown"; 
+        return $ip; 
+    }
     private function error_msg($str)
     {
         echo $str;

@@ -8,7 +8,7 @@ class database
     private $con = NULL;
     public $prefix;
     private $db_config = Array ();
-    function database ($db_hsot, $db_name, $db_user, $db_pass, $prefix)
+    function database ($db_host, $db_name, $db_user, $db_pass, $prefix)
     {
         $this -> db_config = array (
                 "db_host" => $db_host,
@@ -20,8 +20,9 @@ class database
         $this->connect ( $this -> db_config );
     }
     function connect ($config)
-    {
-        $this -> con = @mysql_connect ( $config ['db_host'], $config ['db_user'], $config ['db_pass'] );
+    {  
+        
+        $this -> con = mysql_connect ( $config ['db_host'], $config ['db_user'], $config ['db_pass'] );
         if (! $this -> con)
             die ( "Cannot Connect To mysql" );
         mysql_select_db ( $config ['db_name'], $this -> con );

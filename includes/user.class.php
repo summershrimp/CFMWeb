@@ -4,8 +4,8 @@ if (! defined('IN_CFM'))
 {
     die('Hacking attempt');
 }
-require_once './common.class.php';
-require_once '../data/config.php';
+
+require_once ROOT_PATH . 'includes/common.class.php';
 
 class user extends apicommon
 {

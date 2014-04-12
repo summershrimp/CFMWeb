@@ -1,9 +1,9 @@
 <?php
 // database host
-$db_host   = "localhost:3306";
+$db_host   = "127.0.0.1:3306";
 
 // database name
-$db_name   = "Test2";
+$db_name   = "carryforme";
 
 // database username
 $db_user   = "root";
@@ -12,7 +12,7 @@ $db_user   = "root";
 $db_pass   = "ZYB941023";
 
 // table prefix
-$prefix    = "ecs_";
+$prefix    = "cfm_";
 
 $timezone    = "PRC";
 

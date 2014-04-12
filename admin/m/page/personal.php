@@ -17,17 +17,13 @@ if (isset($_GET['function'])) {
 	<span class="titlespan">个人信息</span>
 	<div>
 		<span class="fixed">用户名：</span>
-		<span><?php echo $result['admin_name']; ?></span>
-		<br>
+		<span><?php echo $result['admin_name']; ?></span><br>
 		<span class="fixed">电子邮箱：</span>
-		<span><?php echo $result['email']; ?></span>
-		<br>
+		<span><?php echo $result['email']; ?></span><br>
 		<span class="fixed">电话：</span>
-		<span><?php echo $result['phone']; ?></span>
-		<br>
+		<span><?php echo $result['phone']; ?></span><br>
 		<span class="fixed">权限等级：</span>
-		<span><?php echo $result['privilage']; ?></span>
-		<br>
+		<span><?php echo $result['privilage']; ?></span><br>
 		<span class="fixed">上次登录IP：</span>
 		<span><?php echo $result['last_ip']; ?></span>
 		<p></p>

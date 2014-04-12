@@ -23,6 +23,7 @@ function check($db, $alt, $page, $row, $exit) {
 	}
 }
 $db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
+$filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'editant':
@@ -38,54 +39,9 @@ if (isset($_GET['function'])) {
 		require "m/ant/newant.php";
 		exit;
 		break;
+	case 'filter':
+		$filter = true;
 	}
-}
-$condition = "";
-if (isset($_POST['ant_id']) && $_POST['ant_id'] != "") {
-	if ($condition != "") {
-		$condition .= " AND ";
-	}
-	$condition .= "`ant_id`='" . $_POST['ant_id'] . "'";
-}
-if (isset($_POST['name']) && $_POST['name'] != "") {
-	if ($condition != "") {
-		$condition .= " AND ";
-	}
-	$condition .= "`ant_name` LIKE '%" . $_POST['name'] . "%'";
-}
-if (isset($_POST['email']) && $_POST['email'] != "") {
-	if ($condition != "") {
-		$condition .= " AND ";
-	}
-	$condition .= "`email` LIKE '%" . $_POST['email'] . "%'";
-}
-if (isset($_POST['real_name']) && $_POST['real_name'] != "") {
-	if ($condition != "") {
-		$condition .= " AND ";
-	}
-	$condition .= "`ant_real_name` LIKE '%" . $_POST['real_name'] . "%'";
-}
-if (isset($_POST['sex']) && $_POST['sex'] != "-1") {
-	if ($condition != "") {
-		$condition .= " AND ";
-	}
-	$condition .= "`sex`='" . $_POST['sex'] . "'";
-}
-if (isset($_POST['mobile']) && $_POST['mobile'] != "") {
-	if ($condition != "") {
-		$condition .= " AND ";
-	}
-	$condition .= "`mobile_phone` LIKE '%" . $_POST['mobile'] . "%'";
-}
-if ($condition == "") {
-	$condition = NULL;
-}
-$result = $db->select("*", "ants", $condition);
-if ($result == false) {
-	echo "<div class='returnsuccess'>结果为空！</div>";
-}
-else if ($condition != NULL) {
-	echo "<div class='returnsuccess'>查询成功！</div>";	
 }
 ?>
 <div class="boxdiv">
@@ -127,6 +83,7 @@ else if ($condition != NULL) {
 				<td>操作</td>
 			</tr>
 			<?php
+			$result = $db->select("*", "ants");
 			if ($result != false) {
 				$count = 0;
 				while ($r = $db->fetch($result)) {

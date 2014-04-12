@@ -2,6 +2,7 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
+$db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
@@ -67,7 +68,6 @@ if (isset($_GET['function'])) {
 			<td>已付款</td>
 		</tr>
 		<?php
-		$db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 		$result = $db->select("*", "order_info");
 		if ($result != false) {
 			$count = 0;
@@ -80,7 +80,7 @@ if (isset($_GET['function'])) {
 				$ant = $db->fetch($ant);
 				$match = true;
 				if ($filter == true) {
-					if (isset($_POST['order_id']) && $_POST['order_id'] != "" && !strstr($order['order_id'], $_POST['order_id'])) {
+					if (isset($_POST['order_id']) && $_POST['order_id'] != "" && $order['order_id'] != $_POST['order_id']) {
 						$match = false;
 					}
 					if (isset($_POST['name']) && $_POST['name'] != "" && !strstr($shop['shop_name'], $_POST['name'])) {

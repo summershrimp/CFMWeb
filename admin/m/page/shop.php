@@ -2,13 +2,13 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-function check($db, $alt, $page, $row, $exit) {
+function check($db, $alt, $page, $shopow, $exit) {
 	if (isset($_GET[$alt])) {
 		$get = $_GET[$alt];
-		$result = $db->select("*", "shop", "`$row`='$get'", 1);
+		$result = $db->select("*", "shop", "`$shopow`='$get'", 1);
 		if ($result != false) {
-			$r = $db->fetch($result);
-			if (!empty($r)) {
+			$shop = $db->fetch($result);
+			if (!empty($shop)) {
 				require $page;
 				if ($exit == true) {
 					exit;
@@ -23,6 +23,7 @@ function check($db, $alt, $page, $row, $exit) {
 	}
 }
 $db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
+$filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'editshop':
@@ -38,42 +39,9 @@ if (isset($_GET['function'])) {
 		require "m/shop/newshop.php";
 		exit;
 		break;
+	case 'filter':
+		$filter = true;
 	}
-}
-$condition = "";
-if (isset($_POST['shop_id']) && $_POST['shop_id'] != "") {
-	if ($condition != "") {
-		$condition .= " AND ";
-	}
-	$condition .= "`shop_id`='" . $_POST['shop_id'] . "'";
-}
-if (isset($_POST['name']) && $_POST['name'] != "") {
-	if ($condition != "") {
-		$condition .= " AND ";
-	}
-	$condition .= "`shop_name` LIKE '%" . $_POST['name'] . "%'";
-}
-if (isset($_POST['phone']) && $_POST['phone'] != "") {
-	if ($condition != "") {
-		$condition .= " AND ";
-	}
-	$condition .= "`shop_phone` LIKE '%" . $_POST['phone'] . "%'";
-}
-if (isset($_POST['pos']) && $_POST['pos'] != "") {
-	if ($condition != "") {
-		$condition .= " AND ";
-	}
-	$condition .= "`shop_pos` LIKE '%" . $_POST['pos'] . "%'";
-}
-if ($condition == "") {
-	$condition = NULL;
-}
-$result = $db->select("*", "shop", $condition);
-if ($result == false) {
-	echo "<div class='returnsuccess'>结果为空！</div>";
-}
-else if ($condition != NULL) {
-	echo "<div class='returnsuccess'>查询成功！</div>";	
 }
 ?>
 <div class="boxdiv">
@@ -109,28 +77,55 @@ else if ($condition != NULL) {
 				<td>操作</td>
 			</tr>
 			<?php
+			$result = $db->select("*", "shop");
 			if ($result != false) {
 				$count = 0;
-				while ($r = $db->fetch($result)) {
+				while ($shop = $db->fetch($result)) {
+					$provider = $db->select("provider_name", "providers", "`provider_id`='" . $shop['owner_id'] . "'", 1);
+					$provider = $db->fetch($provider);
+					$match = true;
+					if ($filter == true) {
+						if (isset($_POST['shop_id']) && $_POST['shop_id'] != "" && $shop['shop_id'] != $_POST['shop_id']) {
+							$match = false;
+						}
+						if (isset($_POST['shop_name']) && $_POST['shop_name'] != "" && !strstr($shop['shop_name'], $_POST['shop_name'])) {
+							$match = false;
+						}
+						if (isset($_POST['shop_phone']) && $_POST['shop_phone'] != "" && !strstr($shop['shop_phone'], $_POST['shop_phone'])) {
+							$match = false;
+						}
+						if (isset($_POST['shop_pos']) && $_POST['shop_pos'] != "-1" && $shop['shop_pos'] != $_POST['shop_pos']) {
+							$match = false;
+						}
+						if (isset($_POST['name']) && $_POST['name'] != "" && !strstr($provider['provider_name'], $_POST['name'])) {
+							$match = false;
+						}
+						if (isset($_POST['shop_desc']) && $_POST['shop_desc'] != "" && !strstr($shop['shop_desc'], $_POST['shop_desc'])) {
+							$match = false;
+						}
+					}
+					if ($match == false) {
+						continue;
+					}
 					$count++;
 					$style = ($count - 1) % 2;
 					echo "<tr class='tr$style'>";
-					echo "<td><input type='checkbox' name='chk[]' value='" . $r['shop_id'] . "'></td>";
+					echo "<td><input type='checkbox' name='chk[]' value='" . $shop['shop_id'] . "'></td>";
 					echo "<td>$count</td>";
-					$id = $r['owner_id'];
+					$id = $shop['owner_id'];
 					$t = $db->select("provider_name", "providers", "`provider_id`='$id'", 1);
 					$t = $db->fetch($t);
-					echo "<td>" . $r['shop_id'] . "</td>";
-					echo "<td>" . $r['shop_name'] . "</td>";
-					echo "<td>" . $r['shop_phone'] . "</td>";
-					echo "<td>" . $r['shop_pos'] . "</td>";
-					echo "<td>" . $t['provider_name'] . "</td>";
-					echo "<td>" . $r['shop_desc'] . "</td>";
+					echo "<td>" . $shop['shop_id'] . "</td>";
+					echo "<td>" . $shop['shop_name'] . "</td>";
+					echo "<td>" . $shop['shop_phone'] . "</td>";
+					echo "<td>" . $shop['shop_pos'] . "</td>";
+					echo "<td>" . $provider['provider_name'] . "</td>";
+					echo "<td>" . $shop['shop_desc'] . "</td>";
 					echo "<td>&nbsp;";
-					echo "<a href='?page=shop&function=edit&detail=" . $r['shop_id'] . "'>";
+					echo "<a href='?page=shop&function=edit&detail=" . $shop['shop_id'] . "'>";
 					echo "<img src='images/icon_edit' alt='修改'>";
 					echo "<span class='link'>修改</span></a>&nbsp;";
-					echo "<a href='?page=shop&function=deleteshop&detail=" . $r['shop_id'] . "'>";
+					echo "<a href='?page=shop&function=deleteshop&detail=" . $shop['shop_id'] . "'>";
 					echo "<img src='images/icon_del' alt='删除'>";
 					echo "<span class='link'>删除</span></a>";
 					echo "&nbsp;</td>";

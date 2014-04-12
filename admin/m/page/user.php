@@ -27,6 +27,8 @@ if (isset($_GET['function'])) {
 		<span><input type="radio" name="sex" value="1" <?php if (isset($_POST['sex']) && $_POST['sex'] == 1) echo "checked"; ?>>女</span><br>
 		<span class="fixed">上次登录IP：</span>
 		<input class="text" type="text" name="last_ip" placeholder="依据上次登录IP过滤" value="<?php if (isset($_POST['last_ip'])) echo $_POST['last_ip']; ?>"><br>
+		<span class="fixed">用户QQ：</span>
+		<input class="text" type="text" name="qq" placeholder="依据用户QQ过滤" value="<?php if (isset($_POST['qq'])) echo $_POST['qq']; ?>"><br>
 		<p class="psubmit">
 			<input class="button" type="submit" value="搜索">
 			<input class="button" type="reset">
@@ -43,6 +45,7 @@ if (isset($_GET['function'])) {
 			<td>邮箱</td>
 			<td>性别</td>
 			<td>上次登录IP</td>
+			<td>用户QQ</td>
 		</tr>
 		<?php
 		$result = $db->select("*", "customers");
@@ -66,6 +69,9 @@ if (isset($_GET['function'])) {
 					if (isset($_POST['last_ip']) && $_POST['last_ip'] != "" && !strstr($user['last_ip'], $_POST['last_ip'])) {
 						$match = false;
 					}
+					if (isset($_POST['qq']) && $_POST['qq'] != "" && !strstr($user['qq'], $_POST['qq'])) {
+						$match = false;
+					}
 				}
 				if ($match == false) {
 					continue;
@@ -79,6 +85,7 @@ if (isset($_GET['function'])) {
 				echo "<td>" . $user['email'] . "</td>";
 				echo "<td>" . ($user['sex'] == "0" ? "男" : "女") . "</td>";
 				echo "<td>" . $user['last_ip'] . "</td>";
+				echo "<td>" . $user['qq'] . "</td>";
 				echo "</tr>";
 			}
 		}

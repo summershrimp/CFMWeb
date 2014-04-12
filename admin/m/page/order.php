@@ -95,7 +95,7 @@ if (isset($_GET['function'])) {
 					if (isset($_POST['date'])) {
 						switch ($_POST['date']) {
 						case '今天':
-							if (strtotime(date("Y-m-d")) != strtotime($order['add_date'])) {
+							if (date("Y-m-d") != $order['add_date']) {
 								$match = false;
 							}
 							break;

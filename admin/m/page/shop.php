@@ -46,15 +46,19 @@ if (isset($_GET['function'])) {
 ?>
 <div class="boxdiv">
 	<span class="titlespan">搜索商家</span>
-	<form action="?page=shop" method="post">
+	<form action="?page=shop&function=filter" method="post">
 		<span class="fixed">商家ID：</span>
 		<input class="text" type="text" name="shop_id" placeholder="依据商家ID过滤" value="<?php if (isset($_POST['shop_id'])) echo $_POST['shop_id']; ?>"><br>
 		<span class="fixed">名称：</span>
-		<input class="text" type="text" name="name" placeholder="依据商家名称过滤" value="<?php if (isset($_POST['name'])) echo $_POST['name']; ?>"><br>
+		<input class="text" type="text" name="shop_name" placeholder="依据商家名称过滤" value="<?php if (isset($_POST['shop_name'])) echo $_POST['shop_name']; ?>"><br>
 		<span class="fixed">电话：</span>
-		<input class="text" type="text" name="phone" placeholder="依据业主电话过滤" value="<?php if (isset($_POST['phone'])) echo $_POST['phone']; ?>"><br>
+		<input class="text" type="text" name="shop_phone" placeholder="依据业主电话过滤" value="<?php if (isset($_POST['shop_phone'])) echo $_POST['shop_phone']; ?>"><br>
 		<span class="fixed">位置：</span>
-		<input class="text" type="text" name="pos" placeholder="依据商家位置过滤" value="<?php if (isset($_POST['pos'])) echo $_POST['pos']; ?>"><br>
+		<input class="text" type="text" name="shop_pos" placeholder="依据商家位置过滤" value="<?php if (isset($_POST['shop_pos'])) echo $_POST['shop_pos']; ?>"><br>
+		<span class="fixed">业主：</span>
+		<input class="text" type="text" name="provider_name" placeholder="依据业主姓名过滤" value="<?php if (isset($_POST['provider_name'])) echo $_POST['provider_name']; ?>"><br>
+		<span class="fixed">描述：</span>
+		<input class="text" type="text" name="shop_desc" placeholder="依据商家描述过滤" value="<?php if (isset($_POST['shop_desc'])) echo $_POST['shop_desc']; ?>"><br>
 		<p class="psubmit">
 			<input class="button" type="submit" value="搜索">
 			<input class="button" type="reset">
@@ -94,10 +98,10 @@ if (isset($_GET['function'])) {
 						if (isset($_POST['shop_phone']) && $_POST['shop_phone'] != "" && !strstr($shop['shop_phone'], $_POST['shop_phone'])) {
 							$match = false;
 						}
-						if (isset($_POST['shop_pos']) && $_POST['shop_pos'] != "-1" && $shop['shop_pos'] != $_POST['shop_pos']) {
+						if (isset($_POST['shop_pos']) && $_POST['shop_pos'] != "" && !strstr($shop['shop_pos'], $_POST['shop_pos'])) {
 							$match = false;
 						}
-						if (isset($_POST['name']) && $_POST['name'] != "" && !strstr($provider['provider_name'], $_POST['name'])) {
+						if (isset($_POST['provider_name']) && $_POST['provider_name'] != "" && !strstr($provider['provider_name'], $_POST['provider_name'])) {
 							$match = false;
 						}
 						if (isset($_POST['shop_desc']) && $_POST['shop_desc'] != "" && !strstr($shop['shop_desc'], $_POST['shop_desc'])) {

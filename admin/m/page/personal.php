@@ -3,15 +3,16 @@ if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
 $db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
-$result = $db->select("*", "admin_users", "`admin_name`='" . $_SESSION['username'] . "'", 1);
-$result = $db->fetch($result);
+$username = $_SESSION['username'];
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
-	case 'changepassword':
-		require "f/personal/changepassword.php";
+	case 'editpersonal':
+		require "f/personal/editpersonal.php";
 		break;
 	}
 }
+$result = $db->select("*", "admin_users", "`admin_name`='$username'", 1);
+$result = $db->fetch($result);
 ?>
 <div class="boxdiv">
 	<span class="titlespan">个人信息</span>
@@ -31,15 +32,19 @@ if (isset($_GET['function'])) {
 </div>
 <div class="boxdiv">
 	<span class="titlespan">修改密码</span>
-	<form action="?page=personal&function=changepassword" method="post">
-		<span class="fixed">原密码：</span>
-		<input class="text" type="password" name="old">
-		<br>
+	<form action="?page=personal&function=editpersonal" method="post">
+		<span class="fixed" style="width:auto;">若想修改信息，请先输入旧密码。</span><br>
+		<span class="fixed" style="width:auto;">若不想修改某条信息，则留空相应的输入框。</span><br>
+		<span class="fixed">旧密码：</span>
+		<input class="text" type="password" name="old"><br>
 		<span class="fixed">新密码：</span>
-		<input class="text" type="password" name="new">
-		<br>
+		<input class="text" type="password" name="new"><br>
 		<span class="fixed">重复新密码：</span>
-		<input class="text" type="password" name="rep">
+		<input class="text" type="password" name="rep"><br>
+		<span class="fixed">电子邮箱：</span>
+		<input class="text" type="text" name="email"><br>
+		<span class="fixed">电话：</span>
+		<input class="text" type="text" name="phone">
 		<p class="psubmit">
 			<input class="button" type="submit" value="提交">
 			<input class="button" type="reset" value="重置">

@@ -46,7 +46,7 @@ if (isset($_GET['function'])) {
 ?>
 <div class="boxdiv">
 	<span class="titlespan">搜索Ant</span>
-	<form action="?page=ant" method="post">
+	<form action="?page=ant&function=filter" method="post">
 		<span class="fixed">AntID：</span>
 		<input class="text" type="text" name="ant_id" placeholder="依据AntID过滤" value="<?php if (isset($_POST['ant_id'])) echo $_POST['ant_id']; ?>"><br>
 		<span class="fixed">名称：</span>
@@ -86,23 +86,47 @@ if (isset($_GET['function'])) {
 			$result = $db->select("*", "ants");
 			if ($result != false) {
 				$count = 0;
-				while ($r = $db->fetch($result)) {
+				while ($ant = $db->fetch($result)) {
+					$match = true;
+					if ($filter == true) {
+						if (isset($_POST['ant_id']) && $_POST['ant_id'] != "" && $ant['ant_id'] != $_POST['ant_id']) {
+							$match = false;
+						}
+						if (isset($_POST['ant_name']) && $_POST['ant_name'] != "" && !strstr($ant['ant_name'], $_POST['ant_name'])) {
+							$match = false;
+						}
+						if (isset($_POST['email']) && $_POST['email'] != "" && !strstr($ant['email'], $_POST['email'])) {
+							$match = false;
+						}
+						if (isset($_POST['real_name']) && $_POST['real_name'] != "" && !strstr($ant['ant_real_name'], $_POST['real_name'])) {
+							$match = false;
+						}
+						if (isset($_POST['sex']) && $_POST['sex'] != "-1" && $ant['sex'] != $_POST['sex']) {
+							$match = false;
+						}
+						if (isset($_POST['mobile']) && $_POST['mobile'] != "" && !strstr($ant['mobile_phone'], $_POST['mobile'])) {
+							$match = false;
+						}
+					}
+					if ($match == false) {
+						continue;
+					}
 					$count++;
 					$style = ($count - 1) % 2;
 					echo "<tr class='tr$style'>";
-					echo "<td><input type='checkbox' name='chk[]' value='" . $r['ant_id'] . "'></td>";
+					echo "<td><input type='checkbox' name='chk[]' value='" . $ant['ant_id'] . "'></td>";
 					echo "<td>$count</td>";
-					echo "<td>" . $r['ant_id'] . "</td>";
-					echo "<td>" . $r['ant_name'] . "</td>";
-					echo "<td>" . $r['email'] . "</td>";
-					echo "<td>" . $r['ant_real_name'] . "</td>";
-					echo "<td>" . ($r['sex'] == "0" ? "男" : "女") . "</td>";
-					echo "<td>" . $r['mobile_phone'] . "</td>";
+					echo "<td>" . $ant['ant_id'] . "</td>";
+					echo "<td>" . $ant['ant_name'] . "</td>";
+					echo "<td>" . $ant['email'] . "</td>";
+					echo "<td>" . $ant['ant_real_name'] . "</td>";
+					echo "<td>" . ($ant['sex'] == "0" ? "男" : "女") . "</td>";
+					echo "<td>" . $ant['mobile_phone'] . "</td>";
 					echo "<td>&nbsp;";
-					echo "<a href='?page=ant&function=editant&detail=" . $r['ant_id'] . "'>";
+					echo "<a href='?page=ant&function=editant&detail=" . $ant['ant_id'] . "'>";
 					echo "<img src='images/icon_edit' alt='修改'>";
 					echo "<span class='link'>修改</span></a>&nbsp;";
-					echo "<a href='?page=ant&function=deleteant&detail=" . $r['ant_id'] . "'>";
+					echo "<a href='?page=ant&function=deleteant&detail=" . $ant['ant_id'] . "'>";
 					echo "<img src='images/icon_del' alt='删除'>";
 					echo "<span class='link'>删除</span></a>";
 					echo "&nbsp;</td>";

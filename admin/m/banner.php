@@ -33,6 +33,9 @@ if (!defined("IN_CFM")) {
 			$function = $_GET['function'];
 			$str .= " » ";
 			switch ($function) {
+			case "editpersonal":
+				$str .= "编辑个人信息";
+				break;
 			case "newshop":
 				$str .= "<a href='?page=$page&function=$function'>添加商家</a>";
 				break;

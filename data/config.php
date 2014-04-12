@@ -12,7 +12,7 @@ $db_user   = "rexskz";
 $db_pass   = "2147483647";
 
 // table prefix
-$prefix    = "ecs_";
+$prefix    = "cfm_";
 
 $timezone    = "PRC";
 

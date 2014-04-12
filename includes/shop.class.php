@@ -9,9 +9,9 @@ if (!defined('IN_CFM')) {
 	die('Hacking attempt');
 }
 
-require "include/init.inc.php";
-require "include/defines.inc.php";
-require "include/common.class.php";
+require "includes/init.inc.php";
+require "includes/defines.inc.php";
+require "includes/common.class.php";
 
 class Shop extends apicommon {
 	/**

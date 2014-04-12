@@ -67,7 +67,7 @@ if (! get_magic_quotes_gpc())
 }
 
 /* 创建cfm对象 */
-require_once ROOT_PATH . 'include/cfm.class.php';
+require_once ROOT_PATH . 'includes/cfm.class.php';
 
 $cfm = new CFM($db_name, $prefix);
 define('DATA_DIR', $ecs->data_dir());

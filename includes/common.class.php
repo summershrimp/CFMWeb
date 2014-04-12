@@ -95,7 +95,7 @@ class apicommon
     {
         $sql = "Select Count(*) From " . $GLOBALS['cfm']->table('shop_goods') . " Where `shop_id` = '$shop_id' ";
         $arr = $GLOBALS['db']->getOne($sql);
-        return $arr;
+        return intval($arr);
     }
 
     public function get_order_sn($order_id)

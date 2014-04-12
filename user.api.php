@@ -1,5 +1,5 @@
 <?php
-define('IN_CFM','1');
+define('IN_CFM',true);
 require_once './includes/init.inc.php';
 require_once ROOT_PATH . 'includes/user.class.php';
 
@@ -12,9 +12,8 @@ $return = Array();
 // 登录操作
 if (! isset($content['accesscode']))
 {
-    if ($content['act'] == 'ant_login')
+    if ($content['act'] == 'ant_login'&&isset($content['username']))
     {
-        //isset($content['username'])?:
         $user = new user();
         $accesscode = $user->login($content['username'], '', Role_Ant);
         if ($accesscode)
@@ -23,8 +22,10 @@ if (! isset($content['accesscode']))
             $return['status'] = STATUS_SUCCESS;
         }
     }
+    elseif(!isset($content['username']))
+        $return['status'] = NO_JSON_KEY;
     else
-        $return['status'] = ILLIGAL_ACCESSTOKEN;
+        $return['status'] = NO_TOKEN_PARA;
     echo json_encode($return);
     exit();
 }
@@ -34,10 +35,24 @@ $user = new user($content["accesscode"]);
 // 验证用户手机号
 if ($content['act'] == 'confirm_user_phone')
 {
+    if(!isset($content['phonenumber']))
+        $return['status'] = NO_JSON_KEY;
     if (! isset($content['confirmcode']))
-        $return = $user->send_confirm($content['phonenumber']);
+    {
+        if($user->send_confirm($content['phonenumber']))
+            $return['status'] = STATUS_SUCCESS;
+        else $return['status'] = SYS_BUSY; 
+    }
     else
-        $return = $user->confirm_phone($content['phonenumber'], $content['confirmcode']);
+    {
+        if( !$user->confirm_phone($content['phonenumber'], $content['confirmcode']))
+            $return['status'] = ILLEGAL_TICKET;
+        else
+        {
+            $return['status'] = STATUS_SUCCESS;
+            $return['phone_number'] =$content['phonenumber']; 
+        } 
+    }
 }
 
 // 验证是否有未完成订单
@@ -57,9 +72,13 @@ elseif ($content['act'] == 'check_unpaid')
 }
 elseif ($content['act'] == 'get_shop_menu')
 {
-    if ($content['getcount'] == 0)
+    $get_c=isset($content['getcount'])?false:true;
+    if ($get_c)
     {
-        $ans = $user->get_shop_menu($content['limitstart'], $content['limitend']);
+        $l_st=isset($content['limitstart'])?intval($content['limitstart']):0;
+        $l_ed=isset($content['limitend'])?intval($content['limitstart']):$user->get_shop_count();
+        
+        $ans = $user->get_shop_menu($l_st, $l_ed);
         $return['status'] = STATUS_SUCCESS;
         $return['shoplist'] = $ans;
     }
@@ -72,15 +91,38 @@ elseif ($content['act'] == 'get_shop_menu')
 }
 elseif ($content['act'] == 'get_good_menu')
 {
-    if ($content['getcount'] == 0)
+    $get_c=isset($content['getcount'])?false:true;
+    if ($get_c)
     {
-        $ans = $user->get_good_menu($content['limitstart'], $content['limitend']);
+        $l_st=isset($content['limitstart'])?intval($content['limitstart']):0;
+        $l_ed=isset($content['limitend'])?intval($content['limitstart']):$user->get_good_count();
+        
+        $ans = $user->get_good_menu($l_st, $l_ed);
         $return['status'] = STATUS_SUCCESS;
         $return['goodlist'] = $ans;
     }
     else
     {
         $ans = $user->get_good_count($content['shop_id']);
+        $return['status'] = STATUS_SUCCESS;
+        $return['count'] = $ans;
+    }
+}
+elseif ($content['act'] == 'get_hot_menu')
+{
+    $get_c=isset($content['getcount'])?false:true;
+    if ($get_c)
+    {
+        $l_st=isset($content['limitstart'])?intval($content['limitstart']):0;
+        $l_ed=isset($content['limitend'])?intval($content['limitstart']):$user->get_hot_count();
+        
+        $ans = $user->get_hot_menu($l_st, $l_ed);
+        $return['status'] = STATUS_SUCCESS;
+        $return['goodlist'] = $ans;
+    }
+    else
+    {
+        $ans = $user->get_hot_count($content['shop_id']);
         $return['status'] = STATUS_SUCCESS;
         $return['count'] = $ans;
     }
@@ -93,27 +135,42 @@ elseif ($content['act'] == 'get_address')
 }
 elseif ($content['act'] == 'place_order')
 {
-    $order_id = $user->place_order($content['cart'], $content['address'], $content['tips']);
-    $order_sn = $user->get_order_sn($order_id);
-    $return['status'] = STATUS_SUCCESS;
-    $return['order_id'] = $order_id;
-    $return['order_sn'] = $order_sn;
+    if(!$user->check_unpaid())
+    {
+        $order_id = $user->place_order($content['cart'], $content['address'], $content['tips']);
+        $order_sn = $user->get_order_sn($order_id);
+        $return['status'] = STATUS_SUCCESS;
+        $return['order_id'] = $order_id;
+        $return['order_sn'] = $order_sn;
+    }
+    else 
+        $return['status'] = UNAVAIL_NEW_ORDER;
 }
 elseif ($content['act'] == 'cancel_order')
 {
-    $arr = $user->cancel_order($content['order_id']);
-    if ($arr)
-        $return['status'] = STATUS_SUCCESS;
-    else
-        $return['status'] = NO_ORDER_ID;
+    if(!isset($content['order_id']))
+        $return['status']=NO_JSON_KEY;
+    else 
+    {
+        $arr = $user->cancel_order($content['order_id']);
+        if ($arr)
+            $return['status'] = STATUS_SUCCESS;
+        else
+            $return['status'] = NO_ORDER_ID;
+    }
 }
 elseif ($content['act'] == 'confirm_sent')
 {
-    $arr = $user->confirm_sent($content['order_id']);
-    if ($arr)
-        $return['status'] = STATUS_SUCCESS;
+    if(!isset($content['order_id']))
+        $return['status']=NO_JSON_KEY;
     else
-        $return['status'] = NO_ORDER_ID;
+    {
+        $arr = $user->confirm_sent($content['order_id']);
+        if ($arr)
+            $return['status'] = STATUS_SUCCESS;
+        else
+            $return['status'] = NO_ORDER_ID;
+    }
 }
 elseif ($content['act'] == 'order_detail')
 {

@@ -53,9 +53,21 @@ class user extends apicommon
     {
         $sql = "SELECT Conut(*) From " . $GLOBALS['cfm']->table('shop');
         $count = $GLOBALS['db']->getOne($sql);
-        return $count;
+        return intval($count);
     }
-
+    
+    public function get_hot_menu($limit_start , $limit_end )
+    {
+        $sql = "SELECT * From " . $GLOBALS[cfm]->table('shop_goods') . "Where `onsale` = '1' LIMIT $limit_start , $limit_end ";
+        $arr = $GLOBALS['db']->getAll($sql);
+        return $arr;
+    }
+    public function get_hot_count()
+    {
+        $sql = "SELECT Count(*) From " . $GLOBALS[cfm]->table('shop_goods') . "Where `onsale` = '1' ";
+        $count = $GLOBALS['db']->getOne($sql);
+        return intval($count);
+    }
     public function get_address()
     {
         $sql = "SELECT * FROM " . $GLOBALS['cfm']->table('user_address') . " Where `user_id` = " . $this->user_id . " LIMIT 1";

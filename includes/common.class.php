@@ -135,7 +135,7 @@ class apicommon
     private function access_code_gen($user_id, $role)
     {
         $access_code = $this->genToken();
-        $sql = "Insert Into " . $GLOBALS['cfm']->table('tokens') . " (`token`,`id`,`role`)VALUES('$access_code',$user_id,$role)";
+        $sql = "Insert Into " . $GLOBALS['cfm']->table('tokens') . " (`token`,`id`,`role`)VALUES('$access_code','$user_id','$role')";
         $GLOBALS['db']->query($sql);
         return $access_code;
     }

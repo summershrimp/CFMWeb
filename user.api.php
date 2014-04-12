@@ -14,6 +14,7 @@ if (! isset($content['accesscode']))
 {
     if ($content['act'] == 'ant_login')
     {
+        //isset($content['username'])?:
         $user = new user();
         $accesscode = $user->login($content['username'], '', Role_Ant);
         if ($accesscode)

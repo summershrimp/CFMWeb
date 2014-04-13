@@ -7,7 +7,17 @@ define('IN_CFM', true);
 require_once "includes/init.inc.php";
 require_once "includes/shop.class.php";
 
+header('Content-Type: application/json; charset=utf-8');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type ");
+
+if (!isset($GLOBALS["HTTP_RAW_POST_DATA"])) {
+    $return ['status'] = ERROR_CONTENT;
+    echo json_encode($return);
+    exit();
+}
 $content = json_decode($GLOBALS['HTTP_RAW_POST_DATA'], true);
+$return = array();
 $shop = new Shop();
 
 // Check if action is login

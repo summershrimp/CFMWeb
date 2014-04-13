@@ -20,7 +20,7 @@ if (isset($_POST['old']) && $_POST['old'] != "") {
 				$status = "error";
 			}
 			else {
-				$password = md5($_POST['new']);
+				$password = $_POST['new'];
 				if ($result['salt']) {
 					$password=md5($password . $result['salt']);
 				}

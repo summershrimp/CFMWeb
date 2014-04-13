@@ -16,6 +16,9 @@ if (!defined("IN_CFM")) {
 		case "shop":
 			$str .= "<a href='?page=$page'>商家信息管理</a>";
 			break;
+		case "provider":
+			$str .= "<a href='?page=$page'>业主信息管理</a>";
+			break;
 		case "order":
 			$str .= "<a href='?page=$page'>订单信息管理</a>";
 			break;

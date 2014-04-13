@@ -14,6 +14,7 @@ if (!defined("IN_CFM")) {
 	switch ($page) {
 	case "personal":
 	case "shop":
+	case "provider":
 	case "order":
 	case "economic":
 	case "ant":

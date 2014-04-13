@@ -1,13 +1,13 @@
 <?php
-
 /*
 	Author: Rex Zeng
 	Describtion: Shop API
 */
+define('IN_CFM', true);
+require_once "includes/init.inc.php";
+require_once "includes/shop.class.php";
 
-require "shop.class.php";
-
-$content = json_decode($SERVER['HTTP_RAW_POST_DATA']);
+$content = json_decode($GLOBALS['HTTP_RAW_POST_DATA'], true);
 $shop = new Shop();
 
 // Check if action is login
@@ -71,5 +71,5 @@ else {
 		}
 	}
 }
-return json_encode($result);
+echo json_encode($result);
 ?>

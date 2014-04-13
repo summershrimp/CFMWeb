@@ -8,7 +8,7 @@ class database
     private $con = NULL;
     public $prefix;
     private $db_config = Array ();
-    function database ($db_hsot, $db_name, $db_user, $db_pass, $prefix)
+    function database ($db_host, $db_name, $db_user, $db_pass, $prefix)
     {
         $this -> db_config = array (
                 "db_host" => $db_host,
@@ -20,8 +20,9 @@ class database
         $this->connect ( $this -> db_config );
     }
     function connect ($config)
-    {
-        $this -> con = @mysql_connect ( $config ['db_host'], $config ['db_user'], $config ['db_pass'] );
+    {  
+        
+        $this -> con = mysql_connect ( $config ['db_host'], $config ['db_user'], $config ['db_pass'] );
         if (! $this -> con)
             die ( "Cannot Connect To mysql" );
         mysql_select_db ( $config ['db_name'], $this -> con );
@@ -38,15 +39,15 @@ class database
     }
     function affected_rows ( )
     {
-        return mysql_affected_rows ( $this -> link_id );
+        return mysql_affected_rows ( $this -> con );
     }
     function error ( )
     {
-        return mysql_error ( $this -> link_id );
+        return mysql_error ( $this -> con );
     }
     function errno ( )
     {
-        return mysql_errno ( $this -> link_id );
+        return mysql_errno ( $this -> con );
     }
     function result ($query, $row)
     {
@@ -66,7 +67,7 @@ class database
     }
     function insert_id ( )
     {
-        return mysql_insert_id ( $this -> link_id );
+        return mysql_insert_id ( $this -> con );
     }
     function fetchRow ($query)
     {
@@ -84,7 +85,7 @@ class database
     {
         if (PHP_VERSION >= '4.3')
         {
-            return mysql_ping ( $this -> link_id );
+            return mysql_ping ( $this -> con );
         }
         else
         {
@@ -104,7 +105,7 @@ class database
     }
     function close ( )
     {
-        return mysql_close ( $this -> link_id );
+        return mysql_close ( $this -> con );
     }
     function selectLimit ($sql, $num, $start = 0)
     {

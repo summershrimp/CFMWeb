@@ -73,7 +73,7 @@ if (isset($_GET['function'])) {
 				<td></td>
 				<td style="width:20px;">#</td>
 				<td>操作</td>
-				<td>商家ID</td>
+				<td>ID</td>
 				<td>名称</td>
 				<td>电话</td>
 				<td>位置</td>

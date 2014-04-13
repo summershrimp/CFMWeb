@@ -13,6 +13,7 @@ else {
 <div id="pager">
 	<a href="?page=personal"><span class="pagerbutton"<?php if ($page == "personal") echo "id='leftcheck'"; ?>>个人信息</span></a>
 	<a href="?page=shop"><span class="pagerbutton"<?php if ($page == "shop") echo "id='leftcheck'"; ?>>商家信息管理</span></a>
+	<a href="?page=provider"><span class="pagerbutton"<?php if ($page == "provider") echo "id='leftcheck'"; ?>>业主信息管理</span></a>
 	<a href="?page=order"><span class="pagerbutton"<?php if ($page == "order") echo "id='leftcheck'"; ?>>订单信息管理</span></a>
 	<a href="?page=economic"><span class="pagerbutton"<?php if ($page == "economic") echo "id='leftcheck'"; ?>>财务管理</span></a>
 	<a href="?page=ant"><span class="pagerbutton"<?php if ($page == "ant") echo "id='leftcheck'"; ?>>Ants管理</span></a>

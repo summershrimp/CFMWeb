@@ -3,11 +3,11 @@ if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
 $username = $_POST['username'];
-$password = md5($_POST['password']);
+$password = $_POST['password'];
 $db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 $result = $db->select("*", "admin_users", "`admin_name`='$username'", 1);
 $result = $db->fetch($result);
-if ($result['salt']) {
+if (isset($result['salt'])) {
 	$password=md5($password . $result['salt']);
 }
 if ($password == $result['admin_pass']) {

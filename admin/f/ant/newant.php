@@ -3,7 +3,7 @@ if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
 $salt = rand();
-$password = md5("123456");
+$password = "123456";
 $password = md5($password . $salt);
 $content = "'0','" . $_POST['email'] . "','" . $_POST['name'] . "','$password','" .
 	$_POST['real_name'] . "','','','" . $_POST['sex'] .

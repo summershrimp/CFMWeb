@@ -2,10 +2,10 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-function check($db, $alt, $page, $shopow, $exit) {
+function check($db, $alt, $page, $row, $exit) {
 	if (isset($_GET[$alt])) {
 		$get = $_GET[$alt];
-		$result = $db->select("*", "shop", "`$shopow`='$get'", 1);
+		$result = $db->select("*", "shop", "`$row`='$get'", 1);
 		if ($result != false) {
 			$shop = $db->fetch($result);
 			if (!empty($shop)) {
@@ -49,15 +49,15 @@ if (isset($_GET['function'])) {
 	<form action="?page=shop&function=filter" method="post">
 		<span class="fixed">商家ID：</span>
 		<input class="text" type="text" name="shop_id" placeholder="依据商家ID过滤" value="<?php if (isset($_POST['shop_id'])) echo $_POST['shop_id']; ?>"><br>
-		<span class="fixed">名称：</span>
+		<span class="fixed">商家名称：</span>
 		<input class="text" type="text" name="shop_name" placeholder="依据商家名称过滤" value="<?php if (isset($_POST['shop_name'])) echo $_POST['shop_name']; ?>"><br>
-		<span class="fixed">电话：</span>
-		<input class="text" type="text" name="shop_phone" placeholder="依据业主电话过滤" value="<?php if (isset($_POST['shop_phone'])) echo $_POST['shop_phone']; ?>"><br>
-		<span class="fixed">位置：</span>
+		<span class="fixed">商家电话：</span>
+		<input class="text" type="text" name="shop_phone" placeholder="依据商家电话过滤" value="<?php if (isset($_POST['shop_phone'])) echo $_POST['shop_phone']; ?>"><br>
+		<span class="fixed">商家位置：</span>
 		<input class="text" type="text" name="shop_pos" placeholder="依据商家位置过滤" value="<?php if (isset($_POST['shop_pos'])) echo $_POST['shop_pos']; ?>"><br>
-		<span class="fixed">业主：</span>
+		<span class="fixed">业主姓名：</span>
 		<input class="text" type="text" name="provider_name" placeholder="依据业主姓名过滤" value="<?php if (isset($_POST['provider_name'])) echo $_POST['provider_name']; ?>"><br>
-		<span class="fixed">描述：</span>
+		<span class="fixed">商家描述：</span>
 		<input class="text" type="text" name="shop_desc" placeholder="依据商家描述过滤" value="<?php if (isset($_POST['shop_desc'])) echo $_POST['shop_desc']; ?>"><br>
 		<p class="psubmit">
 			<input class="button" type="submit" value="搜索">
@@ -67,18 +67,18 @@ if (isset($_GET['function'])) {
 </div>
 <div class="boxdiv">
 	<span class="titlespan">商家列表</span>
-	<form action="?page=shop&function=deleteshops" method="post">
+	<form action="#" method="post">
 		<table class="table" style="margin-right:20px;">
 			<tr class="trtitle">
 				<td></td>
 				<td style="width:20px;">#</td>
+				<td>操作</td>
 				<td>商家ID</td>
 				<td>名称</td>
 				<td>电话</td>
 				<td>位置</td>
 				<td>业主</td>
 				<td>描述</td>
-				<td>操作</td>
 			</tr>
 			<?php
 			$result = $db->select("*", "shop");
@@ -116,6 +116,14 @@ if (isset($_GET['function'])) {
 					echo "<tr class='tr$style'>";
 					echo "<td><input type='checkbox' name='chk[]' value='" . $shop['shop_id'] . "'></td>";
 					echo "<td>$count</td>";
+					echo "<td>&nbsp;";
+					echo "<a href='?page=shop&function=editshop&detail=" . $shop['shop_id'] . "'>";
+					echo "<img src='images/icon_edit' alt='修改'>";
+					echo "<span class='link'>修改</span></a>&nbsp;";
+					echo "<a href='javascript:del(\"?page=shop&function=deleteshop&detail=" . $shop['shop_id'] . "\")'>";
+					echo "<img src='images/icon_del' alt='删除'>";
+					echo "<span class='link'>删除</span></a>";
+					echo "&nbsp;</td>";
 					$id = $shop['owner_id'];
 					$t = $db->select("provider_name", "providers", "`provider_id`='$id'", 1);
 					$t = $db->fetch($t);
@@ -125,14 +133,6 @@ if (isset($_GET['function'])) {
 					echo "<td>" . $shop['shop_pos'] . "</td>";
 					echo "<td>" . $provider['provider_name'] . "</td>";
 					echo "<td>" . $shop['shop_desc'] . "</td>";
-					echo "<td>&nbsp;";
-					echo "<a href='?page=shop&function=edit&detail=" . $shop['shop_id'] . "'>";
-					echo "<img src='images/icon_edit' alt='修改'>";
-					echo "<span class='link'>修改</span></a>&nbsp;";
-					echo "<a href='?page=shop&function=deleteshop&detail=" . $shop['shop_id'] . "'>";
-					echo "<img src='images/icon_del' alt='删除'>";
-					echo "<span class='link'>删除</span></a>";
-					echo "&nbsp;</td>";
 					echo "</tr>";
 				}
 			}
@@ -140,7 +140,7 @@ if (isset($_GET['function'])) {
 		</table>
 		<p class="psubmit">
 			<a href="?page=shop&function=newshop"><input class="button" type="button" value="添加商家"></a>
-			<input class="button" type="submit" value="删除已选">
+			<a href="javascript:del('?page=shop&function=deleteshops')"><input class="button" type="button" value="删除已选"></a>
 			<input class="button" type="reset">
 		</p>
 	</form>

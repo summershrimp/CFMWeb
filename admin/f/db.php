@@ -1,4 +1,7 @@
 <?php
+if (!defined("IN_CFM")) {
+	exit("Hacking attempt");
+}
 class Database {
 	function Database($host, $username, $password, $name) {
 		$db = mysql_connect($host, $username, $password);

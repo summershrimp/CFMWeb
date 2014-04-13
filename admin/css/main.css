@@ -57,7 +57,6 @@
 	background-color:	#888;
 	line-height:	32px;
 	padding-left:	10px;
-	/*text-shadow:	0px 1px 0px #000;*/
 	border-left:	1px solid white;
 	border-bottom:	1px solid white;
 }
@@ -85,10 +84,42 @@ td {
 	padding-right:	5px;
 }
 .tr0 {
-	border-bottom:	1px solid #999;
 	background-color:	#FFF;
 }
+.tr0:hover {
+	background-color:	#DDD;
+}
 .tr1 {
-	border-bottom:	1px solid #999;
 	background-color:	#EEE;
+}
+.tr1:hover {
+	background-color:	#DDD;
+}
+#wall {
+	background-color:	rgba(255, 255, 255, 0.4);
+	width:	100%;
+	height:	100%;
+	z-index:	10000;
+	position:	fixed;
+	top:	0px;
+	left:	0px;
+}
+.ensuredel {
+	color:	#FFF;
+	background-color:	#000;
+	border:	1px solid #AAA;
+	-webkit-box-shadow:	#BBB 0px 0px 20px;
+	-moz-box-shadow:	#BBB 0px 0px 20px;
+	box-shadow:	#BBB 0px 0px 20px;
+	position:	fixed;
+	top:	50%;
+	left:	50%;
+	display:	block;
+	width:	300px;
+	height:	121px;
+	margin-left:	-150px;
+	margin-top:	-60px;
+}
+.ensuredel .psubmit {
+	background-color:	#333;
 }

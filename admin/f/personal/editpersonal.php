@@ -1,4 +1,7 @@
 <?php
+if (!defined("IN_CFM")) {
+	exit("Hacking attempt");
+}
 if (isset($_POST['old']) && $_POST['old'] != "") {
 	$result = $db->select("*", "admin_users", "`admin_name`='$username'", 1);
 	$result = $db->fetch($result);

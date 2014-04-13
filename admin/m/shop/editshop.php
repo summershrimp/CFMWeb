@@ -18,27 +18,38 @@ $t = $db->fetch($t);
 			<tr class="trtitle">
 				<td style="width:100px;">属性</td>
 				<td style="width:200px;">值</td>
+				<td style="width:200px;">备注</td>
 			</tr>
 			<tr class="tr0">
-				<td>名称</td>
+				<td>商家名称</td>
 				<td><input class="text" type="text" name="name" value="<?php echo $result['shop_name']; ?>"></td>
+				<td id="tablename"></td>
 			</tr>
 			<tr class="tr1">
 				<td>电话</td>
 				<td><input class="text" type="text" name="phone" value="<?php echo $result['shop_phone']; ?>"></td>
+				<td id="tablephone"></td>
 			</tr>
 			<tr class="tr0">
 				<td>位置</td>
 				<td><input class="text" type="text" name="pos" value="<?php echo $result['shop_pos']; ?>"></td>
+				<td id="tablepos"></td>
 			</tr>
 			<tr class="tr1">
+				<td>业主ID：</td>
+				<td><input class="text" type="text" name="owner_id" value="<?php echo $result['owner_id']; ?>"></td>
+				<td id="tableownerid"></td>
+			</tr>
+			<tr class="tr0">
 				<td>描述</td>
 				<td><textarea class="text" type="text" name="desc"><?php echo $result['shop_desc']; ?></textarea></td>
+				<td id="tabledesc"></td>
 			</tr>
 		</table>
 		<p class="psubmit">
 			<input class="button" type="submit" value="修改">
 			<input class="button" type="reset">
+			<a href="?page=shop"><input class="button" type="button" value="返回"></a>
 		</p>
 	</form>
 </div>

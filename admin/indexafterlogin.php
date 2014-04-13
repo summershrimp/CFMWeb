@@ -10,6 +10,8 @@ if (!defined("IN_CFM")) {
 	<title>管理中心</title>
 	<link rel="stylesheet" type="text/css" href="css/common.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<script src="js/main.js"></script>
+	<script src="js/jquery.min.js"></script>
 </head>
 <body>
 	<div id="whole">

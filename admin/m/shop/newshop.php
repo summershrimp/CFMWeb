@@ -26,27 +26,27 @@ else if (isset($_POST['name']) && $_POST['name'] != "" ||
 				<td style="width:200px;">备注</td>
 			</tr>
 			<tr class="tr0">
-				<td>名称</td>
+				<td>* 名称</td>
 				<td><input class="text" type="text" name="name"></td>
 				<td id="tablename"></td>
 			</tr>
 			<tr class="tr1">
-				<td>业主ID</td>
+				<td>* 业主ID</td>
 				<td><input class="text" type="text" name="owner"></td>
 				<td id="tableowner"></td>
 			</tr>
 			<tr class="tr0">
-				<td>电话</td>
+				<td>* 电话</td>
 				<td><input class="text" type="text" name="phone"></td>
 				<td id="tablephone"></td>
 			</tr>
 			<tr class="tr1">
-				<td>位置</td>
+				<td>* 位置</td>
 				<td><input class="text" type="text" name="pos"></td>
 				<td id="tablepos"></td>
 			</tr>
 			<tr class="tr0">
-				<td>描述</td>
+				<td>* 描述</td>
 				<td><textarea class="text" type="text" name="desc"></textarea></td>
 				<td id="tabledesc"></td>
 			</tr>
@@ -54,6 +54,7 @@ else if (isset($_POST['name']) && $_POST['name'] != "" ||
 		<p class="psubmit">
 			<input class="button" type="submit" value="添加">
 			<input class="button" type="reset">
+			<a href="?page=shop"><input class="button" type="button" value="返回"></a>
 		</p>
 	</form>
 </div>

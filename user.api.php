@@ -4,6 +4,8 @@ require_once './includes/init.inc.php';
 require_once ROOT_PATH . 'includes/user.class.php';
 
 header('Content-Type: application/json; charset=utf-8');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type ");
 
 if(!isset($GLOBALS["HTTP_RAW_POST_DATA"]))
 {

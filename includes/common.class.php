@@ -235,7 +235,7 @@ class apicommon
         if (! isset($arr))
             return false;
         if (isset($arr['salt']))
-            $password = md5($password + $arr['salt']);
+            $password = md5($password . $arr['salt']);
         if ($password == $arr['password'])
         {
             $sql="UPDATE ".$GLOBALS['cfm']->table($db_table)." SET `last_ip` = '".$this->get_IP()."' Where `$db_uname_column` = '$username' LIMIT 1";

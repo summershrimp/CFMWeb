@@ -204,7 +204,6 @@ class apicommon
         elseif($role == Role_User)
         {
             $sql="INSERT Into ".$GLOBALS['cfm']->table("customers")." (`last_ip`,`is_validated`,`openid`) VALUES ('".$this->get_IP()."','0','$username') "; 
-            echo $sql;
             $GLOBALS['db']->query($sql);
             return $GLOBALS['db']->insert_id();
         }

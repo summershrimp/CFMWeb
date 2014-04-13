@@ -5,6 +5,13 @@ require_once ROOT_PATH . 'includes/user.class.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
+if(!isset($GLOBALS["HTTP_RAW_POST_DATA"]))
+{
+    $return ['status'] = ERROR_CONTENT;
+    echo json_encode($return);
+    exit();
+}
+
 $content = json_decode($GLOBALS["HTTP_RAW_POST_DATA"],true);
 // 构造返回数组
 $return = Array();
@@ -28,7 +35,7 @@ if (! isset($content['accesscode']))
         $return['status'] = NO_TOKEN_PARA;
     echo json_encode($return);
     exit();
-}
+}//OK
 
 $user = new user($content["accesscode"]);
 

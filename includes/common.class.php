@@ -120,7 +120,7 @@ class apicommon
 
     public function check_access_code($token)
     {
-        $sql = "Select * From " . $GLOBALS['cfm']->table('tokens') . " Where `token` = '$access_code' LIMIT 1";
+        $sql = "Select * From " . $GLOBALS['cfm']->table('tokens') . " Where `token` = '$token' LIMIT 1";
         $arr = $GLOBALS['db']->getRow($sql);
         if (! isset($arr))
         {
@@ -129,9 +129,9 @@ class apicommon
         
         else
         {
+            $arr['status'] = STATUS_SUCCESS;
             if ($arr['gen_time'] > time() + 86400 * 2)
                 $arr['status'] = TIMEOUT_ACCESS_TOKEN;
-            
             unset($arr['gen_time']);
             unset($arr['token']);
         }

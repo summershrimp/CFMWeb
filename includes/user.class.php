@@ -6,7 +6,7 @@ if (! defined('IN_CFM'))
 }
 
 require_once ROOT_PATH . 'includes/common.class.php';
-
+require_once ROOT_PATH . 'includes/modules/sms/sms.class.php';
 class user extends apicommon
 {
 
@@ -14,7 +14,7 @@ class user extends apicommon
 
     public function user($accesscode = NULL)
     {
-        if (isset($accsscode))
+        if ($accesscode!=NULL)
         {
             $ans = $this->check_access_code($accesscode);
             if ($ans['status'] == STATUS_SUCCESS)
@@ -24,12 +24,26 @@ class user extends apicommon
 
     public function send_confirm($phone_number)
     {
-        // TODO:等待短信接口！
+        $sms=new sms();
+        $verify_code = rand(100000,999999);
+        $sql="UPDATE ".$GLOBALS['cfm']->table("customers")." SET `verify_code` = '$verify_code' , `mobile_phone` = '$phone_number' Where `user_id` = '$this->user_id' LIMIT 1";
+        $GLOBALS['db']->query($sql);
+        if( $sms->send_sms($phone_number, $verify_code))
+            return true;
+        return false;
     }
 
     public function confirm_phone($phone_number, $confirm_number)
     {
-        // TODO:继续等短信接口
+        $sql = "SELECT `mobile_phone`, `verify_code` From ".$GLOBALS['cfm']->table("customers")."Where `user_id` = '$this->user_id' LIMIT 1";
+        $arr = $GLOBALS['db']->getRow($sql);
+        if($arr['verify_code']==$confirm_number&&$arr['mobile_phone']==$phone_number)
+        {
+            $sql="UPDATE ".$GLOBALS['cfm']->table("customers")." SET `is_validated` = '1' Where `user_id` = '$this->user_id' LIMIT 1";
+            $GLOBALS['db']->query($sql);
+            return true;
+        }
+        else return false;
     }
 
     public function check_unpaid()

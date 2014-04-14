@@ -81,11 +81,14 @@ elseif ($content['act'] == 'check_unpaid')
 }
 elseif ($content['act'] == 'get_shop_menu')
 {
-    $get_c=(isset($content['getcount'])&&$content['getcount']==1)?false:true;
-    if ($get_c)
+    if(!isset($content['getcount']))
+        $content['getcount']=1;
+    $get_c=($content['getcount']==1)?true:false;
+    
+    if (!$get_c)
     {
         $l_st=isset($content['limitstart'])?intval($content['limitstart']):0;
-        $l_ed=isset($content['limitend'])?intval($content['limitstart']):$user->get_shop_count();
+        $l_ed=isset($content['limitend'])?intval($content['limitend']):$user->get_shop_count();
         
         $ans = $user->get_shop_menu($l_st, $l_ed);
         $return['status'] = STATUS_SUCCESS;
@@ -100,18 +103,22 @@ elseif ($content['act'] == 'get_shop_menu')
 }
 elseif ($content['act'] == 'get_good_menu')
 {
-    $get_c=isset($content['getcount'])?false:true;
-    if ($get_c)
-    {
+    if(!isset($content['getcount']))
+        $content['getcount']=1;
+    $get_c=($content['getcount']==1)?true:false;
+    
+    
+    if (!$get_c)
+    {   
         $l_st=isset($content['limitstart'])?intval($content['limitstart']):0;
-        $l_ed=isset($content['limitend'])?intval($content['limitstart']):$user->get_good_count();
+        $l_ed=isset($content['limitend'])?intval($content['limitend']):$user->get_good_count($content['shop_id']);
         
-        $ans = $user->get_good_menu($l_st, $l_ed);
+        $ans = $user->get_good_menu($content['shop_id'],$l_st, $l_ed);
         $return['status'] = STATUS_SUCCESS;
         $return['goodlist'] = $ans;
     }
     else
-    {
+    {   
         $ans = $user->get_good_count($content['shop_id']);
         $return['status'] = STATUS_SUCCESS;
         $return['count'] = $ans;
@@ -119,11 +126,13 @@ elseif ($content['act'] == 'get_good_menu')
 }
 elseif ($content['act'] == 'get_hot_menu')
 {
-    $get_c=isset($content['getcount'])?false:true;
-    if ($get_c)
+    if(!isset($content['getcount']))
+        $content['getcount']=1;
+    $get_c=($content['getcount']==1)?true:false;
+    if (!$get_c)
     {
         $l_st=isset($content['limitstart'])?intval($content['limitstart']):0;
-        $l_ed=isset($content['limitend'])?intval($content['limitstart']):$user->get_hot_count();
+        $l_ed=isset($content['limitend'])?intval($content['limitend']):$user->get_hot_count();
         
         $ans = $user->get_hot_menu($l_st, $l_ed);
         $return['status'] = STATUS_SUCCESS;
@@ -131,7 +140,7 @@ elseif ($content['act'] == 'get_hot_menu')
     }
     else
     {
-        $ans = $user->get_hot_count($content['shop_id']);
+        $ans = $user->get_hot_count($content['shopid']);
         $return['status'] = STATUS_SUCCESS;
         $return['count'] = $ans;
     }
@@ -165,7 +174,7 @@ elseif ($content['act'] == 'cancel_order')
         if ($arr)
             $return['status'] = STATUS_SUCCESS;
         else
-            $return['status'] = NO_ORDER_ID;
+            $return['status'] = ORDER_ERROR;
     }
 }
 elseif ($content['act'] == 'confirm_sent')
@@ -183,7 +192,9 @@ elseif ($content['act'] == 'confirm_sent')
 }
 elseif ($content['act'] == 'order_detail')
 {
-    $arr = $user->order_details($content['order_sn'], $content['is_detail']);
+    if(!isset($content['is_detail']))
+        $content['is_detail']=false;
+    $arr = $user->order_details($content['order_id'], $content['is_detail']);
     $return = $arr;
     $return['status'] = STATUS_SUCCESS;
 }

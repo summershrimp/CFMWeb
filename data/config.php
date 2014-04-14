@@ -14,7 +14,7 @@ $db_pass   = "ZYB941023";
 // table prefix
 $prefix    = "cfm_";
 
-$timezone    = "PRC";
+$timezone    = "Asia/Shanghai";
 
 $cookie_path    = "/";
 

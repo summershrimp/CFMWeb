@@ -66,6 +66,8 @@ class apicommon
             $db_id_column = 'ant_id';
         elseif ($role === Role_Shop)
             $db_id_column = 'shop_id';
+        elseif ($role === Role_User)
+            $db_id_column = 'user_id';
         $sql = "Select * From " . $GLOBALS['cfm']->table("order_info") . "Where `$db_id_column` = $id ";
         if (isset($p_start) && isset($p_end))
             $limit = "And add_date Between '$p_start' And '$p_end'";
@@ -75,11 +77,26 @@ class apicommon
         $arr = $GLOBALS['db']->getAll($sql);
         return arr;
     }
+    
+    public function history_count($id, $role)
+    {
+        if ($role === Role_Ant)
+            $db_id_column = 'ant_id';
+        elseif ($role === Role_Shop)
+            $db_id_column = 'shop_id';
+        elseif ($role === Role_User)
+            $db_id_column = 'user_id';
+        $sql = "Select Count(*) From " . $GLOBALS['cfm']->table("order_info") . "Where `$db_id_column` = $id ";
+        $arr = $GLOBALS['db']->getOne($sql);
+        return arr;
+    }
 
     public function order_details($order_id, $is_detail = false)
     {
         $sql = "Select * From " . $GLOBALS['cfm']->table('order_info') . " Where `order_id` = $order_id LIMIT 1";
         $arr = $GLOBALS['db']->getRow($sql);
+        if (! $GLOBALS['db']->affected_rows())
+            return false;
         $return = $arr;
         if ($is_detail)
         {
@@ -93,6 +110,7 @@ class apicommon
     public function get_good_menu($shop_id, $limit_start = 0, $limit_end = 20)
     {
         $sql = "Select * From " . $GLOBALS['cfm']->table('shop_goods') . " Where `shop_id` = '$shop_id' LIMIT $limit_start , $limit_end";
+        echo $sql;
         $arr = $GLOBALS['db']->getAll($sql);
         return $arr;
     }
@@ -143,7 +161,7 @@ class apicommon
         $sql = "DELETE From " . $GLOBALS['cfm']->table('tokens') . "Where `id`='$user_id' AND `role`='$role' LIMIT 1";
         $GLOBALS['db']->query($sql);
         $access_code = $this->genToken();
-        $sql = "Insert Into " . $GLOBALS['cfm']->table('tokens') . " (`token`,`id`,`role`)VALUES('$access_code','$user_id','$role')";
+        $sql = "Insert Into " . $GLOBALS['cfm']->table('tokens') . " (`token`,`id`, `role`, `gen_time`)VALUES('$access_code', '$user_id', '$role', '".time()."')";
         $GLOBALS['db']->query($sql);
         return $access_code;
     }

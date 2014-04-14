@@ -85,49 +85,56 @@ class user extends apicommon
     public function get_address()
     {
         $sql = "SELECT * FROM " . $GLOBALS['cfm']->table('user_address') . " Where `user_id` = " . $this->user_id . " LIMIT 1";
-        $arr = $GLOBALS["db"]->getALL($sql);
+        $arr = $GLOBALS["db"]->getRow($sql);
         return $arr;
     }
 
     public function place_order($carts, $address, $tips)
     {
         $order_id = $this->make_new_order($address, $tips);
-        foreach ($carts as $goodid => $goodcount)
+        if($order_id<=0)
+            return false;
+        foreach ($carts as $good)
         {
-            $sql = "Select `good_name`, `price` From " . $GLOBALS['cfm']->table('shop_goods') . "Where `good_id` = '" . $goodid . "'";
+            $sql = "Select `good_name`, `price`, `unavail` From " . $GLOBALS['cfm']->table('shop_goods') . " Where `good_id` = '" . trim($good['good_id']) . "'";
             $arr = $GLOBALS['db']->getRow($sql);
+            if(!isset($arr['unavail']))
+                $arr['unavail']=1;
+            if($arr['unavail']==1)
+            {
+                $this->delete_new_order($order_id);
+                return false;
+            }
             $good_price = $arr['price'];
             $good_name = $arr['good_name'];
             
             $sql = "Insert INTO " . $GLOBALS['cfm']->table('order_details') . " (`order_id`, `good_id`,`good_name`,`good_number`,`good_price`) 
-             VALUES('" . $order_id . "','" . $goodid . "','" . $good_name . "', '" . $goodcount . "',
+             VALUES('" . $order_id . "','" . $good['good_id'] . "','" . $good_name . "', '" . $good['amount'] . "',
                '" . $good_price . "' )";
             $GLOBALS['db']->query($sql);
-            $rec_id = $GLOBALS['db']->insert_id();
+            
         }
         return $order_id;
     }
 
     public function cancel_order($order_id)
     {
-        $sql = "UPDATE " . $GLOBALS[cfm]->table('order_info') . "SET `order_status` = 0 
-        Where `order_id` = " . $order_id . " LIMIT 1";
+        $sql = "UPDATE " . $GLOBALS['cfm']->table('order_info') . "SET `order_status` = 0 Where `order_id` = ' $order_id ' AND `ant_status` = 0 AND `order_status` = 1 LIMIT 1";
         $GLOBALS['db']->query($sql);
-        if (! $GLOBALS['db']->error())
-            return true;
-        else
+        if (! $GLOBALS['db']->affected_rows())
             return false;
+        else
+            return true;
     }
 
     public function confirm_sent($order_id)
     {
-        $sql = "UPDATE " . $GLOBALS[cfm]->table('order_info') . "SET `shipping_status` = 2 
-        Where `order_id` = " . $order_id . " LIMIT 1";
+        $sql = "UPDATE " . $GLOBALS['cfm']->table('order_info') . " SET `shipping_status` = 1 Where `order_id` = ' $order_id ' AND `shipping_status` = 0 LIMIT 1";
         $GLOBALS['db']->query($sql);
-        if (! $GLOBALS['db']->error())
-            return true;
-        else
+        if (! $GLOBALS['db']->affected_rows())
             return false;
+        else
+            return true;
     }
 
     public function pay($order_id)
@@ -137,10 +144,19 @@ class user extends apicommon
 
     private function make_new_order($address, $tips)
     {
-        $order_sn = date("Ymd") + substr(str_pad(20, time()), '0', STR_PAD_LEFT, 12, 20);
-        $sql = "Insert INTO " . $GLOBALS['cfm']->table('order_info') . " (`order_sn`, `user_id`,`order_status`,`shipping_status`,`pay_status`,`address`,`user_phone`,`tips_amount`) " . "VALUES ('" . $order_sn . "','" . $address['user_id'] . "',0,0,0,'" . $address['address'] . "','" . $address['user_phone'] . "','" . $tips . "')";
+        //$order_sn = date("Ymd") + substr(str_pad(20, time()), '0', STR_PAD_LEFT, 12, 20);
+        $order_sn="20142342234";
+        $sql = "Insert INTO " . $GLOBALS['cfm']->table('order_info') . " (`order_sn`, `user_id`, `user_realname`, `order_status`,`address`,`user_phone`,`tips_amount`) VALUES ('$order_sn', '$this->user_id', '".$address['user_realname']."', 1, '".$address['address']."', '".$address['user_phone']."', '$tips')";
         $GLOBALS['db']->query($sql);
         $order_id = $GLOBALS['db']->insert_id();
         return $order_id;
+    }
+    
+    private function delete_new_order($order_id)
+    {
+        $sql="DELETE From ".$GLOBALS['cfm']->table('order_details')." Where `order_id` = '$order_id' ";
+        $GLOBALS['db']->query($sql);
+        $sql="DELETE From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = '$order_id' ";
+        $GLOBALS['db']->query($sql);
     }
 }

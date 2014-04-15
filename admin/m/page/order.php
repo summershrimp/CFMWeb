@@ -13,7 +13,7 @@ if (isset($_GET['function'])) {
 }
 ?>
 <div class="boxdiv">
-	<span class="titlespan">订单搜索</span>
+	<span class="titlespan dep2">订单搜索</span>
 	<form action="?page=order&function=filter" method="post">
 		<span class="fixed">订单ID：</span>
 		<input class="text" type="text" name="order_id" placeholder="依据订单ID过滤" value="<?php if (isset($_POST['order_id'])) echo $_POST['order_id']; ?>"><br>
@@ -53,8 +53,8 @@ if (isset($_GET['function'])) {
 	</form>
 </div>
 <div class="boxdiv">
-	<span class="titlespan">订单列表</span>
-	<table class="table" style="margin-right:20px;">
+	<span class="titlespan dep2">订单列表</span>
+	<table style="margin-right:20px;">
 		<tr class="trtitle">
 			<td style="width:20px;">#</td>
 			<td>订单ID</td>

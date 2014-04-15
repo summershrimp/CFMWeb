@@ -17,9 +17,9 @@ else if (isset($_POST['name']) && $_POST['name'] != "" ||
 }
 ?>
 <div class="boxdiv">
-	<span class="titlespan">添加Ant</span>
+	<span class="titlespan dep2">添加Ant</span>
 	<form action="?page=ant&function=newant" method="post">
-		<table class="table">
+		<table>
 			<tr class="trtitle">
 				<td style="width:100px;">属性</td>
 				<td style="width:200px;">值</td>

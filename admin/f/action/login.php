@@ -4,6 +4,11 @@ if (!defined("IN_CFM")) {
 }
 $username = $_POST['username'];
 $password = $_POST['password'];
+if ($username == "" || $password == "") {
+	echo "<script>alert('用户名或密码不能为空！');</script>";
+	echo "<meta http-equiv=\"refresh\" content=\"0; url=?\">";
+	exit();
+}
 $db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 $result = $db->select("*", "admin_users", "`admin_name`='$username'", 1);
 $result = $db->fetch($result);

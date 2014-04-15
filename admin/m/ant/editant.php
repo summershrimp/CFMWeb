@@ -10,9 +10,9 @@ $result = $db->fetch($result);
 $id = $result['ant_id'];
 ?>
 <div class="boxdiv">
-	<span class="titlespan">编辑Ant信息（id=<?php echo $result['ant_id']; ?>）</span>
+	<span class="titlespan dep2">编辑Ant信息（id=<?php echo $result['ant_id']; ?>）</span>
 	<form action="?page=ant&function=editant&detail=<?php echo $result['ant_id']; ?>" method="post">
-		<table class="table">
+		<table>
 			<tr class="trtitle">
 				<td style="width:100px;">属性</td>
 				<td style="width:200px;">值</td>

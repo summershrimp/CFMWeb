@@ -5,7 +5,7 @@ if (!defined("IN_CFM")) {
 if (isset($_POST['old']) && $_POST['old'] != "") {
 	$result = $db->select("*", "admin_users", "`admin_name`='$username'", 1);
 	$result = $db->fetch($result);
-	$old = md5($_POST['old']);
+	$old = $_POST['old'];
 	if ($result['salt']) {
 		$old=md5($old . $result['salt']);
 	}

@@ -12,38 +12,38 @@ $t = $db->select("provider_name", "providers", "`provider_id`='$id'", 1);
 $t = $db->fetch($t);
 ?>
 <div class="boxdiv">
-	<span class="titlespan">编辑商家信息（id=<?php echo $result['shop_id']; ?>）</span>
+	<span class="titlespan dep2">编辑商家信息（id=<?php echo $result['shop_id']; ?>）</span>
 	<form action="?page=shop&function=editshop&detail=<?php echo $result['shop_id']; ?>" method="post">
-		<table class="table">
+		<table>
 			<tr class="trtitle">
 				<td style="width:100px;">属性</td>
 				<td style="width:200px;">值</td>
-				<td style="width:200px;">备注</td>
+				<!--<td style="width:200px;">备注</td>-->
 			</tr>
 			<tr class="tr0">
 				<td>商家名称</td>
 				<td><input class="text" type="text" name="name" value="<?php echo $result['shop_name']; ?>"></td>
-				<td id="tablename"></td>
+				<!--<td id="tablename"></td>-->
 			</tr>
 			<tr class="tr1">
 				<td>电话</td>
 				<td><input class="text" type="text" name="phone" value="<?php echo $result['shop_phone']; ?>"></td>
-				<td id="tablephone"></td>
+				<!--<td id="tablephone"></td>-->
 			</tr>
 			<tr class="tr0">
 				<td>位置</td>
 				<td><input class="text" type="text" name="pos" value="<?php echo $result['shop_pos']; ?>"></td>
-				<td id="tablepos"></td>
+				<!--<td id="tablepos"></td>-->
 			</tr>
 			<tr class="tr1">
 				<td>业主ID：</td>
 				<td><input class="text" type="text" name="owner_id" value="<?php echo $result['owner_id']; ?>"></td>
-				<td id="tableownerid"></td>
+				<!--<td id="tableownerid"></td>-->
 			</tr>
 			<tr class="tr0">
 				<td>描述</td>
 				<td><textarea class="text" type="text" name="desc"><?php echo $result['shop_desc']; ?></textarea></td>
-				<td id="tabledesc"></td>
+				<!--<td id="tabledesc"></td>-->
 			</tr>
 		</table>
 		<p class="psubmit">

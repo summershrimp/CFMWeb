@@ -15,7 +15,10 @@ $result = $db->select("*", "admin_users", "`admin_name`='$username'", 1);
 $result = $db->fetch($result);
 ?>
 <div class="boxdiv">
-	<span class="titlespan">个人信息</span>
+	<span class="titlespan dep1">账户设置<span class="commit">» 在这里设置您的账户信息</span></span>
+</div>
+<div class="boxdiv">
+	<span class="titlespan dep2">查看个人信息</span>
 	<div>
 		<span class="fixed">用户名：</span>
 		<span><?php echo $result['admin_name']; ?></span><br>
@@ -31,10 +34,10 @@ $result = $db->fetch($result);
 	</div>
 </div>
 <div class="boxdiv">
-	<span class="titlespan">修改密码</span>
+	<span class="titlespan dep2">修改个人信息</span>
 	<form action="?page=personal&function=editpersonal" method="post">
 		<span class="fixed" style="width:auto;">若想修改信息，请先输入旧密码。</span><br>
-		<span class="fixed" style="width:auto;">若不想修改某条信息，则留空相应的输入框。</span><br>
+		<span class="fixed" style="width:auto;">若不想修改某条信息，则留空相应的输入框。</span><br><br>
 		<span class="fixed">* 旧密码：</span>
 		<input class="text" type="password" name="old"><br>
 		<span class="fixed">新密码：</span>

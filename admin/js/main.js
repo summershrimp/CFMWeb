@@ -9,7 +9,7 @@ function del(url) {
 	jQuery("#ensuredel").append(DOM);
 	DOM = "<div class='psubmit' id='psubmit'></div>";
 	jQuery("#ensuredel").append(DOM);
-	DOM = "<a href='" + url + "'><input class='button' type='button' value='确定'></a>";
+	DOM = "<a href='" + url + "'><input class='button dangerousbutton' type='button' value='确定'></a>";
 	jQuery("#psubmit").append(DOM);
 	DOM = "<input class='button' type='button' onclick='javascript:hide()' value='取消'>";
 	jQuery("#psubmit").append(DOM);

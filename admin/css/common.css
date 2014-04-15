@@ -16,58 +16,55 @@ select {
 	font-size:	15px;
 }
 .text {
-	width:	210px;
+	color:	black;
+	width:	200px;
+	padding:	4px;
+	margin-top:	2px;
+	margin-bottom:	2px;
 	border:	1px solid #CCC;
 	background-color:	#FFF;
 }
 .text:hover {
-	border:	1px solid #3CC;
+	border:	1px solid #1AD;
 }
 .text:focus {
 	outline:	none;
-	box-shadow:	inset 0 3px 3px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.8);
-	border-color:	rgba(82, 168, 236, 0.8);
+	border:	1px solid #1AD;
 }
 .button {
+	color:	#FFF;
 	border:	none;
+	cursor:	pointer;
+	margin:	20px 2px;
 	outline:	none;
 	line-height:	28px;
-	background-color:	rgb(204, 204, 204);
-	margin:	20px 2px;
-	padding-left:	15px;
-	padding-right:	15px;
-}
-.button:hover {
-	background-color:	rgb(216, 216, 216);
-}
-.button:active {
-	color:	#FFF;
-	background-color:	#000;
+	padding:	2px 20px;
+	text-shadow:	rgba(0, 0, 0, 0.247059) 0px -1px 0px;
 }
 .titlespan {
-	top:	-11px;
-	left:	40px;
-	border:	1px solid #AAA;
-	padding:	2px 8px;
-	position:	relative;
-	font-weight:	bold;
-	background-color:	white;
-	-webkit-border-radius:	8px;
-	-moz-border-radius:	8px;
-	border-radius:	8px;
-	-webkit-box-shadow:	#BBB 0px 0px 10px;
-	-moz-box-shadow:	#BBB 0px 0px 10px;
-	box-shadow:	#BBB 0px 0px 10px;
+	display:	block;
+	line-height:	48px;
+	margin-bottom:	15px;
 }
-.boxdiv {
-	color:	#333;
-	background-color:	#F9F9F9;
-	border:	1px solid #AAA;
-	margin-top:	30px;
-	-webkit-box-shadow:	#BBB 0px 0px 10px;
-	-moz-box-shadow:	#BBB 0px 0px 10px;
-	box-shadow:	#BBB 0px 0px 10px;
+.commit {
+	color:	#8089A0;
+	display:	inline-block;
+	font-size:	14px;
+	margin-left:	10px;
+	font-weight:	normal;
 }
+.dep1 {
+	color:	#2679B5;
+	font-size:	24px;
+	padding-left:	10px;
+	border-bottom:	1px dotted #E2E2E2;
+}
+.dep2 {
+	color:	#A069C3;
+	font-size:	21px;
+	border-bottom:	1px solid #E0D1EA;
+}
+.boxdiv {}
 .fixed {
 	width:	100px;
 	display:	inline-block;
@@ -76,15 +73,17 @@ select {
 	line-height:	32px;
 }
 .psubmit {
-	background-color:	#EEE;
 	text-align:	right;
-	padding-right:	40px;
 	margin-bottom:	0px;
-	border-top:	1px solid #999;
+	border-top:	1px dotted #999;
+}
+.ensuredel .psubmit {
+	padding-right:	20px;
 }
 .returnsuccess {
 	border:	1px solid #A2D246;
 	margin-top:	10px;
+	margin-bottom:	10px;
 	line-height:	32px;
 	padding-left:	10px;
 	background-color:	#EBF8A4;
@@ -92,6 +91,7 @@ select {
 .returnerror {
 	border:	1px solid maroon;
 	margin-top:	10px;
+	margin-bottom:	10px;
 	line-height:	32px;
 	padding-left:	10px;
 	background-color:	pink;
@@ -100,7 +100,46 @@ select {
 	color:	#235A81;
 	text-shadow:	0px 1px 0px #FFF;
 }
-.text {
-	width:	180px;
-	color:	black;
+input[type=checkbox], input[type=radio] {
+	width:	16px;
+	height:	16px;
+	margin-top:	0px;
+	margin-bottom:	3px;
+	vertical-align:	middle;
+}
+input[type=button] {
+	background-color:	#6FB3E0;
+}
+input[type=button]:hover {
+	background-color:	#4F93B0;
+}
+input[type=button]:active {
+	background-color:	#2F7390;
+}
+input[type=submit] {
+	background-color:	#87B87F;
+}
+input[type=submit]:hover {
+	background-color:	#67985F;
+}
+input[type=submit]:active {
+	background-color:	#47783F;
+}
+input[type=reset] {
+	background-color:	#428BCA;
+}
+input[type=reset]:hover {
+	background-color:	#226BAA;
+}
+input[type=reset]:active {
+	background-color:	#024B8A;
+}
+.dangerousbutton {
+	background-color:	#D15B47 !important;
+}
+.dangerousbutton:hover {
+	background-color:	#B13B27 !important;
+}
+.dangerousbutton:active {
+	background-color:	#911B07 !important;
 }

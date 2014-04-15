@@ -12,9 +12,9 @@ $t = $db->select("provider_name", "providers", "`provider_id`='$id'", 1);
 $t = $db->fetch($t);
 ?>
 <div class="boxdiv">
-	<span class="titlespan">编辑商家信息（id=<?php echo $result['shop_id']; ?>）</span>
+	<span class="titlespan dep2">编辑商家信息（id=<?php echo $result['shop_id']; ?>）</span>
 	<form action="?page=shop&function=editshop&detail=<?php echo $result['shop_id']; ?>" method="post">
-		<table class="table">
+		<table>
 			<tr class="trtitle">
 				<td style="width:100px;">属性</td>
 				<td style="width:200px;">值</td>

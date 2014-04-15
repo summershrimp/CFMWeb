@@ -17,38 +17,38 @@ else if (isset($_POST['name']) && $_POST['name'] != "" ||
 }
 ?>
 <div class="boxdiv">
-	<span class="titlespan">添加商家</span>
+	<span class="titlespan dep2">添加商家</span>
 	<form action="?page=shop&function=newshop" method="post">
-		<table class="table">
+		<table>
 			<tr class="trtitle">
 				<td style="width:100px;">属性</td>
 				<td style="width:200px;">值</td>
-				<td style="width:200px;">备注</td>
+				<!--<td style="width:400px;">备注</td>-->
 			</tr>
 			<tr class="tr0">
 				<td>* 名称</td>
-				<td><input class="text" type="text" name="name"></td>
-				<td id="tablename"></td>
+				<td><input class="text" type="text" name="name" onblur="ajax('tablename', 'shop', 'shop_name', this.value);"></td>
+				<!--<td id="tablename"></td>-->
 			</tr>
 			<tr class="tr1">
 				<td>* 业主ID</td>
-				<td><input class="text" type="text" name="owner"></td>
-				<td id="tableowner"></td>
+				<td><input class="text" type="text" name="owner" onblur="ajax('tableowner', 'shop', 'shop_owner_id', this.value);"></td>
+				<!--<td id="tableowner"></td>-->
 			</tr>
 			<tr class="tr0">
 				<td>* 电话</td>
-				<td><input class="text" type="text" name="phone"></td>
-				<td id="tablephone"></td>
+				<td><input class="text" type="text" name="phone" onblur="ajax('tablephone', 'shop', 'shop_phone', this.value);"></td>
+				<!--<td id="tablephone"></td>-->
 			</tr>
 			<tr class="tr1">
 				<td>* 位置</td>
-				<td><input class="text" type="text" name="pos"></td>
-				<td id="tablepos"></td>
+				<td><input class="text" type="text" name="pos" onblur="ajax('tablepos', 'shop', 'shop_pos', this.value);"></td>
+				<!--<td id="tablepos"></td>-->
 			</tr>
 			<tr class="tr0">
 				<td>* 描述</td>
 				<td><textarea class="text" type="text" name="desc"></textarea></td>
-				<td id="tabledesc"></td>
+				<!--<td id="tabledesc"><span class='valid'>商家描述建议不要太短</span></td>-->
 			</tr>
 		</table>
 		<p class="psubmit">

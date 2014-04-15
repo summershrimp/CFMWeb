@@ -1,4 +1,7 @@
-function ajax(id, content) {
+function ajax(id, page, row, content) {
+	if (content == "") {
+		return;
+	}
 	var xmlhttp;
 	if (window.XMLHttpRequest) {
 		xmlhttp=new XMLHttpRequest();
@@ -11,6 +14,6 @@ function ajax(id, content) {
 			document.getElementById(id).innerHTML = xmlhttp.responseText;
 		}
 	}
-	xmlhttp.open("GET", "ajax.php?=" + content, true);
+	xmlhttp.open("GET", "?action=ajax&page=" + page + "&row=" + row + "&content=" + content, true);
 	xmlhttp.send();
 }

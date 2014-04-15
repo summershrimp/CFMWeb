@@ -13,9 +13,9 @@ if (!defined("IN_CFM")) {
 </head>
 <body>
 	<div id="login" class="boxdiv">
-		<span class="titlespan">登录</span>
+		<span class="titlespan dep2">登录</span>
 		<form action="?action=login" method="post">
-			<p style="margin:20px;font-weight:bold">
+			<p style="font-weight:bold">
 				<span class="fixed">用户名：</span>
 				<input class="text" type="text" name="username">
 				<br>

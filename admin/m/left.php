@@ -9,9 +9,9 @@ else {
 	$page = "";
 }
 ?>
-<div id="logo">管理中心</div>
+<div class="welcome">管理员 <?php echo $_SESSION['username'] ?></div>
 <div id="pager">
-	<a href="?page=personal"><span class="pagerbutton"<?php if ($page == "personal") echo "id='leftcheck'"; ?>>个人信息</span></a>
+	<a href="?page=personal"><span class="pagerbutton"<?php if ($page == "personal") echo "id='leftcheck'"; ?>>账户设置</span></a>
 	<a href="?page=shop"><span class="pagerbutton"<?php if ($page == "shop") echo "id='leftcheck'"; ?>>商家信息管理</span></a>
 	<a href="?page=provider"><span class="pagerbutton"<?php if ($page == "provider") echo "id='leftcheck'"; ?>>业主信息管理</span></a>
 	<a href="?page=order"><span class="pagerbutton"<?php if ($page == "order") echo "id='leftcheck'"; ?>>订单信息管理</span></a>

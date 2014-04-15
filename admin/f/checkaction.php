@@ -9,6 +9,9 @@ case 'login':
 case 'logout':
 	require "f/action/logout.php";
 	break;
+case 'ajax':
+	require "f/ajax.php";
+	break;
 default:
 	echo "<meta http-equiv=\"refresh\" content=\"0; url=?\">";
 	break;

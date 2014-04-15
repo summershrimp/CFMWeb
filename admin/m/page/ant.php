@@ -11,7 +11,7 @@ function check($db, $alt, $page, $row, $exit) {
 			if (!empty($r)) {
 				require $page;
 				if ($exit == true) {
-					exit;
+					exit();
 				}
 				return;
 			}
@@ -37,7 +37,7 @@ if (isset($_GET['function'])) {
 		break;
 	case 'newant':
 		require "m/ant/newant.php";
-		exit;
+		exit();
 		break;
 	case 'filter':
 		$filter = true;
@@ -45,7 +45,7 @@ if (isset($_GET['function'])) {
 }
 ?>
 <div class="boxdiv">
-	<span class="titlespan">搜索Ant</span>
+	<span class="titlespan dep2">搜索Ant</span>
 	<form action="?page=ant&function=filter" method="post">
 		<span class="fixed">AntID：</span>
 		<input class="text" type="text" name="ant_id" placeholder="依据AntID过滤" value="<?php if (isset($_POST['ant_id'])) echo $_POST['ant_id']; ?>"><br>
@@ -68,9 +68,9 @@ if (isset($_GET['function'])) {
 	</form>
 </div>
 <div class="boxdiv">
-	<span class="titlespan">Ant列表</span>
+	<span class="titlespan dep2">Ant列表</span>
 	<form action="?page=ant&function=deleteants" method="post">
-		<table class="table" style="margin-right:20px;">
+		<table style="margin-right:20px;">
 			<tr class="trtitle">
 				<td></td>
 				<td style="width:20px;">#</td>
@@ -137,7 +137,7 @@ if (isset($_GET['function'])) {
 		</table>
 		<p class="psubmit">
 			<a href="?page=ant&function=newant"><input class="button" type="button" value="添加Ant"></a>
-			<input class="button" type="submit" value="删除已选">
+			<input class="dangerousbutton" type="submit" value="删除已选">
 			<input class="button" type="reset">
 		</p>
 	</form>

@@ -2,6 +2,41 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
+function check_and_open($db, $table, $alt, $page, $row, $exit, $str) {
+	if (isset($_GET[$alt])) {
+		$get = $_GET[$alt];
+		$result = $db->select("*", "$table", "`$row`='$get'", 1);
+		if ($result != false) {
+			$r = $db->fetch($result);
+			if (!empty($r)) {
+				require $page;
+				if ($exit == true) {
+					exit();
+				}
+				return;
+			}
+		}
+		echo "<div class=\"returnerror\">$str未找到！</div>";
+	}
+	else {
+		echo "<div class=\"returnerror\">未指明$str！</div>";
+	}
+}
+/* 连接sql查询条件 */
+function contact_condition($str, $row, $full_match = true) {
+	if (isset($_POST[$row]) && $_POST[$row] != NULL) {
+		if ($str != "") {
+			$str .= " AND ";
+		}
+		if ($full_match == true) {
+			$str .= "`$row`='" . $_POST[$row] . "'";
+		}
+		else {
+			$str .= "`$row` LIKE '%" . $_POST[$row] . "%'";
+		}
+	}
+	return $str;
+}
 /* 递归方式的对变量中的特殊字符进行转义 */
 function addslashes_deep($value) {
 	if (empty($value)) {

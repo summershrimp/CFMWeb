@@ -8,10 +8,10 @@ if (!defined("IN_CFM")) {
 	$str = "<a href='?'>管理中心</a>";
 	if (isset($_GET['page'])) {
 		$page = $_GET['page'];
-		$str .= " » ";
+		$str .= " <span>·</span> ";
 		switch ($page) {
 		case "personal":
-			$str .= "<a href='?page=$page'>个人信息</a>";
+			$str .= "<a href='?page=$page'>账户设置</a>";
 			break;
 		case "shop":
 			$str .= "<a href='?page=$page'>商家信息管理</a>";
@@ -34,7 +34,7 @@ if (!defined("IN_CFM")) {
 		}
 		if (isset($_GET['function'])) {
 			$function = $_GET['function'];
-			$str .= " » ";
+			$str .= " <span>·</span> ";
 			switch ($function) {
 			case "editpersonal":
 				$str .= "编辑个人信息";

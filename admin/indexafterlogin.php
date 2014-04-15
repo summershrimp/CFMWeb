@@ -12,9 +12,11 @@ if (!defined("IN_CFM")) {
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<script src="js/main.js"></script>
 	<script src="js/jquery.min.js"></script>
+	<!--<script src="js/ajax.js"></script>-->
 </head>
 <body>
 	<div id="whole">
+		<div id="logo">来人 管理页面</div>
 		<div id="left">
 			<?php require "m/left.php" ?>
 		</div>

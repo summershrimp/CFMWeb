@@ -6,9 +6,16 @@ if (isset($_POST['old']) && $_POST['old'] != "") {
 	$result = $db->select("*", "admin_users", "`admin_name`='$username'", 1);
 	$result = $db->fetch($result);
 	$old = $_POST['old'];
-	if ($result['salt']) {
-		$old=md5($old . $result['salt']);
+	if (!isset($result['salt'])) {
+	$salt=rand(1000,9999);
+	$result['salt']=$salt;
+	$result['admin_pass']=md5($result['admin_pass'].$salt);
+	$db->update("admin_users", "`salt`='$salt'", "`admin_name`='$username'", 1);
+	$db->update("admin_users", "`admin_pass`='".$result['admin_pass']."'", "`admin_name`='$username'", 1);
 	}
+	
+	$old=md5(md5($old) . $result['salt']);
+	
 	if ($old != $result['admin_pass']) {
 		$str = "旧密码输入错误！";
 		$status = "error";

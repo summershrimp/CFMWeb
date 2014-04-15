@@ -90,10 +90,10 @@ if ($cond == "") {
 					echo "<td>$count</td>";
 					echo "<td>&nbsp;";
 					echo "<a href='?page=good&function=editgood&detail=" . $good['good_id'] . "'>";
-					echo "<img src='images/icon_edit' alt='修改'>";
+					echo "<img src='images/icon_edit.png' alt='修改'>";
 					echo "<span class='link'>修改</span></a>&nbsp;";
 					echo "<a href='javascript:del(\"?page=good&function=deletegood&detail=" . $good['good_id'] . "\")'>";
-					echo "<img src='images/icon_del' alt='删除'>";
+					echo "<img src='images/icon_del.png' alt='删除'>";
 					echo "<span class='link'>删除</span></a>";
 					echo "&nbsp;</td>";
 					echo "<td>" . $good['good_id'] . "</td>";

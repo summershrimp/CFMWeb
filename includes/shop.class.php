@@ -20,7 +20,7 @@ class Shop extends apicommon {
 	function get_amount($r) {
 		$result = 0;
 		foreach ($r as $item) {
-			$t = $this->order_details($item['order_id']);
+			$t = $this->details($item['order_id']);
 			$result += $t['goods_price'];
 		}
 		return $result;
@@ -53,7 +53,7 @@ class Shop extends apicommon {
 		$r = $this->history($id, Role_Shop, $start, $end);
 		$result = array();
 		foreach ($r as $item) {
-			$t = $this->order_details($item['order_id']);
+			$t = $this->details($item['order_id']);
 			$temp['order_id'] = $t['order_id'];
 			$temp['price'] = $t['goods_price'];
 			$temp['time'] = $item['pay_time'];

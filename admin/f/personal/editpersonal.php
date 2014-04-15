@@ -28,9 +28,8 @@ if (isset($_POST['old']) && $_POST['old'] != "") {
 			}
 			else {
 				$password = $_POST['new'];
-				if ($result['salt']) {
-					$password=md5($password . $result['salt']);
-				}
+				$password=md5(md5($password) . $result['salt']);
+				
 				$db->update("admin_users", "`admin_pass`='$password'", "`admin_name`='$username'", 1);
 			}
 		}

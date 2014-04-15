@@ -2,35 +2,15 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-function check($db, $alt, $page, $row, $exit) {
-	if (isset($_GET[$alt])) {
-		$get = $_GET[$alt];
-		$result = $db->select("*", "ants", "`$row`='$get'", 1);
-		if ($result != false) {
-			$r = $db->fetch($result);
-			if (!empty($r)) {
-				require $page;
-				if ($exit == true) {
-					exit();
-				}
-				return;
-			}
-		}
-		echo "<div class=\"returnerror\">Ant未找到！</div>";
-	}
-	else {
-		echo "<div class=\"returnerror\">未指明Ant！</div>";
-	}
-}
 $db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'editant':
-		check($db, 'detail', "m/ant/editant.php", 'ant_id', true);
+		check_and_open($db, 'ants', 'detail', "m/ant/editant.php", 'ant_id', true, "Ant");
 		break;
 	case 'deleteant':
-		check($db, 'detail', "f/ant/deleteant.php", 'ant_id', false);
+		check_and_open($db, 'ants', 'detail', "f/ant/deleteant.php", 'ant_id', false, "Ant");
 		break;
 	case 'deleteants':
 		require "f/ant/deleteants.php";
@@ -43,102 +23,93 @@ if (isset($_GET['function'])) {
 		$filter = true;
 	}
 }
+$cond = "";
+if ($filter == true) {
+	$cond = contact_condition($cond, 'ant_id');
+	$cond = contact_condition($cond, 'ant_name');
+	$cond = contact_condition($cond, 'email', false);
+	$cond = contact_condition($cond, 'ant_real_name');
+	if (isset($_POST['sex']) && $_POST['sex'] != -1) $cond = contact_condition($cond, 'sex');
+	$cond = contact_condition($cond, 'mobile_phone');
+}
+if ($cond == "") {
+	$cond = NULL;
+}
 ?>
+<div class="boxdiv">
+	<span class="titlespan dep1">Ant信息管理<span class="commit">» 商家和用户们的连接点，勤劳的Ants们</span></span>
+</div>
 <div class="boxdiv">
 	<span class="titlespan dep2">搜索Ant</span>
 	<form action="?page=ant&function=filter" method="post">
 		<span class="fixed">AntID：</span>
 		<input class="text" type="text" name="ant_id" placeholder="依据AntID过滤" value="<?php if (isset($_POST['ant_id'])) echo $_POST['ant_id']; ?>"><br>
-		<span class="fixed">名称：</span>
-		<input class="text" type="text" name="name" placeholder="依据昵称过滤" value="<?php if (isset($_POST['name'])) echo $_POST['name']; ?>"><br>
+		<span class="fixed">昵称：</span>
+		<input class="text" type="text" name="ant_name" placeholder="依据Ant昵称过滤" value="<?php if (isset($_POST['ant_name'])) echo $_POST['ant_name']; ?>"><br>
 		<span class="fixed">邮箱：</span>
-		<input class="text" type="text" name="email" placeholder="依据邮箱过滤" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>"><br>
+		<input class="text" type="text" name="email" placeholder="依据Ant邮箱过滤" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>">
+		<span class="tooltip">* 支持模糊搜索</span><br>
 		<span class="fixed">真实姓名：</span>
-		<input class="text" type="text" name="real_name" placeholder="依据真实姓名过滤" value="<?php if (isset($_POST['real_name'])) echo $_POST['real_name']; ?>"><br>
+		<input class="text" type="text" name="ant_real_name" placeholder="依据Ant真实姓名过滤" value="<?php if (isset($_POST['ant_real_name'])) echo $_POST['ant_real_name']; ?>"><br>
 		<span class="fixed">性别：</span>
 		<span><input type="radio" name="sex" value="-1" <?php if (!isset($_POST['sex']) || $_POST['sex'] == -1) echo "checked"; ?>>全部</span>&nbsp;
 		<span><input type="radio" name="sex" value="0" <?php if (isset($_POST['sex']) && $_POST['sex'] == 0) echo "checked"; ?>>男</span>&nbsp;
 		<span><input type="radio" name="sex" value="1" <?php if (isset($_POST['sex']) && $_POST['sex'] == 1) echo "checked"; ?>>女</span><br>
 		<span class="fixed">手机：</span>
-		<input class="text" type="text" name="mobile" placeholder="依据手机过滤" value="<?php if (isset($_POST['mobile'])) echo $_POST['mobile']; ?>"><br>
+		<input class="text" type="text" name="mobile_phone" placeholder="依据Ant手机过滤" value="<?php if (isset($_POST['mobile_phone'])) echo $_POST['mobile_phone']; ?>"><br>
 		<p class="psubmit">
 			<input class="button" type="submit" value="搜索">
 			<input class="button" type="reset">
 		</p>
 	</form>
 </div>
-<div class="boxdiv">
-	<span class="titlespan dep2">Ant列表</span>
-	<form action="?page=ant&function=deleteants" method="post">
+<div class="boxdiv"><span class="titlespan dep2">Ant列表</span>
+	<form action="#" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
 				<td></td>
 				<td style="width:20px;">#</td>
-				<td>AntID</td>
-				<td>名称</td>
+				<td>操作</td>
+				<td>ID</td>
+				<td>昵称</td>
 				<td>邮箱</td>
 				<td>真实姓名</td>
 				<td>性别</td>
 				<td>手机</td>
-				<td>操作</td>
 			</tr>
 			<?php
-			$result = $db->select("*", "ants");
+			$result = $db->select("*", "ants", $cond);
 			if ($result != false) {
 				$count = 0;
 				while ($ant = $db->fetch($result)) {
-					$match = true;
-					if ($filter == true) {
-						if (isset($_POST['ant_id']) && $_POST['ant_id'] != "" && $ant['ant_id'] != $_POST['ant_id']) {
-							$match = false;
-						}
-						if (isset($_POST['ant_name']) && $_POST['ant_name'] != "" && !strstr($ant['ant_name'], $_POST['ant_name'])) {
-							$match = false;
-						}
-						if (isset($_POST['email']) && $_POST['email'] != "" && !strstr($ant['email'], $_POST['email'])) {
-							$match = false;
-						}
-						if (isset($_POST['real_name']) && $_POST['real_name'] != "" && !strstr($ant['ant_real_name'], $_POST['real_name'])) {
-							$match = false;
-						}
-						if (isset($_POST['sex']) && $_POST['sex'] != "-1" && $ant['sex'] != $_POST['sex']) {
-							$match = false;
-						}
-						if (isset($_POST['mobile']) && $_POST['mobile'] != "" && !strstr($ant['mobile_phone'], $_POST['mobile'])) {
-							$match = false;
-						}
-					}
-					if ($match == false) {
-						continue;
-					}
 					$count++;
 					$style = ($count - 1) % 2;
 					echo "<tr class='tr$style'>";
-					echo "<td><input type='checkbox' name='chk[]' value='" . $ant['ant_id'] . "'></td>";
+					echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $ant['ant_id'] . "'></td>";
 					echo "<td>$count</td>";
-					echo "<td>" . $ant['ant_id'] . "</td>";
-					echo "<td>" . $ant['ant_name'] . "</td>";
-					echo "<td>" . $ant['email'] . "</td>";
-					echo "<td>" . $ant['ant_real_name'] . "</td>";
-					echo "<td>" . ($ant['sex'] == "0" ? "男" : "女") . "</td>";
-					echo "<td>" . $ant['mobile_phone'] . "</td>";
 					echo "<td>&nbsp;";
 					echo "<a href='?page=ant&function=editant&detail=" . $ant['ant_id'] . "'>";
 					echo "<img src='images/icon_edit' alt='修改'>";
 					echo "<span class='link'>修改</span></a>&nbsp;";
-					echo "<a href='?page=ant&function=deleteant&detail=" . $ant['ant_id'] . "'>";
+					echo "<a href='javascript:del(\"?page=ant&function=deleteant&detail=" . $ant['ant_id'] . "\")'>";
 					echo "<img src='images/icon_del' alt='删除'>";
 					echo "<span class='link'>删除</span></a>";
 					echo "&nbsp;</td>";
+					echo "<td>" . $ant['ant_id'] . "</td>";
+					echo "<td>" . $ant['ant_name'] . "</td>";
+					echo "<td>" . $ant['email'] . "</td>";
+					echo "<td class='tdclip'>" . $ant['ant_real_name'] . "</td>";
+					echo "<td>" . (($ant['sex'] == 0) ? "男" : "女") . "</td>";
+					echo "<td>" . $ant['mobile_phone'] . "</td>";
 					echo "</tr>";
 				}
 			}
 			?>
 		</table>
 		<p class="psubmit">
-			<a href="?page=ant&function=newant"><input class="button" type="button" value="添加Ant"></a>
-			<input class="dangerousbutton" type="submit" value="删除已选">
-			<input class="button" type="reset">
+			<a href="?page=ant&function=newant"><input class="button" style="float:left;" type="button" value="添加Ant"></a>
+			<a href="javascript:del('?page=ant&function=deleteants')"><input class="button dangerousbutton" type="button" value="批量删除"></a>
+			<input class="button" type="reset" value="重新选择">
 		</p>
 	</form>
 </div>

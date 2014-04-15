@@ -112,7 +112,6 @@ class apicommon
     public function get_good_menu($shop_id, $limit_start = 0, $limit_end = 20)
     {
         $sql = "Select * From " . $GLOBALS['cfm']->table('shop_goods') . " Where `shop_id` = '$shop_id' LIMIT $limit_start , $limit_end";
-        echo $sql;
         $arr = $GLOBALS['db']->getAll($sql);
         return $arr;
     }

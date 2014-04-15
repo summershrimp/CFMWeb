@@ -140,7 +140,7 @@ elseif ($content['act'] == 'get_hot_menu')
     }
     else
     {
-        $ans = $user->get_hot_count($content['shopid']);
+        $ans = $user->get_hot_count();
         $return['status'] = STATUS_SUCCESS;
         $return['count'] = $ans;
     }
@@ -197,6 +197,13 @@ elseif ($content['act'] == 'order_detail')
     $arr = $user->order_details($content['order_id'], $content['is_detail']);
     $return = $arr;
     $return['status'] = STATUS_SUCCESS;
+}
+elseif ($content['act'] == 'get_history')
+{
+    $p_st=isset($content['periodstart'])?$content['limitstart']:date("Y-m-d",mktime(0,0,0,date("m"),date("d")-7,date("Y")));
+    $p_ed=isset($content['periodend'])?$content['limitend']:date("Y-m-d");
+    $arr=$user->get_history($p_st, $p_ed);
+    $return = $arr;
 }
 
 echo json_encode($return);

@@ -37,7 +37,7 @@ if ($cond == "") {
 }
 ?>
 <div class="boxdiv">
-	<span class="titlespan dep1">商家信息管理<span class="commit">» 在这里管理所有的商家信息</span></span>
+	<span class="titlespan dep1">商家信息管理<span class="commit">» 他们作为源头，生产各种商品</span></span>
 </div>
 <div class="boxdiv">
 	<span class="titlespan dep2">搜索商家</span>

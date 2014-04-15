@@ -49,7 +49,7 @@ $result = $db->fetch($result);
 		<span class="fixed">电话：</span>
 		<input class="text" type="text" name="phone">
 		<p class="psubmit">
-			<input class="button" type="submit" value="提交">
+			<input class="button" type="submit" value="更新">
 			<input class="button" type="reset" value="重置">
 		</p>
 	</form>

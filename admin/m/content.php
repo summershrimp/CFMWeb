@@ -16,8 +16,9 @@ if (!defined("IN_CFM")) {
 	case "shop":
 	case "provider":
 	case "order":
-	case "economic":
+	case "detail":
 	case "ant":
+	case "good":
 	case "user":
 	case "default":
 		require "m/page/$page.php";

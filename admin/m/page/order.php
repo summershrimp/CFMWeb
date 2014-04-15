@@ -13,7 +13,10 @@ if (isset($_GET['function'])) {
 }
 ?>
 <div class="boxdiv">
-	<span class="titlespan dep2">订单搜索</span>
+	<span class="titlespan dep1">订单信息管理<span class="commit">» 用户的订单数量随着时间逐渐增加</span></span>
+</div>
+<div class="boxdiv">
+	<span class="titlespan dep2">搜索订单</span>
 	<form action="?page=order&function=filter" method="post">
 		<span class="fixed">订单ID：</span>
 		<input class="text" type="text" name="order_id" placeholder="依据订单ID过滤" value="<?php if (isset($_POST['order_id'])) echo $_POST['order_id']; ?>"><br>

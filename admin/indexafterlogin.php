@@ -16,7 +16,7 @@ if (!defined("IN_CFM")) {
 </head>
 <body>
 	<div id="whole">
-		<div id="logo">来人 管理页面</div>
+		<div id="logo">来人 - 管理页面</div>
 		<div id="left">
 			<?php require "m/left.php" ?>
 		</div>

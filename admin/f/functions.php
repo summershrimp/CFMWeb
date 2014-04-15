@@ -16,10 +16,10 @@ function check_and_open($db, $table, $alt, $page, $row, $exit, $str) {
 				return;
 			}
 		}
-		echo "<div class=\"returnerror\">$str未找到！</div>";
+		echo "<div class=\"returnerror\">" . $str . "未找到！</div>";
 	}
 	else {
-		echo "<div class=\"returnerror\">未指明$str！</div>";
+		echo "<div class=\"returnerror\">未指明" . $str . "！</div>";
 	}
 }
 /* 连接sql查询条件 */

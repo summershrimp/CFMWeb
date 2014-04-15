@@ -22,11 +22,17 @@ if (!defined("IN_CFM")) {
 		case "order":
 			$str .= "<a href='?page=$page'>订单信息管理</a>";
 			break;
+		case "detail":
+			$str .= "<a href='?page=$page'>订单详情管理</a>";
+			break;
 		case "economic":
 			$str .= "<a href='?page=$page'>财务管理</a>";
 			break;
 		case "ant":
-			$str .= "<a href='?page=$page'>Ants管理</a>";
+			$str .= "<a href='?page=$page'>Ant信息管理</a>";
+			break;
+		case "good":
+			$str .= "<a href='?page=$page'>商品管理</a>";
 			break;
 		case "user":
 			$str .= "<a href='?page=$page'>用户管理</a>";
@@ -35,31 +41,17 @@ if (!defined("IN_CFM")) {
 		if (isset($_GET['function'])) {
 			$function = $_GET['function'];
 			$str .= " <span>·</span> ";
-			switch ($function) {
-			case "editpersonal":
-				$str .= "编辑个人信息";
-				break;
-			case "newshop":
-				$str .= "<a href='?page=$page&function=$function'>添加商家</a>";
-				break;
-			case "editshop":
-				$str .= "编辑商家信息";
-				break;
-			case "deleteshop": case "deleteshops":
-				$str .= "删除商家";
-				break;
-			case "newant":
-				$str .= "<a href='?page=$page&function=$function'>添加Ant</a>";
-				break;
-			case "editant":
-				$str .= "编辑Ant信息";
-				break;
-			case "deleteant": case "deleteants":
-				$str .= "删除Ant";
-				break;
-			case "filter":
+			if (strstr($function, "new")) {
+				$str .= "<a href='?page=$page&function=$function'>添加新信息</a>";
+			}
+			else if (strstr($function, "edit")) {
+				$str .= "<a href='?page=$page&function=$function'>编辑信息</a>";
+			}
+			else if (strstr($function, "delete")) {
+				$str .= "删除条目";
+			}
+			else if ($function == "filter") {
 				$str .= "条件过滤";
-				break;
 			}
 		}
 	}

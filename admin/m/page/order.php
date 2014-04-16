@@ -170,7 +170,7 @@ if ($filter == true) {
 		?>
 		</table>
 		<p class="psubmit">
-			<a href="?page=order&function=neworder"><input class="button" style="float:left;" type="button" value="添加Ant"></a>
+			<a href="?page=order&function=neworder"><input class="button" style="float:left;" type="button" value="添加订单信息"></a>
 			<a href="javascript:del('?page=order&function=deleteorders')"><input class="button dangerousbutton" type="button" value="批量删除"></a>
 			<input class="button" type="reset" value="重新选择">
 		</p>

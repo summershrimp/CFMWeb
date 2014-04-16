@@ -7,10 +7,10 @@ $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'editaddress':
-		check_and_open($db, 'user_address', 'address', "m/address/editaddress.php", 'address_id', true, "用户详情");
+		check_and_open($db, 'user_address', 'address', "m/address/editaddress.php", 'addr_id', true, "用户信息");
 		break;
 	case 'deleteaddress':
-		check_and_open($db, 'user_address', 'address', "f/address/deleteaddress.php", 'address_id', false, "用户详情");
+		check_and_open($db, 'user_address', 'address', "f/address/deleteaddress.php", 'addr_id', false, "用户信息");
 		break;
 	case 'deleteaddresses':
 		require "f/address/deleteaddresses.php";

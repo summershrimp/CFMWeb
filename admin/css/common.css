@@ -1,6 +1,10 @@
 *{
 	font-size:	15px;
 	font-family:	"微软雅黑" !important;
+	transition:	linear 0.2s;
+	-moz-transition:	linear 0.2s;
+	-webkit-transition:	linear 0.2s;
+	-o-transition:	linear 0.2s;
 }
 ::-webkit-scrollbar {
 	width:	10px;

@@ -7,10 +7,10 @@ $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'editdetail':
-		check_and_open($db, 'order_details', 'detail', "m/detail/editdetail.php", 'detail_id', true, "订单详情");
+		check_and_open($db, 'order_details', 'detail', "m/detail/editdetail.php", 'rec_id', true, "订单详情");
 		break;
 	case 'deletedetail':
-		check_and_open($db, 'order_details', 'detail', "f/detail/deletedetail.php", 'detail_id', false, "订单详情");
+		check_and_open($db, 'order_details', 'detail', "f/detail/deletedetail.php", 'rec_id', false, "订单详情");
 		break;
 	case 'deletedetails':
 		require "f/detail/deletedetails.php";

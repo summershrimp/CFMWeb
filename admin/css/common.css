@@ -1,6 +1,10 @@
 *{
 	font-size:	15px;
 	font-family:	"微软雅黑" !important;
+	transition:	linear 0.2s;
+	-moz-transition:	linear 0.2s;
+	-webkit-transition:	linear 0.2s;
+	-o-transition:	linear 0.2s;
 }
 ::-webkit-scrollbar {
 	width:	10px;
@@ -24,10 +28,12 @@ a:hover {
 }
 img {
 	border:	none;
+	margin-right:	2px;
 }
 select {
 	border:	1px solid rgb(204, 204, 204);
 	font-size:	15px;
+	outline:	none;
 }
 .text {
 	color:	black;
@@ -39,7 +45,7 @@ select {
 	background-color:	#FFF;
 }
 .text:hover {
-	border:	1px solid #1AD;
+	border:	1px solid #999;
 }
 .text:focus {
 	outline:	none;

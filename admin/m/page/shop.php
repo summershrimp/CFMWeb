@@ -88,14 +88,13 @@ if ($cond == "") {
 					echo "<tr class='tr$style'>";
 					echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $shop['shop_id'] . "'></td>";
 					echo "<td>$count</td>";
-					echo "<td>&nbsp;";
+					echo "<td>";
 					echo "<a href='?page=shop&function=editshop&detail=" . $shop['shop_id'] . "'>";
 					echo "<img src='images/icon_edit.png' alt='修改'>";
 					echo "<span class='link'>修改</span></a>&nbsp;";
 					echo "<a href='javascript:del(\"?page=shop&function=deleteshop&detail=" . $shop['shop_id'] . "\")'>";
 					echo "<img src='images/icon_del.png' alt='删除'>";
-					echo "<span class='link'>删除</span></a>";
-					echo "&nbsp;</td>";
+					echo "<span class='link'>删除</span></a></td>";
 					$id = $shop['owner_id'];
 					$t = $db->select("provider_name", "providers", "`provider_id`='$id'", 1);
 					$t = $db->fetch($t);

@@ -31,6 +31,7 @@ if ($filter == true) {
 	if (isset($_POST['sex']) && $_POST['sex'] != -1) $cond = contact_condition($cond, 'sex');
 	$cond = contact_condition($cond, 'mobile_phone');
 	$cond = contact_condition($cond, 'qq');
+	$cond = contact_condition($cond, 'openid');
 }
 if ($cond == "") {
 	$cond = NULL;
@@ -57,6 +58,8 @@ if ($cond == "") {
 		<input class="text" type="text" name="mobile_phone" placeholder="依据业主手机过滤" value="<?php if (isset($_POST['mobile_phone'])) echo $_POST['mobile_phone']; ?>"><br>
 		<span class="fixed">QQ：</span>
 		<input class="text" type="text" name="qq" placeholder="依据业主QQ过滤" value="<?php if (isset($_POST['qq'])) echo $_POST['qq']; ?>"><br>
+		<span class="fixed">OpenID：</span>
+		<input class="text" type="text" name="openid" placeholder="依据OpenID过滤" value="<?php if (isset($_POST['openid'])) echo $_POST['openid']; ?>"><br>
 		<p class="psubmit">
 			<input class="button" type="submit" value="搜索">
 			<input class="button" type="reset">
@@ -76,6 +79,7 @@ if ($cond == "") {
 				<td>性别</td>
 				<td>手机</td>
 				<td>QQ</td>
+				<td>OpenID</td>
 			</tr>
 			<?php
 			$result = $db->select("*", "providers", $cond);
@@ -87,20 +91,20 @@ if ($cond == "") {
 					echo "<tr class='tr$style'>";
 					echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $provider['provider_id'] . "'></td>";
 					echo "<td>$count</td>";
-					echo "<td>&nbsp;";
+					echo "<td>";
 					echo "<a href='?page=provider&function=editprovider&detail=" . $provider['provider_id'] . "'>";
 					echo "<img src='images/icon_edit.png' alt='修改'>";
 					echo "<span class='link'>修改</span></a>&nbsp;";
 					echo "<a href='javascript:del(\"?page=provider&function=deleteprovider&detail=" . $provider['provider_id'] . "\")'>";
 					echo "<img src='images/icon_del.png' alt='删除'>";
-					echo "<span class='link'>删除</span></a>";
-					echo "&nbsp;</td>";
+					echo "<span class='link'>删除</span></a></td>";
 					echo "<td>" . $provider['provider_id'] . "</td>";
 					echo "<td>" . $provider['provider_name'] . "</td>";
 					echo "<td>" . $provider['email'] . "</td>";
 					echo "<td>" . (($provider['sex'] == 0) ? "男" : "女") . "</td>";
 					echo "<td>" . $provider['mobile_phone'] . "</td>";
 					echo "<td>" . $provider['qq'] . "</td>";
+					echo "<td>" . $provider['openid'] . "</td>";
 					echo "</tr>";
 				}
 			}

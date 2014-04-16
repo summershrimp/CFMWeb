@@ -20,6 +20,7 @@ if (!defined("IN_CFM")) {
 	case "ant":
 	case "good":
 	case "user":
+	case "address":
 	case "default":
 		require "m/page/$page.php";
 		break;

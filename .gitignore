@@ -1,3 +1,5 @@
 .settings/
+.bulidpath
 .project
-data/
+documents/
+data/config.php

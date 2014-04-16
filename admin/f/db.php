@@ -8,13 +8,23 @@ class Database {
 		mysql_select_db(DB_NAME);
 		mysql_query("SET NAMES UTF8");
 	}
-	function select($content, $table_name, $condition = NULL, $limit = 0, $desc = false) {
+	function query($sql) {
+		$result = mysql_query($sql);
+		return $result;
+	}
+	function select($content, $table_name, $condition = NULL, $limit = 0, $limit2 = 0, $orderby = NULL, $desc = false) {
 		$sql = "SELECT $content FROM `" . DB_TABLE_PRE . "$table_name`";
 		if ($condition != NULL) {
 			$sql .= " WHERE $condition";
 		}
 		if ($limit > 0) {
 			$sql .= " LIMIT $limit";
+			if ($limit2 >= $limit) {
+				$sql .= ", " . $limit2;
+			}
+		}
+		if ($orderby != NULL) {
+			$sql .= " ORDER BY $orderby";
 		}
 		if ($desc == true) {
 			$sql .= " DESC";

@@ -35,7 +35,10 @@ if (!defined("IN_CFM")) {
 			$str .= "<a href='?page=$page'>商品管理</a>";
 			break;
 		case "user":
-			$str .= "<a href='?page=$page'>用户管理</a>";
+			$str .= "<a href='?page=$page'>用户列表</a>";
+			break;
+		case "address":
+			$str .= "<a href='?page=$page'>用户信息</a>";
 			break;
 		}
 		if (isset($_GET['function'])) {
@@ -55,6 +58,6 @@ if (!defined("IN_CFM")) {
 			}
 		}
 	}
-	echo "<span>当前位置： $str</span>";
+	echo "<span><img src='images/icon_home.png' alt='主页' style='vertical-align:-2px;'>&nbsp;当前位置： $str</span>";
 ?>
 </div>

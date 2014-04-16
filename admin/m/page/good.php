@@ -27,10 +27,23 @@ $cond = "";
 if ($filter == true) {
 	$cond = contact_condition($cond, 'good_id');
 	$cond = contact_condition($cond, 'shop_id');
-	$cond = contact_condition($cond, 'price');
+	if (isset($_POST['price']) && $_POST['price'] != "") {
+		if ($cond != "") {
+			$cond .= " AND ";
+		}
+		$low = 0;
+		$high = 0;
+		sscanf($_POST['price'], "%d-%d", $low, $high);
+		if ($low <= $high) {
+			$cond .= "`price` BETWEEN '$low' AND '$high'";
+		}
+		else {
+			$cond .= "`price`='$low'";
+		}
+	}
 	if (isset($_POST['onsales']) && $_POST['onsales'] != -1) $cond = contact_condition($cond, 'onsales');
-	$cond = contact_condition($cond, 'good_name');
-	$cond = contact_condition($cond, 'good_desc');
+	$cond = contact_condition($cond, 'good_name', false);
+	$cond = contact_condition($cond, 'good_desc', false);
 }
 if ($cond == "") {
 	$cond = NULL;
@@ -47,7 +60,7 @@ if ($cond == "") {
 		<span class="fixed">商家ID：</span>
 		<input class="text" type="text" name="shop_id" placeholder="依据提供商品的商家ID过滤" value="<?php if (isset($_POST['shop_id'])) echo $_POST['shop_id']; ?>"><br>
 		<span class="fixed">价格：</span>
-		<input class="text" type="text" name="email" placeholder="格式：A或A~B，单位：元" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>"><br>
+		<input class="text" type="text" name="price" placeholder="格式：A或A~B，单位：元" value="<?php if (isset($_POST['price'])) echo $_POST['price']; ?>"><br>
 		<span class="fixed">在售状态：</span>
 		<span><input type="radio" name="onsales" value="-1" <?php if (!isset($_POST['onsales']) || $_POST['onsales'] == -1) echo "checked"; ?>>全部</span>&nbsp;
 		<span><input type="radio" name="onsales" value="0" <?php if (isset($_POST['onsales']) && $_POST['onsales'] == 0) echo "checked"; ?>>在售</span>&nbsp;
@@ -88,17 +101,16 @@ if ($cond == "") {
 					echo "<tr class='tr$style'>";
 					echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $good['good_id'] . "'></td>";
 					echo "<td>$count</td>";
-					echo "<td>&nbsp;";
+					echo "<td>";
 					echo "<a href='?page=good&function=editgood&detail=" . $good['good_id'] . "'>";
 					echo "<img src='images/icon_edit.png' alt='修改'>";
 					echo "<span class='link'>修改</span></a>&nbsp;";
 					echo "<a href='javascript:del(\"?page=good&function=deletegood&detail=" . $good['good_id'] . "\")'>";
 					echo "<img src='images/icon_del.png' alt='删除'>";
-					echo "<span class='link'>删除</span></a>";
-					echo "&nbsp;</td>";
+					echo "<span class='link'>删除</span></a></td>";
 					echo "<td>" . $good['good_id'] . "</td>";
 					echo "<td>" . $good['shop_id'] . "</td>";
-					echo "<td>" . $good['price'] . "</td>";
+					echo "<td>￥" . $good['price'] . "</td>";
 					echo "<td>" . (($good['onsales'] == 0) ? "在售" : "脱销") . "</td>";
 					echo "<td>" . $good['good_name'] . "</td>";
 					echo "<td>" . $good['good_desc'] . "</td>";

@@ -18,6 +18,7 @@ else {
 	<a href="?page=detail"><span class="pagerbutton"<?php if ($page == "detail") echo "id='leftcheck'"; ?>>订单详情管理</span></a>
 	<a href="?page=ant"><span class="pagerbutton"<?php if ($page == "ant") echo "id='leftcheck'"; ?>>Ant信息管理</span></a>
 	<a href="?page=good"><span class="pagerbutton"<?php if ($page == "good") echo "id='leftcheck'"; ?>>商品管理</span></a>
-	<a href="?page=user"><span class="pagerbutton"<?php if ($page == "user") echo "id='leftcheck'"; ?>>用户管理</span></a>
+	<a href="?page=user"><span class="pagerbutton"<?php if ($page == "user") echo "id='leftcheck'"; ?>>用户列表</span></a>
+	<a href="?page=address"><span class="pagerbutton"<?php if ($page == "address") echo "id='leftcheck'"; ?>>用户信息</span></a>
 	<a href="?action=logout"><span class="pagerbutton">退出登录</span></a>
 </div>

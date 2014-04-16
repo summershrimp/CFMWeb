@@ -26,18 +26,19 @@ if (isset($_GET['function'])) {
 $cond = "";
 if ($filter == true) {
 	$cond = contact_condition($cond, 'user_id');
-	$cond = contact_condition($cond, 'user_name');
+	$cond = contact_condition($cond, 'user_name', false);
 	$cond = contact_condition($cond, 'email', false);
 	if (isset($_POST['sex']) && $_POST['sex'] != -1) $cond = contact_condition($cond, 'sex');
 	$cond = contact_condition($cond, 'mobile_phone');
 	$cond = contact_condition($cond, 'qq');
+	$cond = contact_condition($cond, 'openid');
 }
 if ($cond == "") {
 	$cond = NULL;
 }
 ?>
 <div class="boxdiv">
-	<span class="titlespan dep1">用户信息管理<span class="commit">» 为用户做最好的服务</span></span>
+	<span class="titlespan dep1">用户列表<span class="commit">» 为用户做最好的服务</span></span>
 </div>
 <div class="boxdiv">
 	<span class="titlespan dep2">搜索用户</span>
@@ -45,7 +46,8 @@ if ($cond == "") {
 		<span class="fixed">用户ID：</span>
 		<input class="text" type="text" name="user_id" placeholder="依据用户ID过滤" value="<?php if (isset($_POST['user_id'])) echo $_POST['user_id']; ?>"><br>
 		<span class="fixed">用户名：</span>
-		<input class="text" type="text" name="user_name" placeholder="依据用户昵称过滤" value="<?php if (isset($_POST['user_name'])) echo $_POST['user_name']; ?>"><br>
+		<input class="text" type="text" name="user_name" placeholder="依据用户昵称过滤" value="<?php if (isset($_POST['user_name'])) echo $_POST['user_name']; ?>">
+		<span class="tooltip">* 支持模糊搜索</span><br>
 		<span class="fixed">邮箱：</span>
 		<input class="text" type="text" name="email" placeholder="依据用户邮箱过滤" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>">
 		<span class="tooltip">* 支持模糊搜索</span><br>
@@ -57,6 +59,8 @@ if ($cond == "") {
 		<input class="text" type="text" name="mobile_phone" placeholder="依据用户手机过滤" value="<?php if (isset($_POST['mobile_phone'])) echo $_POST['mobile_phone']; ?>"><br>
 		<span class="fixed">QQ：</span>
 		<input class="text" type="text" name="qq" placeholder="依据用户QQ过滤" value="<?php if (isset($_POST['qq'])) echo $_POST['qq']; ?>"><br>
+		<span class="fixed">OpenID：</span>
+		<input class="text" type="text" name="openid" placeholder="依据用户OpenID过滤" value="<?php if (isset($_POST['openid'])) echo $_POST['openid']; ?>"><br>
 		<p class="psubmit">
 			<input class="button" type="submit" value="搜索">
 			<input class="button" type="reset">
@@ -76,6 +80,7 @@ if ($cond == "") {
 				<td>性别</td>
 				<td>手机</td>
 				<td>QQ</td>
+				<td>OpenID</td>
 			</tr>
 			<?php
 			$result = $db->select("*", "customers", $cond);
@@ -87,20 +92,20 @@ if ($cond == "") {
 					echo "<tr class='tr$style'>";
 					echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $user['user_id'] . "'></td>";
 					echo "<td>$count</td>";
-					echo "<td>&nbsp;";
+					echo "<td>";
 					echo "<a href='?page=user&function=edituser&detail=" . $user['user_id'] . "'>";
 					echo "<img src='images/icon_edit.png' alt='修改'>";
 					echo "<span class='link'>修改</span></a>&nbsp;";
 					echo "<a href='javascript:del(\"?page=user&function=deleteuser&detail=" . $user['user_id'] . "\")'>";
 					echo "<img src='images/icon_del.png' alt='删除'>";
-					echo "<span class='link'>删除</span></a>";
-					echo "&nbsp;</td>";
+					echo "<span class='link'>删除</span></a></td>";
 					echo "<td>" . $user['user_id'] . "</td>";
 					echo "<td>" . $user['user_name'] . "</td>";
 					echo "<td>" . $user['email'] . "</td>";
 					echo "<td>" . (($user['sex'] == 0) ? "男" : "女") . "</td>";
 					echo "<td>" . $user['mobile_phone'] . "</td>";
 					echo "<td>" . $user['qq'] . "</td>";
+					echo "<td>" . $user['openid'] . "</td>";
 					echo "</tr>";
 				}
 			}
@@ -113,3 +118,4 @@ if ($cond == "") {
 		</p>
 	</form>
 </div>
+

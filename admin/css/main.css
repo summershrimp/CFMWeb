@@ -39,8 +39,8 @@
 #leftcheck {
 	color:	#428BCA;
 	font-weight:	bold;
-	border-right:	2px solid #428BCA;
-	background-color:	#FFF;
+	/*border-right:	2px solid #428BCA;*/
+	background:	url(../images/border_vertical.png) repeat-y right #FFF;
 }
 #right {
 	top:	48px;

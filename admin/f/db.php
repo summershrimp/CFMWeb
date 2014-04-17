@@ -7,6 +7,7 @@ class Database {
 		$db = mysql_connect($host, $username, $password);
 		mysql_select_db(DB_NAME);
 		mysql_query("SET NAMES UTF8");
+		mysql_query("SET time_zone='+8:00'");
 	}
 	function query($sql) {
 		$result = mysql_query($sql);
@@ -46,8 +47,10 @@ class Database {
 		$result = mysql_query($sql);
 		return $result;
 	}
-	function insert($table_name, $values) {
-		$sql = "INSERT INTO `" . DB_TABLE_PRE . "$table_name` VALUES($values)";
+	function insert($table_name, $keys, $values) {
+		$sql = "INSERT INTO `" . DB_TABLE_PRE . "$table_name` (" .
+			join(", ", quot($keys, "`")) . ") VALUES(" .
+			join(", ", quot($values, "'")) . ")";
 		$result = mysql_query($sql);
 		return $result;
 	}

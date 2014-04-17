@@ -6,23 +6,23 @@ $all_success = true;
 $list = "";
 if (isset($_POST['chk'])) {
 	foreach ($_POST['chk'] as $e) {
-		$result = $db->select("provider_id", "providers", "`provider_id`='$e'", 1);
+		$result = $db->select("rec_id", "order_details", "`rec_id`='$e'", 1);
 		if ($result == false || $db->fetch($result) == false) {
 			$list .= ($list == "" ? "" : ", ") . $e;
 			$all_success = false;
 		}
 		else {
-			$db->delete("providers", "`provider_id`='$e'", 1);
+			$db->delete("order_details", "`rec_id`='$e'", 1);
 		}
 	}
 	if ($all_success == true) {
 		echo "<div class='return success'>批量删除成功！</div>";
 	}
 	else {
-		echo "<div class='return warning'>部分业主未找到！ID：$list</div>";
+		echo "<div class='return warning'>部分订单细节未找到！ID：$list</div>";
 	}
 }
 else {
-	echo "<div class='return error'>未指定业主！</div>";
+	echo "<div class='return error'>未指定订单细节ID！</div>";
 }
 ?>

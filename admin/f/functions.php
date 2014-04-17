@@ -16,11 +16,25 @@ function check_and_open($db, $table, $alt, $page, $row, $exit, $str) {
 				return;
 			}
 		}
-		echo "<div class=\"returnerror\">" . $str . "未找到！</div>";
+		echo "<div class=\"return error\">" . $str . "未找到！</div>";
 	}
 	else {
-		echo "<div class=\"returnerror\">未指明" . $str . "！</div>";
+		echo "<div class=\"return error\">未指明" . $str . "！</div>";
 	}
+}
+function quot($arr, $char) {
+	$result = array();
+	foreach ($arr as $e) {
+		$result[] = $char . $e . $char;
+	}
+	return $result;
+}
+function get_post($arr) {
+	$result = array();
+	foreach ($arr as $e) {
+		$result[] = $_POST[$e];
+	}
+	return $result;
 }
 /* 连接sql查询条件 */
 function contact_condition($str, $row, $full_match = true) {
@@ -55,25 +69,17 @@ function html_special_chars($value) {
 		return $value;
 	}
 	else {
-		return is_array($value) ? array_map('safe_html', $value) : safe_html($value);
+		return is_array($value) ? array_map('html_special_chars', $value) : safe_html($value);
 	}
 }
 /* 对用户传入的变量进行转义操作 */
-if (!empty($_GET)) {
-	$_GET = html_special_chars($_GET);
-}
-if (!empty($_POST)) {
-	$_POST = html_special_chars($_POST);
-}
+$_GET = html_special_chars($_GET);
+$_POST = html_special_chars($_POST);
 $_COOKIE = html_special_chars($_COOKIE);
 $_REQUEST = html_special_chars($_REQUEST);
 if (!get_magic_quotes_gpc()) {
-	if (!empty($_GET)) {
-		$_GET = addslashes_deep($_GET);
-	}
-	if (!empty($_POST)) {
-		$_POST = addslashes_deep($_POST);
-	}
+	$_GET = addslashes_deep($_GET);
+	$_POST = addslashes_deep($_POST);
 	$_COOKIE = addslashes_deep($_COOKIE);
 	$_REQUEST = addslashes_deep($_REQUEST);
 }

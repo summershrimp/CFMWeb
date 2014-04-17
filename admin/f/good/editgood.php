@@ -2,11 +2,15 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
+if (!isset($_POST['onsale'])) {
+	$_POST['onsale'] = 0;
+}
 $t = $db->update("shop_goods", "`shop_id`='" . $_POST['shop_id'] .
 	"' , `price`='" . $_POST['price'] .
-	"' , `onsales`='" . $_POST['onsales'] .
+	"' , `onsale`='" . $_POST['onsale'] .
 	"' , `good_name`='" . $_POST['good_name'] .
-	"' , `good_desc`='" . $_POST['good_desc'] . "'",
+	"' , `good_desc`='" . $_POST['good_desc'] .
+	"' , `unavail`='" . $_POST['unavail'] . "'",
 	"`good_id`='" . $_GET['detail'] . "'", 1
 );
 if ($t == false) {

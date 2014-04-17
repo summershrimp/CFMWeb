@@ -90,15 +90,15 @@ class Shop extends apicommon {
 	 * 切换商品状态
 	 */
 	function switch_good_status($good_id, $good_status) {
-		$sql = "UPDATE " . $GLOBALS['cfm']->table("shop_goods") . " SET `onsales` = $good_status WHERE `good_id` = $good_id LIMIT 1";
+		$sql = "UPDATE " . $GLOBALS['cfm']->table("shop_goods") . " SET `onsale` = $good_status WHERE `good_id` = $good_id LIMIT 1";
 		$t = $GLOBALS['db']->query($sql);
 		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("shop_goods") . " WHERE `good_id` = $good_id LIMIT 1";
 		$t = $GLOBALS['db']->getRow($sql);
-		if (!isset($t['onsales'])) {
+		if (!isset($t['onsale'])) {
 			return 0;
 		}
 		else {
-			return $t['onsales'];
+			return $t['onsale'];
 		}
 	}
 	/**

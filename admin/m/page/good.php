@@ -41,9 +41,10 @@ if ($filter == true) {
 			$cond .= "`price`='$low'";
 		}
 	}
-	if (isset($_POST['onsales']) && $_POST['onsales'] != -1) $cond = contact_condition($cond, 'onsales');
+	if (isset($_POST['onsale']) && $_POST['onsale'] != -1) $cond = contact_condition($cond, 'onsale');
 	$cond = contact_condition($cond, 'good_name', false);
 	$cond = contact_condition($cond, 'good_desc', false);
+	if (isset($_POST['unavail']) && $_POST['unavail'] != -1) $cond = contact_condition($cond, 'unavail');
 }
 if ($cond == "") {
 	$cond = NULL;
@@ -61,16 +62,20 @@ if ($cond == "") {
 		<input class="text" type="text" name="shop_id" placeholder="依据提供商品的商家ID过滤" value="<?php if (isset($_POST['shop_id'])) echo $_POST['shop_id']; ?>"><br>
 		<span class="fixed">价格：</span>
 		<input class="text" type="text" name="price" placeholder="格式：A或A~B，单位：元" value="<?php if (isset($_POST['price'])) echo $_POST['price']; ?>"><br>
-		<span class="fixed">在售状态：</span>
-		<span><input type="radio" name="onsales" value="-1" <?php if (!isset($_POST['onsales']) || $_POST['onsales'] == -1) echo "checked"; ?>>全部</span>&nbsp;
-		<span><input type="radio" name="onsales" value="0" <?php if (isset($_POST['onsales']) && $_POST['onsales'] == 0) echo "checked"; ?>>在售</span>&nbsp;
-		<span><input type="radio" name="onsales" value="1" <?php if (isset($_POST['onsales']) && $_POST['onsales'] == 1) echo "checked"; ?>>脱销</span><br>
+		<span class="fixed">人气美食：</span>
+		<span><input type="radio" name="onsale" value="-1" <?php if (!isset($_POST['onsale']) || $_POST['onsale'] == -1) echo "checked"; ?>>全部</span>&nbsp;
+		<span><input type="radio" name="onsale" value="1" <?php if (isset($_POST['onsale']) && $_POST['onsale'] == 1) echo "checked"; ?>>是</span>&nbsp;
+		<span><input type="radio" name="onsale" value="0" <?php if (isset($_POST['onsale']) && $_POST['onsale'] == 0) echo "checked"; ?>>否</span><br>
 		<span class="fixed">商品名称：</span>
 		<input class="text" type="text" name="good_name" placeholder="依据商品名称过滤" value="<?php if (isset($_POST['good_name'])) echo $_POST['good_name']; ?>">
 		<span class="tooltip">支持模糊搜索</span><br>
 		<span class="fixed">商品描述：</span>
 		<input class="text" type="text" name="good_desc" placeholder="依据商品描述过滤" value="<?php if (isset($_POST['good_desc'])) echo $_POST['good_desc']; ?>">
 		<span class="tooltip">支持模糊搜索</span><br>
+		<span class="fixed">销售状态：</span>
+		<span><input type="radio" name="unavail" value="-1" <?php if (!isset($_POST['unavail']) || $_POST['unavail'] == -1) echo "checked"; ?>>全部</span>&nbsp;
+		<span><input type="radio" name="unavail" value="0" <?php if (isset($_POST['unavail']) && $_POST['unavail'] == 0) echo "checked"; ?>>在售</span>&nbsp;
+		<span><input type="radio" name="unavail" value="1" <?php if (isset($_POST['unavail']) && $_POST['unavail'] == 1) echo "checked"; ?>>脱销</span><br>
 		<p class="psubmit">
 			<input class="button" type="submit" value="搜索">
 			<input class="button" type="reset">
@@ -87,9 +92,10 @@ if ($cond == "") {
 				<td>商品ID</td>
 				<td>商家ID</td>
 				<td>价格</td>
-				<td>在售状态</td>
+				<td>人气美食</td>
 				<td>商品名称</td>
 				<td>商品描述</td>
+				<td>销售状态</td>
 			</tr>
 			<?php
 			$result = $db->select("*", "shop_goods", $cond);
@@ -111,9 +117,10 @@ if ($cond == "") {
 					echo "<td>" . $good['good_id'] . "</td>";
 					echo "<td>" . $good['shop_id'] . "</td>";
 					echo "<td>￥" . $good['price'] . "</td>";
-					echo "<td>" . (($good['onsales'] == 0) ? "在售" : "脱销") . "</td>";
+					echo "<td>" . (($good['onsale'] == 0) ? "" : "√") . "</td>";
 					echo "<td>" . $good['good_name'] . "</td>";
 					echo "<td>" . $good['good_desc'] . "</td>";
+					echo "<td>" . (($good['unavail'] == 0) ? "在售" : "脱销") . "</td>";
 					echo "</tr>";
 				}
 			}

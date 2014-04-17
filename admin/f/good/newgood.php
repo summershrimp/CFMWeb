@@ -2,7 +2,10 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$data = array("shop_id", "price", "onsales", "good_name", "good_desc");
+if (!isset($_POST['onsale'])) {
+	$_POST['onsale'] = 0;
+}
+$data = array("shop_id", "price", "onsale", "good_name", "good_desc", "unavail");
 $getpost = get_post($data);
 $t = $db->insert("shop_goods", $data, $getpost);
 if ($t == false) {

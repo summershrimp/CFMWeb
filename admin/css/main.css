@@ -24,7 +24,7 @@
 	width:	180px;
 	height:	100%;
 	float:	left;
-	z-index:	2;
+	z-index:	3;
 	position:	fixed;
 	display:	block;
 	background-color:	#F5F5F5;
@@ -107,7 +107,7 @@
 	z-index:	1;
 	overflow:	auto;
 	position:	fixed;
-	margin-top:	80px;
+	margin-top:	82px;
 }
 .trtitle {
 	text-align:	center;

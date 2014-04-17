@@ -50,7 +50,7 @@ if ($cond == "") {
 		<input class="text" type="text" name="good_id" placeholder="依据商品ID过滤" value="<?php if (isset($_POST['good_id'])) echo $_POST['good_id']; ?>"><br>
 		<span class="fixed">商品名称：</span>
 		<input class="text" type="text" name="good_name" placeholder="依据商品名称过滤" value="<?php if (isset($_POST['good_name'])) echo $_POST['good_name']; ?>">
-		<span class="tooltip">* 支持模糊搜索</span><br>
+		<span class="tooltip">支持模糊搜索</span><br>
 		<span class="fixed">商品数量：</span>
 		<input class="text" type="text" name="good_number" placeholder="依据商品数量过滤" value="<?php if (isset($_POST['good_number'])) echo $_POST['good_number']; ?>"><br>
 		<span class="fixed">商品价格：</span>
@@ -62,7 +62,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">订单列表</span>
-	<form action="#" method="post">
+	<form id="del" action="?page=detail&function=deletedetails" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
 				<td></td>
@@ -105,7 +105,7 @@ if ($cond == "") {
 		</table>
 		<p class="psubmit">
 			<a href="?page=detail&function=newdetail"><input class="button" style="float:left;" type="button" value="添加订单"></a>
-			<a href="javascript:del('?page=detail&function=deletedetails')"><input class="button dangerousbutton" type="button" value="批量删除"></a>
+			<a href="javascript:dels()"><input class="button dangerousbutton" type="button" value="批量删除"></a>
 			<input class="button" type="reset" value="重新选择">
 		</p>
 	</form>

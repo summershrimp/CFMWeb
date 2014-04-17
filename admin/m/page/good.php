@@ -12,8 +12,8 @@ if (isset($_GET['function'])) {
 	case 'deletegood':
 		check_and_open($db, 'shop_goods', 'detail', "f/good/deletegood.php", 'good_id', false, "商品");
 		break;
-	case 'deletegood':
-		require "f/good/deletegood.php";
+	case 'deletegoods':
+		require "f/good/deletegoods.php";
 		break;
 	case 'newgood':
 		require "m/good/newgood.php";
@@ -67,10 +67,10 @@ if ($cond == "") {
 		<span><input type="radio" name="onsales" value="1" <?php if (isset($_POST['onsales']) && $_POST['onsales'] == 1) echo "checked"; ?>>脱销</span><br>
 		<span class="fixed">商品名称：</span>
 		<input class="text" type="text" name="good_name" placeholder="依据商品名称过滤" value="<?php if (isset($_POST['good_name'])) echo $_POST['good_name']; ?>">
-		<span class="tooltip">* 支持模糊搜索</span><br>
+		<span class="tooltip">支持模糊搜索</span><br>
 		<span class="fixed">商品描述：</span>
 		<input class="text" type="text" name="good_desc" placeholder="依据商品描述过滤" value="<?php if (isset($_POST['good_desc'])) echo $_POST['good_desc']; ?>">
-		<span class="tooltip">* 支持模糊搜索</span><br>
+		<span class="tooltip">支持模糊搜索</span><br>
 		<p class="psubmit">
 			<input class="button" type="submit" value="搜索">
 			<input class="button" type="reset">
@@ -78,7 +78,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">商品列表</span>
-	<form action="#" method="post">
+	<form id="del" action="?page=good&function=deletegoods" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
 				<td></td>
@@ -121,7 +121,7 @@ if ($cond == "") {
 		</table>
 		<p class="psubmit">
 			<a href="?page=good&function=newgood"><input class="button" style="float:left;" type="button" value="添加商品"></a>
-			<a href="javascript:del('?page=good&function=deletegood')"><input class="button dangerousbutton" type="button" value="批量删除"></a>
+			<a href="javascript:dels()"><input class="button dangerousbutton" type="button" value="批量删除"></a>
 			<input class="button" type="reset" value="重新选择">
 		</p>
 	</form>

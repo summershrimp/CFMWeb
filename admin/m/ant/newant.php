@@ -2,18 +2,18 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-if (isset($_POST['name']) && isset($_POST['email']) &&
-	isset($_POST['real_name']) && isset($_POST['sex']) && isset($_POST['mobile']) &&
-	$_POST['name'] != "" && $_POST['email'] != "" &&
-	$_POST['real_name'] != "" && $_POST['sex'] != "" && $_POST['mobile'] != "") {
+if (isset($_POST['ant_name']) && isset($_POST['email']) &&
+	isset($_POST['ant_real_name']) && isset($_POST['sex']) && isset($_POST['mobile_phone']) &&
+	$_POST['ant_name'] != "" && $_POST['email'] != "" &&
+	$_POST['ant_real_name'] != "" && $_POST['sex'] != "" && $_POST['mobile_phone'] != "") {
 	require "f/ant/newant.php";
 }
-else if (isset($_POST['name']) && $_POST['name'] != "" ||
+else if (isset($_POST['ant_name']) && $_POST['ant_name'] != "" ||
 	isset($_POST['email']) && $_POST['email'] != "" ||
-	isset($_POST['real_name']) && $_POST['real_name'] != "" ||
+	isset($_POST['ant_real_name']) && $_POST['ant_real_name'] != "" ||
 	isset($_POST['sex']) && $_POST['sex'] != "" ||
-	isset($_POST['mobile']) && $_POST['mobile'] != "") {
-	echo "<div class='returnerror'>表格中存在未填项！</div>";
+	isset($_POST['mobile_phone']) && $_POST['mobile_phone'] != "") {
+	echo "<div class='return error'>表格中存在未填项！</div>";
 }
 ?>
 <div class="boxdiv">
@@ -26,7 +26,7 @@ else if (isset($_POST['name']) && $_POST['name'] != "" ||
 			</tr>
 			<tr class="tr0">
 				<td>昵称</td>
-				<td><input class="text" type="text" name="name"></td>
+				<td><input class="text" type="text" name="ant_name"></td>
 			</tr>
 			<tr class="tr1">
 				<td>邮箱</td>
@@ -34,7 +34,7 @@ else if (isset($_POST['name']) && $_POST['name'] != "" ||
 			</tr>
 			<tr class="tr0">
 				<td>真实姓名</td>
-				<td><input class="text" type="text" name="real_name"></td>
+				<td><input class="text" type="text" name="ant_real_name"></td>
 			</tr>
 			<tr class="tr1">
 				<td>性别</td>
@@ -45,7 +45,7 @@ else if (isset($_POST['name']) && $_POST['name'] != "" ||
 			</tr>
 			<tr class="tr0">
 				<td>手机</td>
-				<td><input class="text" type="text" name="mobile"></td>
+				<td><input class="text" type="text" name="mobile_phone"></td>
 			</tr>
 		</table>
 		<p class="psubmit">

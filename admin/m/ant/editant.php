@@ -2,8 +2,18 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-if (isset($_POST['name']) && $_POST['name'] != "") {
+if (isset($_POST['ant_name']) && isset($_POST['email']) &&
+	isset($_POST['ant_real_name']) && isset($_POST['sex']) && isset($_POST['mobile_phone']) &&
+	$_POST['ant_name'] != "" && $_POST['email'] != "" &&
+	$_POST['ant_real_name'] != "" && $_POST['sex'] != "" && $_POST['mobile_phone'] != "") {
 	require "f/ant/editant.php";
+}
+else if (isset($_POST['ant_name']) && $_POST['ant_name'] != "" ||
+	isset($_POST['email']) && $_POST['email'] != "" ||
+	isset($_POST['ant_real_name']) && $_POST['ant_real_name'] != "" ||
+	isset($_POST['sex']) && $_POST['sex'] != "" ||
+	isset($_POST['mobile_phone']) && $_POST['mobile_phone'] != "") {
+	echo "<div class='return error'>表格中存在未填项！</div>";
 }
 $result = $db->select("*", "ants", "`$row`='$get'", 1);
 $result = $db->fetch($result);
@@ -19,7 +29,7 @@ $id = $result['ant_id'];
 			</tr>
 			<tr class="tr0">
 				<td>名称</td>
-				<td><input class="text" type="text" name="name" value="<?php echo $result['ant_name']; ?>"></td>
+				<td><input class="text" type="text" name="ant_name" value="<?php echo $result['ant_name']; ?>"></td>
 			</tr>
 			<tr class="tr1">
 				<td>邮箱</td>
@@ -27,7 +37,7 @@ $id = $result['ant_id'];
 			</tr>
 			<tr class="tr0">
 				<td>真实姓名</td>
-				<td><input class="text" type="text" name="real_name" value="<?php echo $result['ant_real_name']; ?>"></td>
+				<td><input class="text" type="text" name="ant_real_name" value="<?php echo $result['ant_real_name']; ?>"></td>
 			</tr>
 			<tr class="tr1">
 				<td>性别</td>
@@ -38,7 +48,7 @@ $id = $result['ant_id'];
 			</tr>
 			<tr class="tr0">
 				<td>手机</td>
-				<td><input class="text" type="text" name="mobile" value="<?php echo $result['mobile_phone']; ?>"></td>
+				<td><input class="text" type="text" name="mobile_phone" value="<?php echo $result['mobile_phone']; ?>"></td>
 			</tr>
 		</table>
 		<p class="psubmit">

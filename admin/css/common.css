@@ -1,10 +1,6 @@
 *{
 	font-size:	15px;
 	font-family:	"微软雅黑" !important;
-	transition:	linear 0.2s;
-	-moz-transition:	linear 0.2s;
-	-webkit-transition:	linear 0.2s;
-	-o-transition:	linear 0.2s;
 }
 ::-webkit-scrollbar {
 	width:	10px;
@@ -19,6 +15,12 @@
 }
 ::-webkit-scrollbar-button {
 	display:	none;
+}
+a:hover, span:hover, input:hover, textarea:hover, .button:hover {
+	transition:	linear 0.2s;
+	-moz-transition:	linear 0.2s;
+	-webkit-transition:	linear 0.2s;
+	-o-transition:	linear 0.2s;
 }
 a {
 	text-decoration:	none;
@@ -100,20 +102,22 @@ select {
 .ensuredel .psubmit {
 	padding-right:	20px;
 }
-.returnsuccess {
-	border:	1px solid #A2D246;
+.return {
 	margin-top:	10px;
 	margin-bottom:	10px;
 	line-height:	32px;
 	padding-left:	10px;
+}
+.success {
+	border:	1px solid #A2D246;
 	background-color:	#EBF8A4;
 }
-.returnerror {
+.warning {
+	border:	1px solid #BB0;
+	background-color:	#FF9;
+}
+.error {
 	border:	1px solid maroon;
-	margin-top:	10px;
-	margin-bottom:	10px;
-	line-height:	32px;
-	padding-left:	10px;
 	background-color:	pink;
 }
 .link {

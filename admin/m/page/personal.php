@@ -38,7 +38,7 @@ $result = $db->fetch($result);
 	<form action="?page=personal&function=editpersonal" method="post">
 		<span class="fixed" style="width:auto;">若想修改信息，请先输入旧密码。</span><br>
 		<span class="fixed" style="width:auto;">若不想修改某条信息，则留空相应的输入框。</span><br><br>
-		<span class="fixed">* 旧密码：</span>
+		<span class="fixed">旧密码：</span>
 		<input class="text" type="password" name="old"><br>
 		<span class="fixed">新密码：</span>
 		<input class="text" type="password" name="new"><br>

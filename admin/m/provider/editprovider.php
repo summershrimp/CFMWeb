@@ -13,7 +13,7 @@ else if (isset($_POST['provider_name']) && $_POST['provider_name'] != "" ||
 	isset($_POST['sex']) && $_POST['sex'] != "" ||
 	isset($_POST['mobile_phone']) && $_POST['mobile_phone'] != "" ||
 	isset($_POST['qq']) && $_POST['qq'] != "") {
-	echo "<div class='returnerror'>表格中存在未填项！</div>";
+	echo "<div class='return error'>表格中存在未填项！</div>";
 }
 $result = $db->select("*", "providers", "`$row`='$get'", 1);
 $result = $db->fetch($result);

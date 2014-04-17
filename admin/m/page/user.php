@@ -47,10 +47,10 @@ if ($cond == "") {
 		<input class="text" type="text" name="user_id" placeholder="依据用户ID过滤" value="<?php if (isset($_POST['user_id'])) echo $_POST['user_id']; ?>"><br>
 		<span class="fixed">用户名：</span>
 		<input class="text" type="text" name="user_name" placeholder="依据用户昵称过滤" value="<?php if (isset($_POST['user_name'])) echo $_POST['user_name']; ?>">
-		<span class="tooltip">* 支持模糊搜索</span><br>
+		<span class="tooltip">支持模糊搜索</span><br>
 		<span class="fixed">邮箱：</span>
 		<input class="text" type="text" name="email" placeholder="依据用户邮箱过滤" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>">
-		<span class="tooltip">* 支持模糊搜索</span><br>
+		<span class="tooltip">支持模糊搜索</span><br>
 		<span class="fixed">性别：</span>
 		<span><input type="radio" name="sex" value="-1" <?php if (!isset($_POST['sex']) || $_POST['sex'] == -1) echo "checked"; ?>>全部</span>&nbsp;
 		<span><input type="radio" name="sex" value="0" <?php if (isset($_POST['sex']) && $_POST['sex'] == 0) echo "checked"; ?>>男</span>&nbsp;
@@ -68,7 +68,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">用户列表</span>
-	<form action="#" method="post">
+	<form id="del" action="?page=user&function=deleteusers" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
 				<td></td>
@@ -113,7 +113,7 @@ if ($cond == "") {
 		</table>
 		<p class="psubmit">
 			<a href="?page=user&function=newuser"><input class="button" style="float:left;" type="button" value="添加用户"></a>
-			<a href="javascript:del('?page=user&function=deleteusers')"><input class="button dangerousbutton" type="button" value="批量删除"></a>
+			<a href="javascript:dels()"><input class="button dangerousbutton" type="button" value="批量删除"></a>
 			<input class="button" type="reset" value="重新选择">
 		</p>
 	</form>

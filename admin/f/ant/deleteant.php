@@ -4,9 +4,9 @@ if (!defined("IN_CFM")) {
 }
 $t = $db->delete("ants", "`ant_id`='" . $_GET['detail'] . "'", 1);
 if ($t == false) {
-	echo "<div class='returnerror'>删除失败！</div>";
+	echo "<div class='return error'>删除失败！</div>";
 }
 else {
-	echo "<div class='returnsuccess'>删除成功！</div>";	
+	echo "<div class='return success'>删除成功！</div>";	
 }
 ?>

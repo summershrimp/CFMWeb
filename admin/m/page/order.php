@@ -74,7 +74,7 @@ if ($filter == true) {
 		<input class="text" type="text" name="ant_id" placeholder="依据AntID过滤" value="<?php if (isset($_POST['ant_id'])) echo $_POST['ant_id']; ?>"><br>
 		<span class="fixed">地址：</span>
 		<input class="text" type="text" name="address" placeholder="依据地址过滤" value="<?php if (isset($_POST['address'])) echo $_POST['address']; ?>">
-		<span class="tooltip">* 支持模糊搜索</span><br>
+		<span class="tooltip">支持模糊搜索</span><br>
 		<span class="fixed">用户已下单：</span>
 		<span><input type="radio" name="order_status" value="-1" <?php if (!isset($_POST['order_status']) || $_POST['order_status'] == -1) echo "checked"; ?>>全部</span>&nbsp;
 		<span><input type="radio" name="order_status" value="1" <?php if (isset($_POST['order_status']) && $_POST['order_status'] == 1) echo "checked"; ?>>是</span>&nbsp;
@@ -116,62 +116,63 @@ if ($filter == true) {
 </div>
 <div class="boxdiv">
 	<span class="titlespan dep2">订单列表</span>
-	<table style="margin-right:20px;">
-		<tr class="trtitle">
-			<td></td>
-			<td style="width:20px;">#</td>
-			<td>ID</td>
-			<td>操作</td>
-			<td>用户ID</td>
-			<td>AntID</td>
-			<td>地址</td>
-			<td>已下单</td>
-			<td>已接单</td>
-			<td>已确认</td>
-			<td>已送货</td>
-			<td>已取货</td>
-			<td>已付款</td>
-			<td>支付记录ID</td>
-			<td>添加日期</td>
-		</tr>
-		<?php
-		$result = $db->select("*", "order_info", $cond);
-		if ($result != false) {
-			$count = 0;
-			while ($order = $db->fetch($result)) {
-				$count++;
-				$style = ($count - 1) % 2;
-				echo "<tr class='tr$style'>";
-				echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $order['order_id'] . "'></td>";
-				echo "<td>$count</td>";
-				echo "<td>";
-				echo "<a href='?page=order&function=editorder&detail=" . $order['order_id'] . "'>";
-				echo "<img src='images/icon_edit.png' alt='修改'>";
-				echo "<span class='link'>修改</span></a>&nbsp;";
-				echo "<a href='javascript:del(\"?page=order&function=deleteorder&detail=" . $order['order_id'] . "\")'>";
-				echo "<img src='images/icon_del.png' alt='删除'>";
-				echo "<span class='link'>删除</span></a>";
-				echo "</td>";
-				echo "<td>" . $order['order_id'] . "</td>";
-				echo "<td>" . $order['user_id'] . "</td>";
-				echo "<td>" . $order['ant_id'] . "</td>";
-				echo "<td class='tdclip'>" . $order['address'] . "</td>";
-				echo "<td>" . ($order['order_status'] == 1 ? "是" : "否") . "</td>";
-				echo "<td>" . ($order['ant_status'] == 1 ? "是" : "否") . "</td>";
-				echo "<td>" . ($order['confirm_status'] == 1 ? "是" : "否") . "</td>";
-				echo "<td>" . ($order['shipping_status'] == 1 ? "是" : "否") . "</td>";
-				echo "<td>" . ($order['taking_status'] == 1 ? "是" : "否") . "</td>";
-				echo "<td>" . ($order['pay_status'] == 1 ? "是" : "否") . "</td>";
-				echo "<td>" . $order['pay_id'] . "</td>";
-				echo "<td>" . $order['add_date'] . "</td>";
-				echo "</tr>";
+	<form id="del" action="?page=order&function=deleteorders" method="post">
+		<table style="margin-right:20px;">
+			<tr class="trtitle">
+				<td></td>
+				<td style="width:20px;">#</td>
+				<td>操作</td>
+				<td>ID</td>
+				<td>用户ID</td>
+				<td>AntID</td>
+				<td>地址</td>
+				<td>已下单</td>
+				<td>已接单</td>
+				<td>已确认</td>
+				<td>已送货</td>
+				<td>已取货</td>
+				<td>已付款</td>
+				<td>支付记录ID</td>
+				<td>添加日期</td>
+			</tr>
+			<?php
+			$result = $db->select("*", "order_info", $cond);
+			if ($result != false) {
+				$count = 0;
+				while ($order = $db->fetch($result)) {
+					$count++;
+					$style = ($count - 1) % 2;
+					echo "<tr class='tr$style'>";
+					echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $order['order_id'] . "'></td>";
+					echo "<td>$count</td>";
+					echo "<td>";
+					echo "<a href='?page=order&function=editorder&detail=" . $order['order_id'] . "'>";
+					echo "<img src='images/icon_edit.png' alt='修改'>";
+					echo "<span class='link'>修改</span></a>&nbsp;";
+					echo "<a href='javascript:del(\"?page=order&function=deleteorder&detail=" . $order['order_id'] . "\")'>";
+					echo "<img src='images/icon_del.png' alt='删除'>";
+					echo "<span class='link'>删除</span></a>";
+					echo "</td>";
+					echo "<td>" . $order['order_id'] . "</td>";
+					echo "<td>" . $order['user_id'] . "</td>";
+					echo "<td>" . $order['ant_id'] . "</td>";
+					echo "<td class='tdclip'>" . $order['address'] . "</td>";
+					echo "<td>" . ($order['order_status'] == 1 ? "是" : "否") . "</td>";
+					echo "<td>" . ($order['ant_status'] == 1 ? "是" : "否") . "</td>";
+					echo "<td>" . ($order['confirm_status'] == 1 ? "是" : "否") . "</td>";
+					echo "<td>" . ($order['shipping_status'] == 1 ? "是" : "否") . "</td>";
+					echo "<td>" . ($order['taking_status'] == 1 ? "是" : "否") . "</td>";
+					echo "<td>" . ($order['pay_status'] == 1 ? "是" : "否") . "</td>";
+					echo "<td>" . $order['pay_id'] . "</td>";
+					echo "<td>" . $order['add_date'] . "</td>";
+					echo "</tr>";
+				}
 			}
-		}
-		?>
+			?>
 		</table>
 		<p class="psubmit">
 			<a href="?page=order&function=neworder"><input class="button" style="float:left;" type="button" value="添加订单信息"></a>
-			<a href="javascript:del('?page=order&function=deleteorders')"><input class="button dangerousbutton" type="button" value="批量删除"></a>
+			<a href="javascript:dels()"><input class="button dangerousbutton" type="button" value="批量删除"></a>
 			<input class="button" type="reset" value="重新选择">
 		</p>
 	</form>

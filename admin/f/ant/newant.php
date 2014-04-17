@@ -2,18 +2,16 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$salt = rand();
-$password = "123456";
-$password = md5($password . $salt);
-$content = "'0','" . $_POST['email'] . "','" . $_POST['name'] . "','$password','" .
-	$_POST['real_name'] . "','','','" . $_POST['sex'] .
-	"','1900-00-00','0','0','0','0','0','0000-00-00 00:00:00', '', NULL, '$salt', '0', '0', '','" .
-	$_POST['mobile'] . "', '0', NULL, NULL, '', '', NULL";
-$t = $db->insert("ants", $content);
+mt_srand((double) microtime() * 1000000);
+$_POST['salt'] = mt_rand(0, 2147483647);
+$_POST['password'] = md5("123456" . $_POST['salt']);
+$data = array("ant_name", "email", "ant_real_name", "sex", "mobile_phone", "password", "salt");
+$getpost = get_post($data);
+$t = $db->insert("ants", $data, $getpost);
 if ($t == false) {
-	echo "<div class='returnerror'>插入失败，请检查输入数据！</div>";
+	echo "<div class='return error'>插入失败，请检查输入数据！</div>";
 }
 else {
-	echo "<div class='returnsuccess'>插入成功！</div>";
+	echo "<div class='return success'>插入成功！</div>";
 }
 ?>

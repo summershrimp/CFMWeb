@@ -46,17 +46,17 @@ if ($cond == "") {
 		<input class="text" type="text" name="shop_id" placeholder="依据商家ID过滤" value="<?php if (isset($_POST['shop_id'])) echo $_POST['shop_id']; ?>"><br>
 		<span class="fixed">商家名称：</span>
 		<input class="text" type="text" name="shop_name" placeholder="依据商家名称过滤" value="<?php if (isset($_POST['shop_name'])) echo $_POST['shop_name']; ?>">
-		<span class="tooltip">* 支持模糊搜索</span><br>
+		<span class="tooltip">支持模糊搜索</span><br>
 		<span class="fixed">商家电话：</span>
 		<input class="text" type="text" name="shop_phone" placeholder="依据商家电话过滤" value="<?php if (isset($_POST['shop_phone'])) echo $_POST['shop_phone']; ?>"><br>
 		<span class="fixed">商家位置：</span>
 		<input class="text" type="text" name="shop_pos" placeholder="依据商家位置过滤" value="<?php if (isset($_POST['shop_pos'])) echo $_POST['shop_pos']; ?>">
-		<span class="tooltip">* 支持模糊搜索</span><br>
+		<span class="tooltip">支持模糊搜索</span><br>
 		<span class="fixed">业主ID：</span>
 		<input class="text" type="text" name="owner_id" placeholder="依据业主ID过滤" value="<?php if (isset($_POST['owner_id'])) echo $_POST['owner_id']; ?>"><br>
 		<span class="fixed">商家描述：</span>
 		<input class="text" type="text" name="shop_desc" placeholder="依据商家描述过滤" value="<?php if (isset($_POST['shop_desc'])) echo $_POST['shop_desc']; ?>">
-		<span class="tooltip">* 支持模糊搜索</span><br>
+		<span class="tooltip">支持模糊搜索</span><br>
 		<p class="psubmit">
 			<input class="button" type="submit" value="搜索">
 			<input class="button" type="reset">
@@ -64,7 +64,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">商家列表</span>
-	<form action="#" method="post">
+	<form id="del" action="?page=shop&function=deleteshops" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
 				<td></td>
@@ -112,7 +112,7 @@ if ($cond == "") {
 		</table>
 		<p class="psubmit">
 			<a href="?page=shop&function=newshop"><input class="button" style="float:left;" type="button" value="添加商家"></a>
-			<a href="javascript:del('?page=shop&function=deleteshops')"><input class="button dangerousbutton" type="button" value="批量删除"></a>
+			<input class="button dangerousbutton" type="button" onclick="javascript:dels()" value="批量删除"></a>
 			<input class="button" type="reset" value="重新选择">
 		</p>
 	</form>

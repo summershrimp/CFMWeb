@@ -43,12 +43,12 @@ if (!defined("IN_CFM")) {
 		}
 		if (isset($_GET['function'])) {
 			$function = $_GET['function'];
-			$str .= " <span>·</span> ";
+			$str .= " <span> · </span> ";
 			if (strstr($function, "new")) {
 				$str .= "<a href='?page=$page&function=$function'>添加新信息</a>";
 			}
 			else if (strstr($function, "edit")) {
-				$str .= "<a href='?page=$page&function=$function'>编辑信息</a>";
+				$str .= "编辑信息";
 			}
 			else if (strstr($function, "delete")) {
 				$str .= "删除条目";

@@ -27,7 +27,7 @@ else if (isset($_POST['user_id']) && $_POST['user_id'] != "" ||
 	isset($_POST['pay_status']) && $_POST['pay_status'] != "" ||
 	isset($_POST['pay_id']) && $_POST['pay_id'] != "" ||
 	isset($_POST['add_date']) && $_POST['add_date'] != "") {
-	echo "<div class='returnerror'>表格中存在未填项！</div>";
+	echo "<div class='return error'>表格中存在未填项！</div>";
 }
 ?>
 <div class="boxdiv">
@@ -39,57 +39,57 @@ else if (isset($_POST['user_id']) && $_POST['user_id'] != "" ||
 				<td style="width:200px;">值</td>
 			</tr>
 			<tr class="tr0">
-				<td>* 用户ID</td>
+				<td>用户ID</td>
 				<td><input class="text" type="text" name="user_id"></td>
 			</tr>
 			<tr class="tr1">
-				<td>* AntID</td>
+				<td>AntID</td>
 				<td><input class="text" type="text" name="ant_id"></td>
 			</tr>
 			<tr class="tr0">
-				<td>* 地址</td>
+				<td>地址</td>
 				<td><input class="text" type="text" name="address"></td>
 			</tr>
 			<tr class="tr1">
-				<td>* 用户已下单</td>
+				<td>用户已下单</td>
 				<td>
-					<span><input type="radio" name="order_status" value="0">是</span>
-					<span><input type="radio" name="order_status" value="1" checked>否</span>
+					<span><input type="radio" name="order_status" value="1">是</span>
+					<span><input type="radio" name="order_status" value="0" checked>否</span>
 				</td>
 			</tr>
 			<tr class="tr0">
-				<td>* Ant已接单</td>
+				<td>Ant已接单</td>
 				<td>
-					<span><input type="radio" name="ant_status" value="0">是</span>
-					<span><input type="radio" name="ant_status" value="1" checked>否</span>
+					<span><input type="radio" name="ant_status" value="1">是</span>
+					<span><input type="radio" name="ant_status" value="0" checked>否</span>
 				</td>
 			</tr>
 			<tr class="tr1">
-				<td>* 商家已确认</td>
+				<td>商家已确认</td>
 				<td>
-					<span><input type="radio" name="confirm_status" value="0">是</span>
-					<span><input type="radio" name="confirm_status" value="1" checked>否</span>
+					<span><input type="radio" name="confirm_status" value="1">是</span>
+					<span><input type="radio" name="confirm_status" value="0" checked>否</span>
 				</td>
 			</tr>
 			<tr class="tr0">
-				<td>* Ant已送货</td>
+				<td>Ant已送货</td>
 				<td>
-					<span><input type="radio" name="shipping_status" value="0">是</span>
-					<span><input type="radio" name="shipping_status" value="1" checked>否</span>
+					<span><input type="radio" name="shipping_status" value="1">是</span>
+					<span><input type="radio" name="shipping_status" value="0" checked>否</span>
 				</td>
 			</tr>
 			<tr class="tr1">
-				<td>* 用户已取货</td>
+				<td>用户已取货</td>
 				<td>
-					<span><input type="radio" name="taking_status" value="0">是</span>
-					<span><input type="radio" name="taking_status" value="1" checked>否</span>
+					<span><input type="radio" name="taking_status" value="1">是</span>
+					<span><input type="radio" name="taking_status" value="0" checked>否</span>
 				</td>
 			</tr>
 			<tr class="tr0">
 				<td>用户已付款</td>
 				<td>
-					<span><input type="radio" name="pay_status" value="0">是</span>
-					<span><input type="radio" name="pay_status" value="1" checked>否</span>
+					<span><input type="radio" name="pay_status" value="1">是</span>
+					<span><input type="radio" name="pay_status" value="0" checked>否</span>
 				</td
 			</tr>
 			<tr class="tr1">

@@ -2,18 +2,18 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-if (isset($_POST['name']) && isset($_POST['owner']) &&
-	isset($_POST['phone']) && isset($_POST['pos']) && isset($_POST['desc']) &&
-	$_POST['name'] != "" && $_POST['owner'] != "" &&
-	$_POST['phone'] != "" && $_POST['pos'] != "" && $_POST['desc'] != "") {
+if (isset($_POST['shop_name']) && isset($_POST['owner_id']) &&
+	isset($_POST['shop_phone']) && isset($_POST['shop_pos']) && isset($_POST['shop_desc']) &&
+	$_POST['shop_name'] != "" && $_POST['owner_id'] != "" &&
+	$_POST['shop_phone'] != "" && $_POST['shop_pos'] != "" && $_POST['shop_desc'] != "") {
 	require "f/shop/newshop.php";
 }
-else if (isset($_POST['name']) && $_POST['name'] != "" ||
-	isset($_POST['owner']) && $_POST['owner'] != "" ||
-	isset($_POST['phone']) && $_POST['phone'] != "" ||
-	isset($_POST['pos']) && $_POST['pos'] != "" ||
-	isset($_POST['desc']) && $_POST['desc'] != "") {
-	echo "<div class='returnerror'>表格中存在未填项！</div>";
+else if (isset($_POST['shop_name']) && $_POST['shop_name'] != "" ||
+	isset($_POST['owner_id']) && $_POST['owner_id'] != "" ||
+	isset($_POST['shop_phone']) && $_POST['shop_phone'] != "" ||
+	isset($_POST['shop_pos']) && $_POST['shop_pos'] != "" ||
+	isset($_POST['shop_desc']) && $_POST['shop_desc'] != "") {
+	echo "<div class='return error'>表格中存在未填项！</div>";
 }
 ?>
 <div class="boxdiv">
@@ -25,24 +25,24 @@ else if (isset($_POST['name']) && $_POST['name'] != "" ||
 				<td style="width:200px;">值</td>
 			</tr>
 			<tr class="tr0">
-				<td>* 名称</td>
-				<td><input class="text" type="text" name="name"></td>
+				<td>名称</td>
+				<td><input class="text" type="text" name="shop_name"></td>
 			</tr>
 			<tr class="tr1">
-				<td>* 业主ID</td>
-				<td><input class="text" type="text" name="owner"></td>
+				<td>业主ID</td>
+				<td><input class="text" type="text" name="owner_id"></td>
 			</tr>
 			<tr class="tr0">
-				<td>* 电话</td>
-				<td><input class="text" type="text" name="phone"></td>
+				<td>电话</td>
+				<td><input class="text" type="text" name="shop_phone"></td>
 			</tr>
 			<tr class="tr1">
-				<td>* 位置</td>
-				<td><input class="text" type="text" name="pos"></td>
+				<td>位置</td>
+				<td><input class="text" type="text" name="shop_pos"></td>
 			</tr>
 			<tr class="tr0">
-				<td>* 描述</td>
-				<td><textarea class="text" type="text" name="desc"></textarea></td>
+				<td>描述</td>
+				<td><textarea class="text" type="text" name="shop_desc"></textarea></td>
 			</tr>
 		</table>
 		<p class="psubmit">

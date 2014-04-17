@@ -2,33 +2,35 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-if (isset($_POST['provider_name']) && isset($_POST['email']) &&
-	isset($_POST['sex']) && isset($_POST['mobile_phone']) && isset($_POST['qq']) &&
-	$_POST['provider_name'] != "" && $_POST['email'] != "" &&
-	$_POST['sex'] != "" && $_POST['mobile_phone'] != "" && $_POST['qq'] != "") {
-	require "f/provider/editprovider.php";
+if (isset($_POST['user_name']) &&
+	isset($_POST['email']) && isset($_POST['sex']) &&
+	isset($_POST['mobile_phone']) && isset($_POST['qq']) &&
+	$_POST['user_name'] != "" &&
+	$_POST['email'] != "" && $_POST['sex'] != "" &&
+	$_POST['mobile_phone'] != "" && $_POST['qq'] != "") {
+	require "f/user/edituser.php";
 }
-else if (isset($_POST['provider_name']) && $_POST['provider_name'] != "" ||
+else if (isset($_POST['user_name']) && $_POST['user_name'] != "" ||
 	isset($_POST['email']) && $_POST['email'] != "" ||
 	isset($_POST['sex']) && $_POST['sex'] != "" ||
 	isset($_POST['mobile_phone']) && $_POST['mobile_phone'] != "" ||
 	isset($_POST['qq']) && $_POST['qq'] != "") {
 	echo "<div class='return error'>表格中存在未填项！</div>";
 }
-$result = $db->select("*", "providers", "`$row`='$get'", 1);
+$result = $db->select("*", "customers", "`$row`='$get'", 1);
 $result = $db->fetch($result);
 ?>
 <div class="boxdiv">
-	<span class="titlespan dep2">编辑业主信息（id=<?php echo $result['provider_id']; ?>）</span>
-	<form action="?page=provider&function=editprovider&detail=<?php echo $result['provider_id']; ?>" method="post">
+	<span class="titlespan dep2">编辑用户信息（id=<?php echo $result['user_id']; ?>）</span>
+	<form action="?page=user&function=edituser&detail=<?php echo $result['user_id']; ?>" method="post">
 		<table>
 			<tr class="trtitle">
 				<td style="width:100px;">属性</td>
 				<td style="width:200px;">值</td>
 			</tr>
 			<tr class="tr0">
-				<td>业主名</td>
-				<td><input class="text" type="text" name="provider_name" value="<?php echo $result['provider_name']; ?>"></td>
+				<td>用户名</td>
+				<td><input class="text" type="text" name="user_name" value="<?php echo $result['user_name']; ?>"></td>
 			</tr>
 			<tr class="tr1">
 				<td>邮箱</td>
@@ -53,7 +55,7 @@ $result = $db->fetch($result);
 		<p class="psubmit">
 			<input class="button" type="submit" value="修改">
 			<input class="button" type="reset">
-			<a href="?page=provider"><input class="button" type="button" value="返回"></a>
+			<a href="?page=user"><input class="button" type="button" value="返回"></a>
 		</p>
 	</form>
 </div>

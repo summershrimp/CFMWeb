@@ -2,18 +2,20 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-if (isset($_POST['name']) && isset($_POST['owner']) &&
-	isset($_POST['phone']) && isset($_POST['pos']) && isset($_POST['desc']) &&
-	$_POST['name'] != "" && $_POST['owner'] != "" &&
-	$_POST['phone'] != "" && $_POST['pos'] != "" && $_POST['desc'] != "") {
+if (isset($_POST['order_id']) && isset($_POST['good_id']) &&
+	isset($_POST['good_name']) && isset($_POST['good_number']) &&
+	isset($_POST['good_price']) &&
+	$_POST['order_id'] != "" && $_POST['good_id'] != "" &&
+	$_POST['good_name'] != "" && $_POST['good_number'] != "" &&
+	$_POST['good_price'] != "") {
 	require "f/detail/newdetail.php";
 }
-else if (isset($_POST['name']) && $_POST['name'] != "" ||
-	isset($_POST['owner']) && $_POST['owner'] != "" ||
-	isset($_POST['phone']) && $_POST['phone'] != "" ||
-	isset($_POST['pos']) && $_POST['pos'] != "" ||
-	isset($_POST['desc']) && $_POST['desc'] != "") {
-	echo "<div class='returnerror'>表格中存在未填项！</div>";
+else if (isset($_POST['order_id']) && $_POST['order_id'] != "" ||
+	isset($_POST['good_id']) && $_POST['good_id'] != "" ||
+	isset($_POST['good_name']) && $_POST['good_name'] != "" ||
+	isset($_POST['good_number']) && $_POST['good_number'] != "" ||
+	isset($_POST['good_price']) && $_POST['good_price'] != "") {
+	echo "<div class='return error'>表格中存在未填项！</div>";
 }
 ?>
 <div class="boxdiv">
@@ -25,23 +27,23 @@ else if (isset($_POST['name']) && $_POST['name'] != "" ||
 				<td style="width:200px;">值</td>
 			</tr>
 			<tr class="tr0">
-				<td>* 订单ID</td>
+				<td>订单ID</td>
 				<td><input class="text" type="text" name="order_id"></td>
 			</tr>
 			<tr class="tr1">
-				<td>* 商品ID</td>
+				<td>商品ID</td>
 				<td><input class="text" type="text" name="good_id"></td>
 			</tr>
 			<tr class="tr0">
-				<td>* 商品名称</td>
+				<td>商品名称</td>
 				<td><input class="text" type="text" name="good_name"></td>
 			</tr>
 			<tr class="tr1">
-				<td>* 商品数量</td>
+				<td>商品数量</td>
 				<td><input class="text" type="text" name="good_number"></td>
 			</tr>
 			<tr class="tr0">
-				<td>* 商品价格</td>
+				<td>商品价格</td>
 				<td><input class="text" type="text" name="good_price"></td>
 			</tr>
 		</table>

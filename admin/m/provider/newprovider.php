@@ -13,7 +13,7 @@ else if (isset($_POST['provider_name']) && $_POST['provider_name'] != "" ||
 	isset($_POST['sex']) && $_POST['sex'] != "" ||
 	isset($_POST['mobile_phone']) && $_POST['mobile_phone'] != "" ||
 	isset($_POST['qq']) && $_POST['qq'] != "") {
-	echo "<div class='returnerror'>表格中存在未填项！</div>";
+	echo "<div class='return error'>表格中存在未填项！</div>";
 }
 ?>
 <div class="boxdiv">
@@ -25,26 +25,26 @@ else if (isset($_POST['provider_name']) && $_POST['provider_name'] != "" ||
 				<td style="width:200px;">值</td>
 			</tr>
 			<tr class="tr0">
-				<td>* 业主名</td>
+				<td>业主名</td>
 				<td><input class="text" type="text" name="provider_name"></td>
 			</tr>
 			<tr class="tr1">
-				<td>* 邮箱</td>
+				<td>邮箱</td>
 				<td><input class="text" type="text" name="email"></td>
 			</tr>
 			<tr class="tr0">
-				<td>* 性别</td>
+				<td>性别</td>
 				<td>
 					<span><input type="radio" name="sex" value="0" checked>男</span>
 					<span><input type="radio" name="sex" value="1">女</span>
 				</td>
 			</tr>
 			<tr class="tr1">
-				<td>* 手机</td>
+				<td>手机</td>
 				<td><input class="text" type="text" name="mobile_phone"></td>
 			</tr>
 			<tr class="tr0">
-				<td>* QQ</td>
+				<td>QQ</td>
 				<td><input class="text" type="text" name="qq"></td>
 			</tr>
 		</table>

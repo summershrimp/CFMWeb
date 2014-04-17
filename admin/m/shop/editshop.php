@@ -2,8 +2,18 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-if (isset($_POST['name']) && $_POST['name'] != "") {
+if (isset($_POST['shop_name']) && isset($_POST['owner_id']) &&
+	isset($_POST['shop_phone']) && isset($_POST['shop_pos']) && isset($_POST['shop_desc']) &&
+	$_POST['shop_name'] != "" && $_POST['owner_id'] != "" &&
+	$_POST['shop_phone'] != "" && $_POST['shop_pos'] != "" && $_POST['shop_desc'] != "") {
 	require "f/shop/editshop.php";
+}
+else if (isset($_POST['shop_name']) && $_POST['shop_name'] != "" ||
+	isset($_POST['owner_id']) && $_POST['owner_id'] != "" ||
+	isset($_POST['shop_phone']) && $_POST['shop_phone'] != "" ||
+	isset($_POST['shop_pos']) && $_POST['shop_pos'] != "" ||
+	isset($_POST['shop_desc']) && $_POST['shop_desc'] != "") {
+	echo "<div class='return error'>表格中存在未填项！</div>";
 }
 $result = $db->select("*", "shop", "`$row`='$get'", 1);
 $result = $db->fetch($result);
@@ -21,15 +31,15 @@ $t = $db->fetch($t);
 			</tr>
 			<tr class="tr0">
 				<td>商家名称</td>
-				<td><input class="text" type="text" name="name" value="<?php echo $result['shop_name']; ?>"></td>
+				<td><input class="text" type="text" name="shop_name" value="<?php echo $result['shop_name']; ?>"></td>
 			</tr>
 			<tr class="tr1">
 				<td>电话</td>
-				<td><input class="text" type="text" name="phone" value="<?php echo $result['shop_phone']; ?>"></td>
+				<td><input class="text" type="text" name="shop_phone" value="<?php echo $result['shop_phone']; ?>"></td>
 			</tr>
 			<tr class="tr0">
 				<td>位置</td>
-				<td><input class="text" type="text" name="pos" value="<?php echo $result['shop_pos']; ?>"></td>
+				<td><input class="text" type="text" name="shop_pos" value="<?php echo $result['shop_pos']; ?>"></td>
 			</tr>
 			<tr class="tr1">
 				<td>业主ID：</td>
@@ -37,7 +47,7 @@ $t = $db->fetch($t);
 			</tr>
 			<tr class="tr0">
 				<td>描述</td>
-				<td><textarea class="text" type="text" name="desc"><?php echo $result['shop_desc']; ?></textarea></td>
+				<td><textarea class="text" type="text" name="shop_desc"><?php echo $result['shop_desc']; ?></textarea></td>
 			</tr>
 		</table>
 		<p class="psubmit">

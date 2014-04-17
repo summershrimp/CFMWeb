@@ -7,10 +7,10 @@ $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'editaddress':
-		check_and_open($db, 'user_address', 'address', "m/address/editaddress.php", 'addr_id', true, "用户信息");
+		check_and_open($db, 'user_address', 'detail', "m/address/editaddress.php", 'addr_id', true, "用户信息");
 		break;
 	case 'deleteaddress':
-		check_and_open($db, 'user_address', 'address', "f/address/deleteaddress.php", 'addr_id', false, "用户信息");
+		check_and_open($db, 'user_address', 'detail', "f/address/deleteaddress.php", 'addr_id', false, "用户信息");
 		break;
 	case 'deleteaddresses':
 		require "f/address/deleteaddresses.php";
@@ -47,12 +47,12 @@ if ($cond == "") {
 		<input class="text" type="text" name="user_id" placeholder="依据用户ID过滤" value="<?php if (isset($_POST['user_id'])) echo $_POST['user_id']; ?>"><br>
 		<span class="fixed">真实姓名：</span>
 		<input class="text" type="text" name="user_realname" placeholder="依据用户真实姓名过滤" value="<?php if (isset($_POST['user_realname'])) echo $_POST['user_realname']; ?>">
-		<span class="tooltip">* 支持模糊搜索</span><br>
+		<span class="tooltip">支持模糊搜索</span><br>
 		<span class="fixed">用户手机：</span>
 		<input class="text" type="text" name="user_phone" placeholder="依据用户手机过滤" value="<?php if (isset($_POST['user_phone'])) echo $_POST['user_phone']; ?>"><br>
 		<span class="fixed">用户地址：</span>
 		<input class="text" type="text" name="address" placeholder="依据用户地址过滤" value="<?php if (isset($_POST['address'])) echo $_POST['address']; ?>">
-		<span class="tooltip">* 支持模糊搜索</span><br>
+		<span class="tooltip">支持模糊搜索</span><br>
 		<p class="psubmit">
 			<input class="button" type="submit" value="搜索">
 			<input class="button" type="reset">
@@ -60,7 +60,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">用户列表</span>
-	<form action="#" method="post">
+	<form id="del" action="?page=address&function=deleteaddresses" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
 				<td></td>
@@ -83,10 +83,10 @@ if ($cond == "") {
 					echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $address['addr_id'] . "'></td>";
 					echo "<td>$count</td>";
 					echo "<td>";
-					echo "<a href='?page=address&function=editaddress&address=" . $address['addr_id'] . "'>";
+					echo "<a href='?page=address&function=editaddress&detail=" . $address['addr_id'] . "'>";
 					echo "<img src='images/icon_edit.png' alt='修改'>";
 					echo "<span class='link'>修改</span></a>&nbsp;";
-					echo "<a href='javascript:del(\"?page=address&function=deleteaddress&address=" . $address['addr_id'] . "\")'>";
+					echo "<a href='javascript:del(\"?page=address&function=deleteaddress&detail=" . $address['addr_id'] . "\")'>";
 					echo "<img src='images/icon_del.png' alt='删除'>";
 					echo "<span class='link'>删除</span></a></td>";
 					echo "<td>" . $address['addr_id'] . "</td>";
@@ -101,7 +101,7 @@ if ($cond == "") {
 		</table>
 		<p class="psubmit">
 			<a href="?page=address&function=newaddress"><input class="button" style="float:left;" type="button" value="添加用户"></a>
-			<a href="javascript:del('?page=address&function=deleteaddresses')"><input class="button dangerousbutton" type="button" value="批量删除"></a>
+			<a href="javascript:dels()"><input class="button dangerousbutton" type="button" value="批量删除"></a>
 			<input class="button" type="reset" value="重新选择">
 		</p>
 	</form>

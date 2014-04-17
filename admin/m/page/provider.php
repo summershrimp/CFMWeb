@@ -49,7 +49,7 @@ if ($cond == "") {
 		<input class="text" type="text" name="provider_name" placeholder="依据业主昵称过滤" value="<?php if (isset($_POST['provider_name'])) echo $_POST['provider_name']; ?>"><br>
 		<span class="fixed">邮箱：</span>
 		<input class="text" type="text" name="email" placeholder="依据业主邮箱过滤" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>">
-		<span class="tooltip">* 支持模糊搜索</span><br>
+		<span class="tooltip">支持模糊搜索</span><br>
 		<span class="fixed">性别：</span>
 		<span><input type="radio" name="sex" value="-1" <?php if (!isset($_POST['sex']) || $_POST['sex'] == -1) echo "checked"; ?>>全部</span>&nbsp;
 		<span><input type="radio" name="sex" value="0" <?php if (isset($_POST['sex']) && $_POST['sex'] == 0) echo "checked"; ?>>男</span>&nbsp;
@@ -67,7 +67,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">业主列表</span>
-	<form action="#" method="post">
+	<form id="del" action="?page=provider&function=deleteproviders" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
 				<td></td>
@@ -112,7 +112,7 @@ if ($cond == "") {
 		</table>
 		<p class="psubmit">
 			<a href="?page=provider&function=newprovider"><input class="button" style="float:left;" type="button" value="添加业主"></a>
-			<a href="javascript:del('?page=provider&function=deleteproviders')"><input class="button dangerousbutton" type="button" value="批量删除"></a>
+			<a href="javascript:dels()"><input class="button dangerousbutton" type="button" value="批量删除"></a>
 			<input class="button" type="reset" value="重新选择">
 		</p>
 	</form>

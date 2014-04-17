@@ -6,23 +6,23 @@ $all_success = true;
 $list = "";
 if (isset($_POST['chk'])) {
 	foreach ($_POST['chk'] as $e) {
-		$result = $db->select("good_id", "shop_goods", "`good_id`='$e'", 1);
+		$result = $db->select("user_id", "customers", "`user_id`='$e'", 1);
 		if ($result == false || $db->fetch($result) == false) {
 			$list .= ($list == "" ? "" : ", ") . $e;
 			$all_success = false;
 		}
 		else {
-			$db->delete("shop_goods", "`good_id`='$e'", 1);
+			$db->delete("customers", "`user_id`='$e'", 1);
 		}
 	}
 	if ($all_success == true) {
 		echo "<div class='return success'>批量删除成功！</div>";
 	}
 	else {
-		echo "<div class='return warning'>部分商品未找到！ID：$list</div>";
+		echo "<div class='return warning'>部分用户未找到！ID：$list</div>";
 	}
 }
 else {
-	echo "<div class='return error'>未指定商品！</div>";
+	echo "<div class='return error'>未指定用户！</div>";
 }
 ?>

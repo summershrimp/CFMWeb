@@ -1,3 +1,12 @@
 .settings/
+<<<<<<< HEAD
 .project
 data/
+=======
+.bulidpath
+.project
+documents/
+data/config.php
+
+
+>>>>>>> 13ecf9fb8ec661d408e82927c18594c6cfb06771

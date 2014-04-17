@@ -1,20 +1,20 @@
 <?php
 // database host
-$db_host   = "localhost";
+$db_host   = "127.0.0.1:3306";
 
 // database name
 $db_name   = "carryforme";
 
 // database username
-$db_user   = "rexskz";
+$db_user   = "root";
 
 // database password
-$db_pass   = "2147483647";
+$db_pass   = "ZYB941023";
 
 // table prefix
 $prefix    = "cfm_";
 
-$timezone    = "PRC";
+$timezone    = "Asia/Shanghai";
 
 $cookie_path    = "/";
 
@@ -32,7 +32,9 @@ define('OLD_AUTH_KEY', '');
 
 define('API_TIME', '');
 
-define('CHANNEL_API_KEY','dsad');
 
-define('CHANNEL_SECRET_KEY','123');
+define('CHANNEL_API_KEY','DGv8TZhmZyGglKQojU2Uo6BI');
+
+define('CHANNEL_SECRET_KEY','8okSd8tTmpU8c9KVNDXGudiRiS3PlhSB');
+
 ?>

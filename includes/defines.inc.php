@@ -57,7 +57,7 @@ define('NO_MEDIAID_PARA', '41006'); // 缺少media_id参数
 define('NO_SUBMENU_CONTENT', '41007'); // 缺少子菜单数据
 define('NO_AUTH_CODE', '41008'); // 缺少oauth code
 define('NO_OPENOID', '41009'); // 缺少openid
-define('NO_ORDER_ID', '41010'); // 缺少openid
+define('NO_ORDER_ID', '41010'); // 缺少orderid
 define('NO_JSON_KEY', '41011' );//缺少必要的json键值
 
 define('TIMEOUT_ACCESS_TOKEN', '42001'); // access_token超时
@@ -97,7 +97,11 @@ define('UNAVAIL_USER', '46004'); // 不存在的用户
 define('UNAVAIL_NEW_ORDER', '46005'); // 不允许新订单
 
 define('ERROR_CONTENT', '47001'); // 解析JSON/XML内容错误
+
 define('NO_ACCESS_TO_FUNC', '48001'); // api功能未授权
+
+define('ORDER_ERROR','49001');
+
 define('NO_ACCESS_TO_API', '50001'); // 用户未授权该api
 
 ?>

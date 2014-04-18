@@ -15,11 +15,11 @@ else if (isset($_POST['shop_name']) && $_POST['shop_name'] != "" ||
 	isset($_POST['shop_desc']) && $_POST['shop_desc'] != "") {
 	echo "<div class='return error'>表格中存在未填项！</div>";
 }
-$result = $db->select("*", "shop", "`$row`='$get'", 1);
-$result = $db->fetch($result);
+$result = $GLOBALS['db']->select("*", "shop", "`$row`='$get'", 1);
+$result = $GLOBALS['db']->fetch($result);
 $id = $result['owner_id'];
-$t = $db->select("provider_name", "providers", "`provider_id`='$id'", 1);
-$t = $db->fetch($t);
+$t = $GLOBALS['db']->select("provider_name", "providers", "`provider_id`='$id'", 1);
+$t = $GLOBALS['db']->fetch($t);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep2">编辑商家信息（id=<?php echo $result['shop_id']; ?>）</span>
@@ -43,7 +43,10 @@ $t = $db->fetch($t);
 			</tr>
 			<tr class="tr1">
 				<td>业主ID：</td>
-				<td><input class="text" type="text" name="owner_id" value="<?php echo $result['owner_id']; ?>"></td>
+				<td>
+					<input onblur="ajax('owner_id','shop','shop_owner_id',this.value,'<?php echo $_GET['detail']; ?>')" class="text" type="text" name="owner_id" value="<?php echo $result['owner_id']; ?>">
+					<span id="owner_id" class="ajaxresult"></span>
+				</td>
 			</tr>
 			<tr class="tr0">
 				<td>描述</td>

@@ -2,15 +2,17 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
+if (!isset($_GET['pr'])) {
+	$_GET['pr'] = 1;
+}
 $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'editshop':
-		check_and_open($db, 'shop', 'detail', "m/shop/editshop.php", 'shop_id', true, "商家");
+		check_and_open('shop', 'detail', "m/shop/editshop.php", 'shop_id', true, "商家");
 		break;
 	case 'deleteshop':
-		check_and_open($db, 'shop', 'detail', "f/shop/deleteshop.php", 'shop_id', false, "商家");
+		check_and_open('shop', 'detail', "f/shop/deleteshop.php", 'shop_id', false, "商家");
 		break;
 	case 'deleteshops':
 		require "f/shop/deleteshops.php";
@@ -64,6 +66,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">商家列表</span>
+	<?php $show = make_page_controller("shop", "shop", "shop_id", $cond, $_GET['pr']); ?>
 	<form id="del" action="?page=shop&function=deleteshops" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
@@ -79,33 +82,35 @@ if ($cond == "") {
 				<td>描述</td>
 			</tr>
 			<?php
-			$result = $db->select("*", "shop", $cond);
-			if ($result != false) {
-				$count = 0;
-				while ($shop = $db->fetch($result)) {
-					$count++;
-					$style = ($count - 1) % 2;
-					echo "<tr class='tr$style'>";
-					echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $shop['shop_id'] . "'></td>";
-					echo "<td>$count</td>";
-					echo "<td>";
-					echo "<a href='?page=shop&function=editshop&detail=" . $shop['shop_id'] . "'>";
-					echo "<img src='images/icon_edit.png' alt='修改'>";
-					echo "<span class='link'>修改</span></a>&nbsp;";
-					echo "<a href='javascript:del(\"?page=shop&function=deleteshop&detail=" . $shop['shop_id'] . "\")'>";
-					echo "<img src='images/icon_del.png' alt='删除'>";
-					echo "<span class='link'>删除</span></a></td>";
-					$id = $shop['owner_id'];
-					$t = $db->select("provider_name", "providers", "`provider_id`='$id'", 1);
-					$t = $db->fetch($t);
-					echo "<td>" . $shop['shop_id'] . "</td>";
-					echo "<td>" . $shop['shop_name'] . "</td>";
-					echo "<td>" . $shop['shop_phone'] . "</td>";
-					echo "<td class='tdclip'>" . $shop['shop_pos'] . "</td>";
-					echo "<td>$id</td>";
-					echo "<td>" . $t['provider_name'] . "</td>";
-					echo "<td class='tdclip'>" . $shop['shop_desc'] . "</td>";
-					echo "</tr>";
+			if ($show == true) {
+				$result = $GLOBALS['db']->get_page_content("*", "shop", $cond, $_GET['pr']);
+				if ($result != false) {
+					$count = 0;
+					while ($shop = $GLOBALS['db']->fetch($result)) {
+						$count++;
+						$style = ($count - 1) % 2;
+						echo "<tr class='tr$style'>";
+						echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $shop['shop_id'] . "'></td>";
+						echo "<td>$count</td>";
+						echo "<td>";
+						echo "<a href='?page=shop&function=editshop&detail=" . $shop['shop_id'] . "'>";
+						echo "<img src='images/icon_edit.png' alt='修改'>";
+						echo "<span class='link'>修改</span></a>&nbsp;";
+						echo "<a href='javascript:del(\"?page=shop&function=deleteshop&detail=" . $shop['shop_id'] . "\")'>";
+						echo "<img src='images/icon_del.png' alt='删除'>";
+						echo "<span class='link'>删除</span></a></td>";
+						$id = $shop['owner_id'];
+						$t = $GLOBALS['db']->select("provider_name", "providers", "`provider_id`='$id'", 1);
+						$t = $GLOBALS['db']->fetch($t);
+						echo "<td>" . $shop['shop_id'] . "</td>";
+						echo "<td>" . $shop['shop_name'] . "</td>";
+						echo "<td>" . $shop['shop_phone'] . "</td>";
+						echo "<td class='tdclip'>" . $shop['shop_pos'] . "</td>";
+						echo "<td>$id</td>";
+						echo "<td>" . $t['provider_name'] . "</td>";
+						echo "<td class='tdclip'>" . $shop['shop_desc'] . "</td>";
+						echo "</tr>";
+					}
 				}
 			}
 			?>

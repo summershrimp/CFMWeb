@@ -4,7 +4,7 @@ if (!defined("IN_CFM")) {
 }
 class Database {
 	function Database($host, $username, $password, $name) {
-		$db = mysql_connect($host, $username, $password);
+		$GLOBALS['db'] = mysql_connect($host, $username, $password);
 		mysql_select_db(DB_NAME);
 		mysql_query("SET NAMES UTF8");
 		mysql_query("SET time_zone='+8:00'");
@@ -13,25 +13,34 @@ class Database {
 		$result = mysql_query($sql);
 		return $result;
 	}
-	function select($content, $table_name, $condition = NULL, $limit = 0, $limit2 = 0, $orderby = NULL, $desc = false) {
+	function select($content, $table_name, $condition = NULL, $limit = -1, $limit2 = -1) {
 		$sql = "SELECT $content FROM `" . DB_TABLE_PRE . "$table_name`";
 		if ($condition != NULL) {
 			$sql .= " WHERE $condition";
 		}
-		if ($limit > 0) {
+		if ($limit >= 0) {
 			$sql .= " LIMIT $limit";
-			if ($limit2 >= $limit) {
+			if ($limit2 >= 0) {
 				$sql .= ", " . $limit2;
 			}
 		}
-		if ($orderby != NULL) {
-			$sql .= " ORDER BY $orderby";
-		}
-		if ($desc == true) {
-			$sql .= " DESC";
-		}
 		$result = mysql_query($sql);
 		return $result;
+	}
+	function count($content, $table_name, $condition) {
+		$sql = "SELECT count($content) FROM " . DB_TABLE_PRE . "$table_name";
+		if ($condition != NULL) {
+			$sql .= " WHERE $condition";
+		}
+		$result = mysql_query($sql);
+		$result = mysql_fetch_array($result);
+		return $result[0];
+	}
+	function get_page_content($content, $table_name, $condition, $page) {
+		//
+		// 可以优化
+		//
+		return $this->select($content, $table_name, $condition, ($page - 1) * PAGE_LENGTH, PAGE_LENGTH);
 	}
 	function fetch($resource) {
 		return mysql_fetch_array($resource);

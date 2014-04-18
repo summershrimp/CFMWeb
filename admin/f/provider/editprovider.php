@@ -2,7 +2,7 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$t = $db->update("providers", "`provider_name`='" . $_POST['provider_name'] .
+$t = $GLOBALS['db']->update("providers", "`provider_name`='" . $_POST['provider_name'] .
 	"' , `email`='" . $_POST['email'] .
 	"' , `sex`='" . $_POST['sex'] .
 	"' , `mobile_phone`='" . $_POST['mobile_phone'] .

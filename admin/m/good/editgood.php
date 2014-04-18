@@ -17,8 +17,8 @@ else if (isset($_POST['shop_id']) && $_POST['shop_id'] != "" ||
 	isset($_POST['unavail']) && $_POST['unavail'] != "") {
 	echo "<div class='return error'>表格中存在未填项！</div>";
 }
-$result = $db->select("*", "shop_goods", "`$row`='$get'", 1);
-$result = $db->fetch($result);
+$result = $GLOBALS['db']->select("*", "shop_goods", "`$row`='$get'", 1);
+$result = $GLOBALS['db']->fetch($result);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep2">编辑商品信息（id=<?php echo $result['good_id']; ?>）</span>

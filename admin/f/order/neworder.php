@@ -8,7 +8,7 @@ $data = array(
 	"confirm_status", "shipping_status", "taking_status", "pay_status", "pay_id", "add_date"
 );
 $getpost = get_post($data);
-$t = $db->insert("order_info", $data, $getpost);
+$t = $GLOBALS['db']->insert("order_info", $data, $getpost);
 if ($t == false) {
 	echo "<div class='return error'>插入失败，请检查输入数据！</div>";
 }

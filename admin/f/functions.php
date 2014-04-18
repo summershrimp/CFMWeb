@@ -1,13 +1,17 @@
 <?php
+/*
+	Describe: 一些实用的小功能
+	Author: Rex
+*/
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-function check_and_open($db, $table, $alt, $page, $row, $exit, $str) {
+function check_and_open($table, $alt, $page, $row, $exit, $str) {
 	if (isset($_GET[$alt])) {
 		$get = $_GET[$alt];
-		$result = $db->select("*", "$table", "`$row`='$get'", 1);
+		$result = $GLOBALS['db']->select("*", "$table", "`$row`='$get'", 1);
 		if ($result != false) {
-			$r = $db->fetch($result);
+			$r = $GLOBALS['db']->fetch($result);
 			if (!empty($r)) {
 				require $page;
 				if ($exit == true) {
@@ -35,6 +39,41 @@ function get_post($arr) {
 		$result[] = $_POST[$e];
 	}
 	return $result;
+}
+function make_page_controller($page, $table_name, $row, $cond, $pr) {
+	$result = $GLOBALS['db']->count($row, $table_name, $cond);
+	echo "<div id=\"pagecontroller\">";
+	if ($pr > $result) {
+		echo "<span class='pageerror'>不正确的页！</span>";
+		echo "</div>";
+		return false;
+	}
+	echo "共有记录";
+	echo "<span class='pagemark'>$result</span>";
+	echo "条，当前为第";
+	echo "<span class='pagemark'>$pr</span>";
+	echo "页 / 共";
+	$result = ceil($result / PAGE_LENGTH);
+	echo "<span class='pagemark'>$result</span>";
+	echo "页";
+	if ($pr < $result) {
+		echo "<a href='?page=" . $page . "&pr=" . $result . "'>尾页</a>";
+		echo "<a href='?page=" . $page . "&pr=" . ($pr + 1) . "'>下一页</a>";
+	}
+	else {
+		echo "<a class='disabled'>尾页</a>";
+		echo "<a class='disabled'>下一页</a>";
+	}
+	if ($pr > 1) {
+		echo "<a href='?page=" . $page . "&pr=" . ($pr - 1) . "'>上一页</a>";
+		echo "<a href='?page=" . $page . "&pr=1'>首页</a>";
+	}
+	else {
+		echo "<a class='disabled'>上一页</a>";
+		echo "<a class='disabled'>首页</a>";
+	}
+	echo "</div>";
+	return true;
 }
 /* 连接sql查询条件 */
 function contact_condition($str, $row, $full_match = true) {

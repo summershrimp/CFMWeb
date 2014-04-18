@@ -2,7 +2,6 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 $username = $_SESSION['username'];
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
@@ -11,8 +10,8 @@ if (isset($_GET['function'])) {
 		break;
 	}
 }
-$result = $db->select("*", "admin_users", "`admin_name`='$username'", 1);
-$result = $db->fetch($result);
+$result = $GLOBALS['db']->select("*", "admin_users", "`admin_name`='$username'", 1);
+$result = $GLOBALS['db']->fetch($result);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep1">账户设置<span class="commit">» 在这里设置您的账户信息</span></span>

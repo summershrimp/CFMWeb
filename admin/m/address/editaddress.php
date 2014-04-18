@@ -14,8 +14,8 @@ else if (isset($_POST['user_id']) && $_POST['user_id'] != "" ||
 	isset($_POST['address']) && $_POST['address'] != "") {
 	echo "<div class='return error'>表格中存在未填项！</div>";
 }
-$result = $db->select("*", "user_address", "`$row`='$get'", 1);
-$result = $db->fetch($result);
+$result = $GLOBALS['db']->select("*", "user_address", "`$row`='$get'", 1);
+$result = $GLOBALS['db']->fetch($result);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep2">编辑用户真实信息（id=<?php echo $result['addr_id']; ?>）</span>

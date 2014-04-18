@@ -2,15 +2,17 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
+if (!isset($_GET['pr'])) {
+	$_GET['pr'] = 1;
+}
 $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'edituser':
-		check_and_open($db, 'customers', 'detail', "m/user/edituser.php", 'user_id', true, "用户");
+		check_and_open('customers', 'detail', "m/user/edituser.php", 'user_id', true, "用户");
 		break;
 	case 'deleteuser':
-		check_and_open($db, 'customers', 'detail', "f/user/deleteuser.php", 'user_id', false, "用户");
+		check_and_open('customers', 'detail', "f/user/deleteuser.php", 'user_id', false, "用户");
 		break;
 	case 'deleteusers':
 		require "f/user/deleteusers.php";
@@ -68,6 +70,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">用户列表</span>
+	<?php $show = make_page_controller("user", "customers", "user_id", $cond, $_GET['pr']); ?>
 	<form id="del" action="?page=user&function=deleteusers" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
@@ -83,30 +86,32 @@ if ($cond == "") {
 				<td>OpenID</td>
 			</tr>
 			<?php
-			$result = $db->select("*", "customers", $cond);
-			if ($result != false) {
-				$count = 0;
-				while ($user = $db->fetch($result)) {
-					$count++;
-					$style = ($count - 1) % 2;
-					echo "<tr class='tr$style'>";
-					echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $user['user_id'] . "'></td>";
-					echo "<td>$count</td>";
-					echo "<td>";
-					echo "<a href='?page=user&function=edituser&detail=" . $user['user_id'] . "'>";
-					echo "<img src='images/icon_edit.png' alt='修改'>";
-					echo "<span class='link'>修改</span></a>&nbsp;";
-					echo "<a href='javascript:del(\"?page=user&function=deleteuser&detail=" . $user['user_id'] . "\")'>";
-					echo "<img src='images/icon_del.png' alt='删除'>";
-					echo "<span class='link'>删除</span></a></td>";
-					echo "<td>" . $user['user_id'] . "</td>";
-					echo "<td>" . $user['user_name'] . "</td>";
-					echo "<td>" . $user['email'] . "</td>";
-					echo "<td>" . (($user['sex'] == 0) ? "男" : "女") . "</td>";
-					echo "<td>" . $user['mobile_phone'] . "</td>";
-					echo "<td>" . $user['qq'] . "</td>";
-					echo "<td>" . $user['openid'] . "</td>";
-					echo "</tr>";
+			if ($show == true) {
+				$result = $GLOBALS['db']->get_page_content("*", "customers", $cond, $_GET['pr']);
+				if ($result != false) {
+					$count = 0;
+					while ($user = $GLOBALS['db']->fetch($result)) {
+						$count++;
+						$style = ($count - 1) % 2;
+						echo "<tr class='tr$style'>";
+						echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $user['user_id'] . "'></td>";
+						echo "<td>$count</td>";
+						echo "<td>";
+						echo "<a href='?page=user&function=edituser&detail=" . $user['user_id'] . "'>";
+						echo "<img src='images/icon_edit.png' alt='修改'>";
+						echo "<span class='link'>修改</span></a>&nbsp;";
+						echo "<a href='javascript:del(\"?page=user&function=deleteuser&detail=" . $user['user_id'] . "\")'>";
+						echo "<img src='images/icon_del.png' alt='删除'>";
+						echo "<span class='link'>删除</span></a></td>";
+						echo "<td>" . $user['user_id'] . "</td>";
+						echo "<td>" . $user['user_name'] . "</td>";
+						echo "<td>" . $user['email'] . "</td>";
+						echo "<td>" . (($user['sex'] == 0) ? "男" : "女") . "</td>";
+						echo "<td>" . $user['mobile_phone'] . "</td>";
+						echo "<td>" . $user['qq'] . "</td>";
+						echo "<td>" . $user['openid'] . "</td>";
+						echo "</tr>";
+					}
 				}
 			}
 			?>

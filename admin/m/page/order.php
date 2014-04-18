@@ -2,15 +2,17 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
+if (!isset($_GET['pr'])) {
+	$_GET['pr'] = 1;
+}
 $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'editorder':
-		check_and_open($db, 'order_info', 'detail', "m/order/editorder.php", 'order_id', true, "订单");
+		check_and_open('order_info', 'detail', "m/order/editorder.php", 'order_id', true, "订单");
 		break;
 	case 'deleteorder':
-		check_and_open($db, 'order_info', 'detail', "f/order/deleteorder.php", 'order_id', false, "订单");
+		check_and_open('order_info', 'detail', "f/order/deleteorder.php", 'order_id', false, "订单");
 		break;
 	case 'deleteorders':
 		require "f/order/deleteorders.php";
@@ -116,6 +118,7 @@ if ($filter == true) {
 </div>
 <div class="boxdiv">
 	<span class="titlespan dep2">订单列表</span>
+	<?php $show = make_page_controller("order", "order_info", "order_id", $cond, $_GET['pr']); ?>
 	<form id="del" action="?page=order&function=deleteorders" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
@@ -136,36 +139,38 @@ if ($filter == true) {
 				<td>添加日期</td>
 			</tr>
 			<?php
-			$result = $db->select("*", "order_info", $cond);
-			if ($result != false) {
-				$count = 0;
-				while ($order = $db->fetch($result)) {
-					$count++;
-					$style = ($count - 1) % 2;
-					echo "<tr class='tr$style'>";
-					echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $order['order_id'] . "'></td>";
-					echo "<td>$count</td>";
-					echo "<td>";
-					echo "<a href='?page=order&function=editorder&detail=" . $order['order_id'] . "'>";
-					echo "<img src='images/icon_edit.png' alt='修改'>";
-					echo "<span class='link'>修改</span></a>&nbsp;";
-					echo "<a href='javascript:del(\"?page=order&function=deleteorder&detail=" . $order['order_id'] . "\")'>";
-					echo "<img src='images/icon_del.png' alt='删除'>";
-					echo "<span class='link'>删除</span></a>";
-					echo "</td>";
-					echo "<td>" . $order['order_id'] . "</td>";
-					echo "<td>" . $order['user_id'] . "</td>";
-					echo "<td>" . $order['ant_id'] . "</td>";
-					echo "<td class='tdclip'>" . $order['address'] . "</td>";
-					echo "<td>" . ($order['order_status'] == 1 ? "是" : "否") . "</td>";
-					echo "<td>" . ($order['ant_status'] == 1 ? "是" : "否") . "</td>";
-					echo "<td>" . ($order['confirm_status'] == 1 ? "是" : "否") . "</td>";
-					echo "<td>" . ($order['shipping_status'] == 1 ? "是" : "否") . "</td>";
-					echo "<td>" . ($order['taking_status'] == 1 ? "是" : "否") . "</td>";
-					echo "<td>" . ($order['pay_status'] == 1 ? "是" : "否") . "</td>";
-					echo "<td>" . $order['pay_id'] . "</td>";
-					echo "<td>" . $order['add_date'] . "</td>";
-					echo "</tr>";
+			if ($show == true) {
+				$result = $GLOBALS['db']->get_page_content("*", "order_info", $cond, $_GET['pr']);
+				if ($result != false) {
+					$count = 0;
+					while ($order = $GLOBALS['db']->fetch($result)) {
+						$count++;
+						$style = ($count - 1) % 2;
+						echo "<tr class='tr$style'>";
+						echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $order['order_id'] . "'></td>";
+						echo "<td>$count</td>";
+						echo "<td>";
+						echo "<a href='?page=order&function=editorder&detail=" . $order['order_id'] . "'>";
+						echo "<img src='images/icon_edit.png' alt='修改'>";
+						echo "<span class='link'>修改</span></a>&nbsp;";
+						echo "<a href='javascript:del(\"?page=order&function=deleteorder&detail=" . $order['order_id'] . "\")'>";
+						echo "<img src='images/icon_del.png' alt='删除'>";
+						echo "<span class='link'>删除</span></a>";
+						echo "</td>";
+						echo "<td>" . $order['order_id'] . "</td>";
+						echo "<td>" . $order['user_id'] . "</td>";
+						echo "<td>" . $order['ant_id'] . "</td>";
+						echo "<td class='tdclip'>" . $order['address'] . "</td>";
+						echo "<td>" . ($order['order_status'] == 1 ? "是" : "否") . "</td>";
+						echo "<td>" . ($order['ant_status'] == 1 ? "是" : "否") . "</td>";
+						echo "<td>" . ($order['confirm_status'] == 1 ? "是" : "否") . "</td>";
+						echo "<td>" . ($order['shipping_status'] == 1 ? "是" : "否") . "</td>";
+						echo "<td>" . ($order['taking_status'] == 1 ? "是" : "否") . "</td>";
+						echo "<td>" . ($order['pay_status'] == 1 ? "是" : "否") . "</td>";
+						echo "<td>" . $order['pay_id'] . "</td>";
+						echo "<td>" . $order['add_date'] . "</td>";
+						echo "</tr>";
+					}
 				}
 			}
 			?>

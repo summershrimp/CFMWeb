@@ -2,15 +2,17 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
+if (!isset($_GET['pr'])) {
+	$_GET['pr'] = 1;
+}
 $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'editdetail':
-		check_and_open($db, 'order_details', 'detail', "m/detail/editdetail.php", 'rec_id', true, "订单详情");
+		check_and_open('order_details', 'detail', "m/detail/editdetail.php", 'rec_id', true, "订单详情");
 		break;
 	case 'deletedetail':
-		check_and_open($db, 'order_details', 'detail', "f/detail/deletedetail.php", 'rec_id', false, "订单详情");
+		check_and_open('order_details', 'detail', "f/detail/deletedetail.php", 'rec_id', false, "订单详情");
 		break;
 	case 'deletedetails':
 		require "f/detail/deletedetails.php";
@@ -62,6 +64,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">订单列表</span>
+	<?php $show = make_page_controller("detail", "order_details", "rec_id", $cond, $_GET['pr']); ?>
 	<form id="del" action="?page=detail&function=deletedetails" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
@@ -76,29 +79,31 @@ if ($cond == "") {
 				<td>商品价格</td>
 			</tr>
 			<?php
-			$result = $db->select("*", "order_details", $cond);
-			if ($result != false) {
-				$count = 0;
-				while ($detail = $db->fetch($result)) {
-					$count++;
-					$style = ($count - 1) % 2;
-					echo "<tr class='tr$style'>";
-					echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $detail['rec_id'] . "'></td>";
-					echo "<td>$count</td>";
-					echo "<td>";
-					echo "<a href='?page=detail&function=editdetail&detail=" . $detail['rec_id'] . "'>";
-					echo "<img src='images/icon_edit.png' alt='修改'>";
-					echo "<span class='link'>修改</span></a>&nbsp;";
-					echo "<a href='javascript:del(\"?page=detail&function=deletedetail&detail=" . $detail['rec_id'] . "\")'>";
-					echo "<img src='images/icon_del.png' alt='删除'>";
-					echo "<span class='link'>删除</span></a></td>";
-					echo "<td>" . $detail['rec_id'] . "</td>";
-					echo "<td>" . $detail['order_id'] . "</td>";
-					echo "<td>" . $detail['good_id'] . "</td>";
-					echo "<td>" . $detail['good_name'] . "</td>";
-					echo "<td>" . $detail['good_number'] . "</td>";
-					echo "<td>" . $detail['good_price'] . "</td>";
-					echo "</tr>";
+			if ($show == true) {
+				$result = $GLOBALS['db']->get_page_content("*", "order_details", $cond, $_GET['pr']);
+				if ($result != false) {
+					$count = 0;
+					while ($detail = $GLOBALS['db']->fetch($result)) {
+						$count++;
+						$style = ($count - 1) % 2;
+						echo "<tr class='tr$style'>";
+						echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $detail['rec_id'] . "'></td>";
+						echo "<td>$count</td>";
+						echo "<td>";
+						echo "<a href='?page=detail&function=editdetail&detail=" . $detail['rec_id'] . "'>";
+						echo "<img src='images/icon_edit.png' alt='修改'>";
+						echo "<span class='link'>修改</span></a>&nbsp;";
+						echo "<a href='javascript:del(\"?page=detail&function=deletedetail&detail=" . $detail['rec_id'] . "\")'>";
+						echo "<img src='images/icon_del.png' alt='删除'>";
+						echo "<span class='link'>删除</span></a></td>";
+						echo "<td>" . $detail['rec_id'] . "</td>";
+						echo "<td>" . $detail['order_id'] . "</td>";
+						echo "<td>" . $detail['good_id'] . "</td>";
+						echo "<td>" . $detail['good_name'] . "</td>";
+						echo "<td>" . $detail['good_number'] . "</td>";
+						echo "<td>" . $detail['good_price'] . "</td>";
+						echo "</tr>";
+					}
 				}
 			}
 			?>

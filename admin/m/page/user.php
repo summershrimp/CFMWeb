@@ -2,7 +2,6 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 if (!isset($_GET['pr'])) {
 	$_GET['pr'] = 1;
 }
@@ -10,10 +9,10 @@ $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'edituser':
-		check_and_open($db, 'customers', 'detail', "m/user/edituser.php", 'user_id', true, "用户");
+		check_and_open('customers', 'detail', "m/user/edituser.php", 'user_id', true, "用户");
 		break;
 	case 'deleteuser':
-		check_and_open($db, 'customers', 'detail', "f/user/deleteuser.php", 'user_id', false, "用户");
+		check_and_open('customers', 'detail', "f/user/deleteuser.php", 'user_id', false, "用户");
 		break;
 	case 'deleteusers':
 		require "f/user/deleteusers.php";
@@ -71,7 +70,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">用户列表</span>
-	<?php $show = make_page_controller($db, "user", "customers", "user_id", $cond, $_GET['pr']); ?>
+	<?php $show = make_page_controller("user", "customers", "user_id", $cond, $_GET['pr']); ?>
 	<form id="del" action="?page=user&function=deleteusers" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
@@ -88,10 +87,10 @@ if ($cond == "") {
 			</tr>
 			<?php
 			if ($show == true) {
-				$result = $db->get_page_content("*", "customers", $cond, $_GET['pr']);
+				$result = $GLOBALS['db']->get_page_content("*", "customers", $cond, $_GET['pr']);
 				if ($result != false) {
 					$count = 0;
-					while ($user = $db->fetch($result)) {
+					while ($user = $GLOBALS['db']->fetch($result)) {
 						$count++;
 						$style = ($count - 1) % 2;
 						echo "<tr class='tr$style'>";

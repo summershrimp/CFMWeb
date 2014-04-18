@@ -2,7 +2,7 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$t = $db->update("order_details", "`order_id`='" . $_POST['order_id'] .
+$t = $GLOBALS['db']->update("order_details", "`order_id`='" . $_POST['order_id'] .
 	"' , `good_id`='" . $_POST['good_id'] .
 	"' , `good_name`='" . $_POST['good_name'] .
 	"' , `good_number`='" . $_POST['good_number'] .

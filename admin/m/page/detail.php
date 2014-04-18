@@ -2,7 +2,6 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 if (!isset($_GET['pr'])) {
 	$_GET['pr'] = 1;
 }
@@ -10,10 +9,10 @@ $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'editdetail':
-		check_and_open($db, 'order_details', 'detail', "m/detail/editdetail.php", 'rec_id', true, "订单详情");
+		check_and_open('order_details', 'detail', "m/detail/editdetail.php", 'rec_id', true, "订单详情");
 		break;
 	case 'deletedetail':
-		check_and_open($db, 'order_details', 'detail', "f/detail/deletedetail.php", 'rec_id', false, "订单详情");
+		check_and_open('order_details', 'detail', "f/detail/deletedetail.php", 'rec_id', false, "订单详情");
 		break;
 	case 'deletedetails':
 		require "f/detail/deletedetails.php";
@@ -65,7 +64,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">订单列表</span>
-	<?php $show = make_page_controller($db, "detail", "order_details", "rec_id", $cond, $_GET['pr']); ?>
+	<?php $show = make_page_controller("detail", "order_details", "rec_id", $cond, $_GET['pr']); ?>
 	<form id="del" action="?page=detail&function=deletedetails" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
@@ -81,10 +80,10 @@ if ($cond == "") {
 			</tr>
 			<?php
 			if ($show == true) {
-				$result = $db->get_page_content("*", "order_details", $cond, $_GET['pr']);
+				$result = $GLOBALS['db']->get_page_content("*", "order_details", $cond, $_GET['pr']);
 				if ($result != false) {
 					$count = 0;
-					while ($detail = $db->fetch($result)) {
+					while ($detail = $GLOBALS['db']->fetch($result)) {
 						$count++;
 						$style = ($count - 1) % 2;
 						echo "<tr class='tr$style'>";

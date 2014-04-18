@@ -29,8 +29,8 @@ else if (isset($_POST['user_id']) && $_POST['user_id'] != "" ||
 	isset($_POST['add_date']) && $_POST['add_date'] != "") {
 	echo "<div class='return error'>表格中存在未填项！</div>";
 }
-$result = $db->select("*", "order_info", "`$row`='$get'", 1);
-$result = $db->fetch($result);
+$result = $GLOBALS['db']->select("*", "order_info", "`$row`='$get'", 1);
+$result = $GLOBALS['db']->fetch($result);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep2">编辑订单信息（id=<?php echo $result['order_id']; ?>）</span>

@@ -2,7 +2,6 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 if (!isset($_GET['pr'])) {
 	$_GET['pr'] = 1;
 }
@@ -10,10 +9,10 @@ $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'editprovider':
-		check_and_open($db, 'providers', 'detail', "m/provider/editprovider.php", 'provider_id', true, "业主");
+		check_and_open('providers', 'detail', "m/provider/editprovider.php", 'provider_id', true, "业主");
 		break;
 	case 'deleteprovider':
-		check_and_open($db, 'providers', 'detail', "f/provider/deleteprovider.php", 'provider_id', false, "业主");
+		check_and_open('providers', 'detail', "f/provider/deleteprovider.php", 'provider_id', false, "业主");
 		break;
 	case 'deleteproviders':
 		require "f/provider/deleteproviders.php";
@@ -70,7 +69,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">业主列表</span>
-	<?php $show = make_page_controller($db, "provider", "providers", "provider_id", $cond, $_GET['pr']); ?>
+	<?php $show = make_page_controller("provider", "providers", "provider_id", $cond, $_GET['pr']); ?>
 	<form id="del" action="?page=provider&function=deleteproviders" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
@@ -87,10 +86,10 @@ if ($cond == "") {
 			</tr>
 			<?php
 			if ($show == true) {
-				$result = $db->get_page_content("*", "providers", $cond, $_GET['pr']);
+				$result = $GLOBALS['db']->get_page_content("*", "providers", $cond, $_GET['pr']);
 				if ($result != false) {
 					$count = 0;
-					while ($provider = $db->fetch($result)) {
+					while ($provider = $GLOBALS['db']->fetch($result)) {
 						$count++;
 						$style = ($count - 1) % 2;
 						echo "<tr class='tr$style'>";

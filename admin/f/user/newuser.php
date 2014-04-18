@@ -4,7 +4,7 @@ if (!defined("IN_CFM")) {
 }
 $data = array("user_name", "email", "sex", "mobile_phone", "qq");
 $getpost = get_post($data);
-$t = $db->insert("customers", $data, $getpost);
+$t = $GLOBALS['db']->insert("customers", $data, $getpost);
 if ($t == false) {
 	echo "<div class='return error'>插入失败，请检查输入数据！</div>";
 }

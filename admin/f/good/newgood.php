@@ -7,7 +7,7 @@ if (!isset($_POST['onsale'])) {
 }
 $data = array("shop_id", "price", "onsale", "good_name", "good_desc", "unavail");
 $getpost = get_post($data);
-$t = $db->insert("shop_goods", $data, $getpost);
+$t = $GLOBALS['db']->insert("shop_goods", $data, $getpost);
 if ($t == false) {
 	echo "<div class='return error'>插入失败，请检查输入数据！</div>";
 }

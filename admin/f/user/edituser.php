@@ -2,7 +2,7 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$t = $db->update("customers", "`user_name`='" . $_POST['user_name'] .
+$t = $GLOBALS['db']->update("customers", "`user_name`='" . $_POST['user_name'] .
 	"' , `email`='" . $_POST['email'] .
 	"' , `sex`='" . $_POST['sex'] .
 	"' , `mobile_phone`='" . $_POST['mobile_phone'] .

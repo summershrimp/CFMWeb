@@ -6,13 +6,13 @@ $all_success = true;
 $list = "";
 if (isset($_POST['chk'])) {
 	foreach ($_POST['chk'] as $e) {
-		$result = $db->select("good_id", "shop_goods", "`good_id`='$e'", 1);
-		if ($result == false || $db->fetch($result) == false) {
+		$result = $GLOBALS['db']->select("good_id", "shop_goods", "`good_id`='$e'", 1);
+		if ($result == false || $GLOBALS['db']->fetch($result) == false) {
 			$list .= ($list == "" ? "" : ", ") . $e;
 			$all_success = false;
 		}
 		else {
-			$db->delete("shop_goods", "`good_id`='$e'", 1);
+			$GLOBALS['db']->delete("shop_goods", "`good_id`='$e'", 1);
 		}
 	}
 	if ($all_success == true) {

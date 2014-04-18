@@ -6,12 +6,12 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-function check_and_open($db, $table, $alt, $page, $row, $exit, $str) {
+function check_and_open($table, $alt, $page, $row, $exit, $str) {
 	if (isset($_GET[$alt])) {
 		$get = $_GET[$alt];
-		$result = $db->select("*", "$table", "`$row`='$get'", 1);
+		$result = $GLOBALS['db']->select("*", "$table", "`$row`='$get'", 1);
 		if ($result != false) {
-			$r = $db->fetch($result);
+			$r = $GLOBALS['db']->fetch($result);
 			if (!empty($r)) {
 				require $page;
 				if ($exit == true) {
@@ -40,8 +40,8 @@ function get_post($arr) {
 	}
 	return $result;
 }
-function make_page_controller($db, $page, $table_name, $row, $cond, $pr) {
-	$result = $db->count($row, $table_name, $cond);
+function make_page_controller($page, $table_name, $row, $cond, $pr) {
+	$result = $GLOBALS['db']->count($row, $table_name, $cond);
 	echo "<div id=\"pagecontroller\">";
 	if ($pr > $result) {
 		echo "<span class='pageerror'>不正确的页！</span>";

@@ -4,7 +4,7 @@ if (!defined("IN_CFM")) {
 }
 class Database {
 	function Database($host, $username, $password, $name) {
-		$db = mysql_connect($host, $username, $password);
+		$GLOBALS['db'] = mysql_connect($host, $username, $password);
 		mysql_select_db(DB_NAME);
 		mysql_query("SET NAMES UTF8");
 		mysql_query("SET time_zone='+8:00'");

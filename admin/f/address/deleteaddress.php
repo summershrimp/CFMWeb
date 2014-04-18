@@ -2,7 +2,7 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$t = $db->delete("user_address", "`addr_id`='" . $_GET['detail'] . "'", 1);
+$t = $GLOBALS['db']->delete("user_address", "`addr_id`='" . $_GET['detail'] . "'", 1);
 if ($t == false) {
 	echo "<div class='return error'>删除失败！</div>";
 }

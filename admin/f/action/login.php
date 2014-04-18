@@ -9,15 +9,14 @@ if ($username == "" || $password == "") {
 	echo "<meta http-equiv=\"refresh\" content=\"0; url=?\">";
 	exit();
 }
-$db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
-$result = $db->select("*", "admin_users", "`admin_name`='$username'", 1);
-$result = $db->fetch($result);
+$result = $GLOBALS['db']->select("*", "admin_users", "`admin_name`='$username'", 1);
+$result = $GLOBALS['db']->fetch($result);
 if (!isset($result['salt'])) {
 	$salt = rand(1000, 9999);
 	$result['salt'] = $salt;
 	$result['admin_pass'] = md5($result['admin_pass'] . $salt);
-	$db->update("admin_users", "`salt`='$salt'", "`admin_name`='$username'", 1);
-	$db->update("admin_users", "`admin_pass`='" . $result['admin_pass'] . "'", "`admin_name`='$username'", 1);
+	$GLOBALS['db']->update("admin_users", "`salt`='$salt'", "`admin_name`='$username'", 1);
+	$GLOBALS['db']->update("admin_users", "`admin_pass`='" . $result['admin_pass'] . "'", "`admin_name`='$username'", 1);
 }
 $password = md5(md5($password) . $result['salt']);
 if ($password == $result['admin_pass']) {
@@ -27,7 +26,7 @@ if ($password == $result['admin_pass']) {
 	else {
 		$ip = "Unknown";
 	}
-	$db->update("admin_users", "`last_ip`='$ip'", "`admin_name`='$username'", 1);
+	$GLOBALS['db']->update("admin_users", "`last_ip`='$ip'", "`admin_name`='$username'", 1);
 	$_SESSION['username'] = $username;
 	echo "<meta http-equiv=\"refresh\" content=\"0; url=?\">";
 }

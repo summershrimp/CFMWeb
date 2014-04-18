@@ -2,7 +2,6 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 if (!isset($_GET['pr'])) {
 	$_GET['pr'] = 1;
 }
@@ -10,10 +9,10 @@ $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'editgood':
-		check_and_open($db, 'shop_goods', 'detail', "m/good/editgood.php", 'good_id', true, "商品");
+		check_and_open('shop_goods', 'detail', "m/good/editgood.php", 'good_id', true, "商品");
 		break;
 	case 'deletegood':
-		check_and_open($db, 'shop_goods', 'detail', "f/good/deletegood.php", 'good_id', false, "商品");
+		check_and_open('shop_goods', 'detail', "f/good/deletegood.php", 'good_id', false, "商品");
 		break;
 	case 'deletegoods':
 		require "f/good/deletegoods.php";
@@ -86,7 +85,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">商品列表</span>
-	<?php $show = make_page_controller($db, "good", "shop_goods", "good_id", $cond, $_GET['pr']); ?>
+	<?php $show = make_page_controller("good", "shop_goods", "good_id", $cond, $_GET['pr']); ?>
 	<form id="del" action="?page=good&function=deletegoods" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
@@ -103,10 +102,10 @@ if ($cond == "") {
 			</tr>
 			<?php
 			if ($show == true) {
-				$result = $db->get_page_content("*", "shop_goods", $cond, $_GET['pr']);
+				$result = $GLOBALS['db']->get_page_content("*", "shop_goods", $cond, $_GET['pr']);
 				if ($result != false) {
 					$count = 0;
-					while ($good = $db->fetch($result)) {
+					while ($good = $GLOBALS['db']->fetch($result)) {
 						$count++;
 						$style = ($count - 1) % 2;
 						echo "<tr class='tr$style'>";

@@ -5,7 +5,7 @@ if (!defined("IN_CFM")) {
 if (!isset($_POST['onsale'])) {
 	$_POST['onsale'] = 0;
 }
-$t = $db->update("shop_goods", "`shop_id`='" . $_POST['shop_id'] .
+$t = $GLOBALS['db']->update("shop_goods", "`shop_id`='" . $_POST['shop_id'] .
 	"' , `price`='" . $_POST['price'] .
 	"' , `onsale`='" . $_POST['onsale'] .
 	"' , `good_name`='" . $_POST['good_name'] .

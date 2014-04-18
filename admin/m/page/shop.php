@@ -2,7 +2,6 @@
 if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
-$db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 if (!isset($_GET['pr'])) {
 	$_GET['pr'] = 1;
 }
@@ -10,10 +9,10 @@ $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
 	case 'editshop':
-		check_and_open($db, 'shop', 'detail', "m/shop/editshop.php", 'shop_id', true, "商家");
+		check_and_open('shop', 'detail', "m/shop/editshop.php", 'shop_id', true, "商家");
 		break;
 	case 'deleteshop':
-		check_and_open($db, 'shop', 'detail', "f/shop/deleteshop.php", 'shop_id', false, "商家");
+		check_and_open('shop', 'detail', "f/shop/deleteshop.php", 'shop_id', false, "商家");
 		break;
 	case 'deleteshops':
 		require "f/shop/deleteshops.php";
@@ -67,7 +66,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">商家列表</span>
-	<?php $show = make_page_controller($db, "shop", "shop", "shop_id", $cond, $_GET['pr']); ?>
+	<?php $show = make_page_controller("shop", "shop", "shop_id", $cond, $_GET['pr']); ?>
 	<form id="del" action="?page=shop&function=deleteshops" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
@@ -84,10 +83,10 @@ if ($cond == "") {
 			</tr>
 			<?php
 			if ($show == true) {
-				$result = $db->get_page_content("*", "shop", $cond, $_GET['pr']);
+				$result = $GLOBALS['db']->get_page_content("*", "shop", $cond, $_GET['pr']);
 				if ($result != false) {
 					$count = 0;
-					while ($shop = $db->fetch($result)) {
+					while ($shop = $GLOBALS['db']->fetch($result)) {
 						$count++;
 						$style = ($count - 1) % 2;
 						echo "<tr class='tr$style'>";
@@ -101,8 +100,8 @@ if ($cond == "") {
 						echo "<img src='images/icon_del.png' alt='删除'>";
 						echo "<span class='link'>删除</span></a></td>";
 						$id = $shop['owner_id'];
-						$t = $db->select("provider_name", "providers", "`provider_id`='$id'", 1);
-						$t = $db->fetch($t);
+						$t = $GLOBALS['db']->select("provider_name", "providers", "`provider_id`='$id'", 1);
+						$t = $GLOBALS['db']->fetch($t);
 						echo "<td>" . $shop['shop_id'] . "</td>";
 						echo "<td>" . $shop['shop_name'] . "</td>";
 						echo "<td>" . $shop['shop_phone'] . "</td>";

@@ -200,10 +200,11 @@ elseif ($content['act'] == 'order_detail')
 }
 elseif ($content['act'] == 'get_history')
 {
-    $p_st=isset($content['periodstart'])?$content['limitstart']:date("Y-m-d",mktime(0,0,0,date("m"),date("d")-7,date("Y")));
-    $p_ed=isset($content['periodend'])?$content['limitend']:date("Y-m-d");
+    $p_st=isset($content['periodstart'])?$content['periodstart']:date("Y-m-d",mktime(0,0,0,date("m"),date("d")-7,date("Y")));
+    $p_ed=isset($content['periodend'])?$content['periodend']:date("Y-m-d");
     $arr=$user->get_history($p_st, $p_ed);
     $return = $arr;
+    $return["status"]=STATUS_SUCCESS;
 }
 
 echo json_encode($return);

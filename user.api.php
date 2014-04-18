@@ -198,6 +198,29 @@ elseif ($content['act'] == 'order_detail')
     $return = $arr;
     $return['status'] = STATUS_SUCCESS;
 }
+elseif ($content['act'] == 'get_history')
+{
+    if(!isset($content['user_id']))
+        $content['user_id'] = 0;
+    if(!isset($content['getcount']))
+        $content['getcount']=1;
+    $get_c=($content['getcount']==1)?true:false;
+    if (!$get_c)
+    {
+        $l_st=isset($content['limitstart'])?intval($content['limitstart']):0;
+        $l_ed=isset($content['limitend'])?intval($content['limitend']):$user->history_count($content['user_id'],Role_User);
+       
+        $ans = $user->get_hot_menu($l_st, $l_ed);
+        $return['status'] = STATUS_SUCCESS;
+        $return['goodlist'] = $ans;
+    }
+    else
+    {
+        $ans = $user->get_hot_count($content['shopid']);
+        $return['status'] = STATUS_SUCCESS;
+        $return['count'] = $ans;
+    }
+}
 
 echo json_encode($return);
 ?>

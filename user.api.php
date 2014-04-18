@@ -140,7 +140,7 @@ elseif ($content['act'] == 'get_hot_menu')
     }
     else
     {
-        $ans = $user->get_hot_count($content['shopid']);
+        $ans = $user->get_hot_count();
         $return['status'] = STATUS_SUCCESS;
         $return['count'] = $ans;
     }
@@ -200,26 +200,11 @@ elseif ($content['act'] == 'order_detail')
 }
 elseif ($content['act'] == 'get_history')
 {
-    if(!isset($content['user_id']))
-        $content['user_id'] = 0;
-    if(!isset($content['getcount']))
-        $content['getcount']=1;
-    $get_c=($content['getcount']==1)?true:false;
-    if (!$get_c)
-    {
-        $l_st=isset($content['limitstart'])?intval($content['limitstart']):0;
-        $l_ed=isset($content['limitend'])?intval($content['limitend']):$user->history_count($content['user_id'],Role_User);
-       
-        $ans = $user->get_hot_menu($l_st, $l_ed);
-        $return['status'] = STATUS_SUCCESS;
-        $return['goodlist'] = $ans;
-    }
-    else
-    {
-        $ans = $user->get_hot_count($content['shopid']);
-        $return['status'] = STATUS_SUCCESS;
-        $return['count'] = $ans;
-    }
+    $p_st=isset($content['periodstart'])?$content['periodstart']:date("Y-m-d",mktime(0,0,0,date("m"),date("d")-7,date("Y")));
+    $p_ed=isset($content['periodend'])?$content['periodend']:date("Y-m-d");
+    $arr=$user->get_history($p_st, $p_ed);
+    $return = $arr;
+    $return["status"]=STATUS_SUCCESS;
 }
 
 echo json_encode($return);

@@ -20,7 +20,7 @@
 ::-webkit-scrollbar-button {
 	display:	none;
 }
-a, span, input, textarea, .button {
+a, span, tr, input, textarea, .button {
 	transition:	linear 0.2s;
 	-moz-transition:	linear 0.2s;
 	-webkit-transition:	linear 0.2s;
@@ -56,6 +56,7 @@ select {
 .text:focus {
 	outline:	none;
 	border:	1px solid #1AD;
+	background-color:	#EEF;
 }
 .button {
 	color:	#FFF;

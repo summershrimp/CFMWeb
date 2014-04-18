@@ -43,7 +43,10 @@ $t = $db->fetch($t);
 			</tr>
 			<tr class="tr1">
 				<td>业主ID：</td>
-				<td><input class="text" type="text" name="owner_id" value="<?php echo $result['owner_id']; ?>"></td>
+				<td>
+					<input onblur="ajax('owner_id','shop','shop_owner_id',this.value,'<?php echo $_GET['detail']; ?>')" class="text" type="text" name="owner_id" value="<?php echo $result['owner_id']; ?>">
+					<span id="owner_id" class="ajaxresult"></span>
+				</td>
 			</tr>
 			<tr class="tr0">
 				<td>描述</td>

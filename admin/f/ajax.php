@@ -35,7 +35,12 @@ case 'shop':
 		else {
 			$r = $db->select("provider_name", "providers", "`provider_id`='$content'");
 			$r = $db->fetch($r);
-			echo "<span class='invalid'>! 业主已被绑定：" . $r['provider_name'] . "</span>";
+			if ($result['shop_id'] == $_GET['ignore']) {
+				echo "<span class='valid'>" . $r['provider_name'] . "是当前的业主</span>";
+			}
+			else {
+				echo "<span class='invalid'>! 业主已被绑定：" . $r['provider_name'] . "</span>";
+			}
 		}
 		break;
 	case 'shop_phone':

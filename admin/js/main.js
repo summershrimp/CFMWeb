@@ -41,3 +41,25 @@ function hide() {
 		jQuery("#wall").remove();
 	});
 }
+function ajax(id, page, row, content, ignore) {
+	if (content == "") {
+		return;
+	}
+	var xmlhttp;
+	if (window.XMLHttpRequest) {
+		xmlhttp=new XMLHttpRequest();
+	}
+	else {
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			document.getElementById(id).innerHTML = xmlhttp.responseText;
+		}
+		else {
+			document.getElementById(id).innerHTML = "查找中……";
+		}
+	}
+	xmlhttp.open("GET", "?action=ajax&page=" + page + "&row=" + row + "&content=" + content + "&ignore=" + ignore, true);
+	xmlhttp.send();
+}

@@ -25,20 +25,23 @@ else if (isset($_POST['shop_name']) && $_POST['shop_name'] != "" ||
 				<td style="width:200px;">值</td>
 			</tr>
 			<tr class="tr0">
-				<td>名称</td>
+				<td>商家名称</td>
 				<td><input class="text" type="text" name="shop_name"></td>
 			</tr>
 			<tr class="tr1">
-				<td>业主ID</td>
-				<td><input class="text" type="text" name="owner_id"></td>
-			</tr>
-			<tr class="tr0">
 				<td>电话</td>
 				<td><input class="text" type="text" name="shop_phone"></td>
 			</tr>
-			<tr class="tr1">
+			<tr class="tr0">
 				<td>位置</td>
 				<td><input class="text" type="text" name="shop_pos"></td>
+			</tr>
+			<tr class="tr1">
+				<td>业主ID</td>
+				<td>
+					<input onblur="ajax('owner_id','shop','shop_owner_id',this.value,'0')" class="text" type="text" name="owner_id">
+					<span id="owner_id" class="ajaxresult"></span>
+				</td>
 			</tr>
 			<tr class="tr0">
 				<td>描述</td>

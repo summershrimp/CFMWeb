@@ -3,6 +3,9 @@ if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
 $db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
+if (!isset($_GET['pr'])) {
+	$_GET['pr'] = 1;
+}
 $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
@@ -66,6 +69,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">Ant列表</span>
+	<?php $show = make_page_controller($db, "ant", "ants", "ant_id", $cond, $_GET['pr']); ?>
 	<form id="del" action="?page=ant&function=deleteants" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
@@ -80,29 +84,31 @@ if ($cond == "") {
 				<td>手机</td>
 			</tr>
 			<?php
-			$result = $db->select("*", "ants", $cond);
-			if ($result != false) {
-				$count = 0;
-				while ($ant = $db->fetch($result)) {
-					$count++;
-					$style = ($count - 1) % 2;
-					echo "<tr class='tr$style'>";
-					echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $ant['ant_id'] . "'></td>";
-					echo "<td>$count</td>";
-					echo "<td>";
-					echo "<a href='?page=ant&function=editant&detail=" . $ant['ant_id'] . "'>";
-					echo "<img src='images/icon_edit.png' alt='修改'>";
-					echo "<span class='link'>修改</span></a>&nbsp;";
-					echo "<a href='javascript:del(\"?page=ant&function=deleteant&detail=" . $ant['ant_id'] . "\")'>";
-					echo "<img src='images/icon_del.png' alt='删除'>";
-					echo "<span class='link'>删除</span></a></td>";
-					echo "<td>" . $ant['ant_id'] . "</td>";
-					echo "<td>" . $ant['ant_name'] . "</td>";
-					echo "<td>" . $ant['email'] . "</td>";
-					echo "<td class='tdclip'>" . $ant['ant_real_name'] . "</td>";
-					echo "<td>" . (($ant['sex'] == 0) ? "男" : "女") . "</td>";
-					echo "<td>" . $ant['mobile_phone'] . "</td>";
-					echo "</tr>";
+			if ($show == true) {
+				$result = $db->get_page_content("*", "ants", $cond, $_GET['pr']);
+				if ($result != false) {
+					$count = 0;
+					while ($ant = $db->fetch($result)) {
+						$count++;
+						$style = ($count - 1) % 2;
+						echo "<tr class='tr$style'>";
+						echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $ant['ant_id'] . "'></td>";
+						echo "<td>$count</td>";
+						echo "<td>";
+						echo "<a href='?page=ant&function=editant&detail=" . $ant['ant_id'] . "'>";
+						echo "<img src='images/icon_edit.png' alt='修改'>";
+						echo "<span class='link'>修改</span></a>&nbsp;";
+						echo "<a href='javascript:del(\"?page=ant&function=deleteant&detail=" . $ant['ant_id'] . "\")'>";
+						echo "<img src='images/icon_del.png' alt='删除'>";
+						echo "<span class='link'>删除</span></a></td>";
+						echo "<td>" . $ant['ant_id'] . "</td>";
+						echo "<td>" . $ant['ant_name'] . "</td>";
+						echo "<td>" . $ant['email'] . "</td>";
+						echo "<td class='tdclip'>" . $ant['ant_real_name'] . "</td>";
+						echo "<td>" . (($ant['sex'] == 0) ? "男" : "女") . "</td>";
+						echo "<td>" . $ant['mobile_phone'] . "</td>";
+						echo "</tr>";
+					}
 				}
 			}
 			?>

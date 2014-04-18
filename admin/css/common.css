@@ -4,6 +4,7 @@
 }
 ::-webkit-scrollbar {
 	width:	10px;
+	height:	10px;
 	background-color:	#FFF;
 }
 ::-webkit-scrollbar-thumb {
@@ -19,7 +20,7 @@
 ::-webkit-scrollbar-button {
 	display:	none;
 }
-a:hover, span:hover, input:hover, textarea:hover, .button:hover {
+a, span, input, textarea, .button {
 	transition:	linear 0.2s;
 	-moz-transition:	linear 0.2s;
 	-webkit-transition:	linear 0.2s;

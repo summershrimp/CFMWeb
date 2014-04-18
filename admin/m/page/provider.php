@@ -3,6 +3,9 @@ if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
 $db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
+if (!isset($_GET['pr'])) {
+	$_GET['pr'] = 1;
+}
 $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
@@ -67,6 +70,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">业主列表</span>
+	<?php $show = make_page_controller($db, "provider", "providers", "provider_id", $cond, $_GET['pr']); ?>
 	<form id="del" action="?page=provider&function=deleteproviders" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
@@ -82,30 +86,32 @@ if ($cond == "") {
 				<td>OpenID</td>
 			</tr>
 			<?php
-			$result = $db->select("*", "providers", $cond);
-			if ($result != false) {
-				$count = 0;
-				while ($provider = $db->fetch($result)) {
-					$count++;
-					$style = ($count - 1) % 2;
-					echo "<tr class='tr$style'>";
-					echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $provider['provider_id'] . "'></td>";
-					echo "<td>$count</td>";
-					echo "<td>";
-					echo "<a href='?page=provider&function=editprovider&detail=" . $provider['provider_id'] . "'>";
-					echo "<img src='images/icon_edit.png' alt='修改'>";
-					echo "<span class='link'>修改</span></a>&nbsp;";
-					echo "<a href='javascript:del(\"?page=provider&function=deleteprovider&detail=" . $provider['provider_id'] . "\")'>";
-					echo "<img src='images/icon_del.png' alt='删除'>";
-					echo "<span class='link'>删除</span></a></td>";
-					echo "<td>" . $provider['provider_id'] . "</td>";
-					echo "<td>" . $provider['provider_name'] . "</td>";
-					echo "<td>" . $provider['email'] . "</td>";
-					echo "<td>" . (($provider['sex'] == 0) ? "男" : "女") . "</td>";
-					echo "<td>" . $provider['mobile_phone'] . "</td>";
-					echo "<td>" . $provider['qq'] . "</td>";
-					echo "<td>" . $provider['openid'] . "</td>";
-					echo "</tr>";
+			if ($show == true) {
+				$result = $db->get_page_content("*", "providers", $cond, $_GET['pr']);
+				if ($result != false) {
+					$count = 0;
+					while ($provider = $db->fetch($result)) {
+						$count++;
+						$style = ($count - 1) % 2;
+						echo "<tr class='tr$style'>";
+						echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $provider['provider_id'] . "'></td>";
+						echo "<td>$count</td>";
+						echo "<td>";
+						echo "<a href='?page=provider&function=editprovider&detail=" . $provider['provider_id'] . "'>";
+						echo "<img src='images/icon_edit.png' alt='修改'>";
+						echo "<span class='link'>修改</span></a>&nbsp;";
+						echo "<a href='javascript:del(\"?page=provider&function=deleteprovider&detail=" . $provider['provider_id'] . "\")'>";
+						echo "<img src='images/icon_del.png' alt='删除'>";
+						echo "<span class='link'>删除</span></a></td>";
+						echo "<td>" . $provider['provider_id'] . "</td>";
+						echo "<td>" . $provider['provider_name'] . "</td>";
+						echo "<td>" . $provider['email'] . "</td>";
+						echo "<td>" . (($provider['sex'] == 0) ? "男" : "女") . "</td>";
+						echo "<td>" . $provider['mobile_phone'] . "</td>";
+						echo "<td>" . $provider['qq'] . "</td>";
+						echo "<td>" . $provider['openid'] . "</td>";
+						echo "</tr>";
+					}
 				}
 			}
 			?>

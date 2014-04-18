@@ -3,6 +3,9 @@ if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
 $db = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
+if (!isset($_GET['pr'])) {
+	$_GET['pr'] = 1;
+}
 $filter = false;
 if (isset($_GET['function'])) {
 	switch ($_GET['function']) {
@@ -60,6 +63,7 @@ if ($cond == "") {
 	</form>
 </div>
 <div class="boxdiv"><span class="titlespan dep2">用户列表</span>
+	<?php $show = make_page_controller($db, "address", "user_address", "addr_id", $cond, $_GET['pr']); ?>
 	<form id="del" action="?page=address&function=deleteaddresses" method="post">
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
@@ -73,28 +77,30 @@ if ($cond == "") {
 				<td>地址</td>
 			</tr>
 			<?php
-			$result = $db->select("*", "user_address", $cond);
-			if ($result != false) {
-				$count = 0;
-				while ($address = $db->fetch($result)) {
-					$count++;
-					$style = ($count - 1) % 2;
-					echo "<tr class='tr$style'>";
-					echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $address['addr_id'] . "'></td>";
-					echo "<td>$count</td>";
-					echo "<td>";
-					echo "<a href='?page=address&function=editaddress&detail=" . $address['addr_id'] . "'>";
-					echo "<img src='images/icon_edit.png' alt='修改'>";
-					echo "<span class='link'>修改</span></a>&nbsp;";
-					echo "<a href='javascript:del(\"?page=address&function=deleteaddress&detail=" . $address['addr_id'] . "\")'>";
-					echo "<img src='images/icon_del.png' alt='删除'>";
-					echo "<span class='link'>删除</span></a></td>";
-					echo "<td>" . $address['addr_id'] . "</td>";
-					echo "<td>" . $address['user_id'] . "</td>";
-					echo "<td>" . $address['user_realname'] . "</td>";
-					echo "<td>" . $address['user_phone'] . "</td>";
-					echo "<td class='tdclip'>" . $address['address'] . "</td>";
-					echo "</tr>";
+			if ($show == true) {
+				$result = $db->get_page_content("*", "user_address", $cond, $_GET['pr']);
+				if ($result != false) {
+					$count = 0;
+					while ($address = $db->fetch($result)) {
+						$count++;
+						$style = ($count - 1) % 2;
+						echo "<tr class='tr$style'>";
+						echo "<td style='text-align:center;'><input type='checkbox' name='chk[]' value='" . $address['addr_id'] . "'></td>";
+						echo "<td>$count</td>";
+						echo "<td>";
+						echo "<a href='?page=address&function=editaddress&detail=" . $address['addr_id'] . "'>";
+						echo "<img src='images/icon_edit.png' alt='修改'>";
+						echo "<span class='link'>修改</span></a>&nbsp;";
+						echo "<a href='javascript:del(\"?page=address&function=deleteaddress&detail=" . $address['addr_id'] . "\")'>";
+						echo "<img src='images/icon_del.png' alt='删除'>";
+						echo "<span class='link'>删除</span></a></td>";
+						echo "<td>" . $address['addr_id'] . "</td>";
+						echo "<td>" . $address['user_id'] . "</td>";
+						echo "<td>" . $address['user_realname'] . "</td>";
+						echo "<td>" . $address['user_phone'] . "</td>";
+						echo "<td class='tdclip'>" . $address['address'] . "</td>";
+						echo "</tr>";
+					}
 				}
 			}
 			?>

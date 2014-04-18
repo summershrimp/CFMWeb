@@ -185,3 +185,33 @@ table {
 	font-size:	14px;
 	margin-left:	10px;
 }
+#pagecontroller {
+	border-top:	1px dotted #06C;
+	border-bottom:	1px dotted #06C;
+	color:	#444;
+	font-size:	15px;
+	margin-bottom:	15px;
+	margin-left:	20px;
+	margin-right:	20px;
+	padding:	0px 20px;
+	line-height:	24px;
+}
+#pagecontroller a {
+	color:	#4C8FBD;
+	float:	right;
+	margin-left:	10px;
+	font-weight:	bold;
+	text-decoration:	none;
+}
+#pagecontroller .pageerror {
+	color:	red;
+	font-weight:	bold;
+}
+.disabled {
+	color:	gray !important;
+}
+.pagemark {
+	color:	#000;
+	margin:	0px 5px;
+	font-weight:	bold;
+}

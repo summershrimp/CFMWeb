@@ -206,6 +206,10 @@ elseif ($content['act'] == 'get_history')
     $return = $arr;
     $return["status"]=STATUS_SUCCESS;
 }
+else 
+{
+    $return["status"]=NO_JSON_KEY;
+}
 
 echo json_encode($return);
 ?>

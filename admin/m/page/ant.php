@@ -37,6 +37,7 @@ if ($filter == true) {
 if ($cond == "") {
 	$cond = NULL;
 }
+$_POST = safe_output($_POST);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep1">Ant信息管理<span class="commit">» 商家和用户们的连接点，勤劳的Ants们</span></span>
@@ -88,6 +89,7 @@ if ($cond == "") {
 				if ($result != false) {
 					$count = 0;
 					while ($ant = $GLOBALS['db']->fetch($result)) {
+						$ant = safe_output($ant);
 						$count++;
 						$style = ($count - 1) % 2;
 						echo "<tr class='tr$style'>";

@@ -38,6 +38,7 @@ if ($filter == true) {
 if ($cond == "") {
 	$cond = NULL;
 }
+$_POST = safe_output($_POST);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep1">用户列表<span class="commit">» 为用户做最好的服务</span></span>
@@ -91,6 +92,7 @@ if ($cond == "") {
 				if ($result != false) {
 					$count = 0;
 					while ($user = $GLOBALS['db']->fetch($result)) {
+						$user = safe_output($user);
 						$count++;
 						$style = ($count - 1) % 2;
 						echo "<tr class='tr$style'>";

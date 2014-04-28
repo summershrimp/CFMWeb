@@ -37,6 +37,7 @@ if ($filter == true) {
 if ($cond == "") {
 	$cond = NULL;
 }
+$_POST = safe_output($_POST);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep1">订单详情管理<span class="commit">» 每一笔订单的详情都在这里</span></span>
@@ -84,6 +85,7 @@ if ($cond == "") {
 				if ($result != false) {
 					$count = 0;
 					while ($detail = $GLOBALS['db']->fetch($result)) {
+						$detail = safe_output($detail);
 						$count++;
 						$style = ($count - 1) % 2;
 						echo "<tr class='tr$style'>";

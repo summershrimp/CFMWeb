@@ -38,6 +38,7 @@ if ($filter == true) {
 if ($cond == "") {
 	$cond = NULL;
 }
+$_POST = safe_output($_POST);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep1">业主信息管理<span class="commit">» 他们是各种商家的主人</span></span>
@@ -90,6 +91,7 @@ if ($cond == "") {
 				if ($result != false) {
 					$count = 0;
 					while ($provider = $GLOBALS['db']->fetch($result)) {
+						$provider = safe_output($provider);
 						$count++;
 						$style = ($count - 1) % 2;
 						echo "<tr class='tr$style'>";

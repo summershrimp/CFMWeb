@@ -37,6 +37,7 @@ if ($filter == true) {
 if ($cond == "") {
 	$cond = NULL;
 }
+$_POST = safe_output($_POST);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep1">商家信息管理<span class="commit">» 他们作为源头，生产各种商品</span></span>
@@ -87,6 +88,7 @@ if ($cond == "") {
 				if ($result != false) {
 					$count = 0;
 					while ($shop = $GLOBALS['db']->fetch($result)) {
+						$shop = safe_output($shop);
 						$count++;
 						$style = ($count - 1) % 2;
 						echo "<tr class='tr$style'>";

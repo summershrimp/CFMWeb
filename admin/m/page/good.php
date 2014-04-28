@@ -51,6 +51,7 @@ if ($filter == true) {
 if ($cond == "") {
 	$cond = NULL;
 }
+$_POST = safe_output($_POST);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep1">商品管理<span class="commit">» 一份煎饺，一杯粥，所有的商品信息都在这里</span></span>
@@ -106,6 +107,7 @@ if ($cond == "") {
 				if ($result != false) {
 					$count = 0;
 					while ($good = $GLOBALS['db']->fetch($result)) {
+						$good = safe_output($good);
 						$count++;
 						$style = ($count - 1) % 2;
 						echo "<tr class='tr$style'>";

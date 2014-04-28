@@ -18,6 +18,7 @@ else if (isset($_POST['ant_name']) && $_POST['ant_name'] != "" ||
 $result = $GLOBALS['db']->select("*", "ants", "`$row`='$get'", 1);
 $result = $GLOBALS['db']->fetch($result);
 $id = $result['ant_id'];
+$result = safe_output($result);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep2">编辑Ant信息（id=<?php echo $result['ant_id']; ?>）</span>

@@ -155,6 +155,13 @@ class apicommon
         }
         return $arr;
     }
+    
+    private function feedback($id, $role, $content)
+    {
+        $sql = "Insert INTO ".$GLOBALS['cfm']->table("feedback")." (`id`,`role`,`content`,) VALUES ('$id', '$role', '$content') ";
+        $GLOBALS['db']->query($sql);
+        return true;
+    }
 
     private function access_code_gen($user_id, $role)
     {

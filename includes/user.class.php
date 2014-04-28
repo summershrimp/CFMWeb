@@ -158,7 +158,12 @@ class user extends apicommon
     {
         // TODO:看完接口再写
     }
-
+    
+    public function add_feedback($content)
+    {
+        $this->feedback($this->user_id,Role_User,$content);
+    }
+    
     private function make_new_order($address, $tips)
     {
         $order_sn = date("Ymd").'0' . substr(str_pad(time(),20,  '0', STR_PAD_LEFT), 15, 20);

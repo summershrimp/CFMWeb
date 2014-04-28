@@ -40,6 +40,9 @@ if (!defined("IN_CFM")) {
 		case "address":
 			$str .= "<a href='?page=$page'>用户信息</a>";
 			break;
+		case "feedback":
+			$str .= "<a href='?page=$page'>反馈列表</a>";
+			break;
 		}
 		if (isset($_GET['function'])) {
 			$function = $_GET['function'];

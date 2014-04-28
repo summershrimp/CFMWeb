@@ -206,6 +206,13 @@ elseif ($content['act'] == 'get_history')
     $return = $arr;
     $return["status"]=STATUS_SUCCESS;
 }
+elseif($content['act']=='feedback')
+{
+    if(isset($content['content']))
+        $ant->add_feedback($content['content']);
+    $return['status']=STATUS_SUCCESS;
+}
+
 else 
 {
     $return["status"]=NO_JSON_KEY;

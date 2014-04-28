@@ -96,4 +96,9 @@ class ants extends apicommon
     {
         return $this->history($this->ant_id, Role_Ant, $p_start, $p_end);
     }
+    
+    public function add_feedback($content)
+    {
+        $this->feedback($this->ant_id,Role_Ant,$content);
+    }
 }

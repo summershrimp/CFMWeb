@@ -101,7 +101,12 @@ elseif($content['act']=='take_goods')
         $return['status']=STATUS_SUCCESS;
     }
 }
-
+elseif($content['act']=='feedback')
+{
+    if(isset($content['content']))
+        $ant->add_feedback($content['content']);
+    $return['status']=STATUS_SUCCESS;
+}
 else
 {
     $return["status"]=NO_JSON_KEY;

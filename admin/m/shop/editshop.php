@@ -54,6 +54,13 @@ $t = safe_output($t);
 				<td>描述</td>
 				<td><textarea class="text" type="text" name="shop_desc"><?php echo $result['shop_desc']; ?></textarea></td>
 			</tr>
+			<tr class="tr1">
+				<td>营业状况</td>
+				<td>
+					<span><input type="radio" name="isopen" value="0"<?php if ($result['isopen'] == 1) echo "checked"; ?>>正常营业</span>
+					<span><input type="radio" name="isopen" value="1"<?php if ($result['isopen'] == 0) echo "checked"; ?>>全店关闭</span>
+				</td>
+			</tr>
 		</table>
 		<p class="psubmit">
 			<input class="button" type="submit" value="修改">

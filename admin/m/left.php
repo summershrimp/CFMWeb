@@ -20,5 +20,6 @@ else {
 	<a href="?page=good"><span class="pagerbutton"<?php if ($page == "good") echo "id='leftcheck'"; ?>>商品管理</span></a>
 	<a href="?page=user"><span class="pagerbutton"<?php if ($page == "user") echo "id='leftcheck'"; ?>>用户列表</span></a>
 	<a href="?page=address"><span class="pagerbutton"<?php if ($page == "address") echo "id='leftcheck'"; ?>>用户信息</span></a>
+	<a href="?page=feedback"><span class="pagerbutton"<?php if ($page == "feedback") echo "id='leftcheck'"; ?>>反馈列表</span></a>
 	<a href="?action=logout"><span class="pagerbutton">退出登录</span></a>
 </div>

@@ -21,6 +21,7 @@ if (!defined("IN_CFM")) {
 	case "good":
 	case "user":
 	case "address":
+	case "feedback":
 	case "default":
 		require "m/page/$page.php";
 		break;

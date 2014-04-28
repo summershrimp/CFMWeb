@@ -3,16 +3,19 @@ if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
 if (isset($_POST['shop_name']) && isset($_POST['owner_id']) &&
-	isset($_POST['shop_phone']) && isset($_POST['shop_pos']) && isset($_POST['shop_desc']) &&
+	isset($_POST['shop_phone']) && isset($_POST['shop_pos']) &&
+	isset($_POST['shop_desc']) && isset($_POST['isopen']) &&
 	$_POST['shop_name'] != "" && $_POST['owner_id'] != "" &&
-	$_POST['shop_phone'] != "" && $_POST['shop_pos'] != "" && $_POST['shop_desc'] != "") {
+	$_POST['shop_phone'] != "" && $_POST['shop_pos'] != "" &&
+	$_POST['shop_desc'] != "" && $_POST['isopen'] != "") {
 	require "f/shop/editshop.php";
 }
 else if (isset($_POST['shop_name']) && $_POST['shop_name'] != "" ||
 	isset($_POST['owner_id']) && $_POST['owner_id'] != "" ||
 	isset($_POST['shop_phone']) && $_POST['shop_phone'] != "" ||
 	isset($_POST['shop_pos']) && $_POST['shop_pos'] != "" ||
-	isset($_POST['shop_desc']) && $_POST['shop_desc'] != "") {
+	isset($_POST['shop_desc']) && $_POST['shop_desc'] != "" ||
+	isset($_POST['isopen']) && $_POST['isopen'] != "") {
 	echo "<div class='return error'>表格中存在未填项！</div>";
 }
 $result = $GLOBALS['db']->select("*", "shop", "`$row`='$get'", 1);
@@ -57,8 +60,8 @@ $t = safe_output($t);
 			<tr class="tr1">
 				<td>营业状况</td>
 				<td>
-					<span><input type="radio" name="isopen" value="0"<?php if ($result['isopen'] == 1) echo "checked"; ?>>正常营业</span>
-					<span><input type="radio" name="isopen" value="1"<?php if ($result['isopen'] == 0) echo "checked"; ?>>全店关闭</span>
+					<span><input type="radio" name="isopen" value="1"<?php if ($result['isopen'] == 1) echo "checked"; ?>>正常营业</span>
+					<span><input type="radio" name="isopen" value="0"<?php if ($result['isopen'] == 0) echo "checked"; ?>>全店关闭</span>
 				</td>
 			</tr>
 		</table>

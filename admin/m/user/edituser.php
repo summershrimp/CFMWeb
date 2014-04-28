@@ -19,6 +19,7 @@ else if (isset($_POST['user_name']) && $_POST['user_name'] != "" ||
 }
 $result = $GLOBALS['db']->select("*", "customers", "`$row`='$get'", 1);
 $result = $GLOBALS['db']->fetch($result);
+$result = safe_output($result);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep2">编辑用户信息（id=<?php echo $result['user_id']; ?>）</span>

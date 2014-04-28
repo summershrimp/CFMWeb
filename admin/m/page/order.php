@@ -61,6 +61,7 @@ if ($filter == true) {
 		}
 	}
 }
+$_POST = safe_output($_POST);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep1">订单信息管理<span class="commit">» 用户的订单数量随着时间逐渐增加</span></span>
@@ -144,6 +145,7 @@ if ($filter == true) {
 				if ($result != false) {
 					$count = 0;
 					while ($order = $GLOBALS['db']->fetch($result)) {
+						$order = safe_output($order);
 						$count++;
 						$style = ($count - 1) % 2;
 						echo "<tr class='tr$style'>";

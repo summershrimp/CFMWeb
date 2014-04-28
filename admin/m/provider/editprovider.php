@@ -17,6 +17,7 @@ else if (isset($_POST['provider_name']) && $_POST['provider_name'] != "" ||
 }
 $result = $GLOBALS['db']->select("*", "providers", "`$row`='$get'", 1);
 $result = $GLOBALS['db']->fetch($result);
+$result = safe_output($result);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep2">编辑业主信息（id=<?php echo $result['provider_id']; ?>）</span>

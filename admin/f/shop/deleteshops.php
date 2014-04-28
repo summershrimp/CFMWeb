@@ -19,7 +19,7 @@ if (isset($_POST['chk'])) {
 		echo "<div class='return success'>批量删除成功！</div>";
 	}
 	else {
-		echo "<div class='return warning'>部分商家未找到！ID：$list</div>";
+		echo "<div class='return warning'>" . safe_output("部分商家未找到！ID：$list") . "</div>";
 	}
 }
 else {

@@ -36,6 +36,7 @@ if ($filter == true) {
 if ($cond == "") {
 	$cond = NULL;
 }
+$_POST = safe_output($_POST);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep1">用户信息<span class="commit">» 这里存了每一个用户的真实信息</span></span>
@@ -81,6 +82,7 @@ if ($cond == "") {
 				if ($result != false) {
 					$count = 0;
 					while ($address = $GLOBALS['db']->fetch($result)) {
+						$address = safe_output($address);
 						$count++;
 						$style = ($count - 1) % 2;
 						echo "<tr class='tr$style'>";

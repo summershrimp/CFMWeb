@@ -19,6 +19,7 @@ else if (isset($_POST['shop_id']) && $_POST['shop_id'] != "" ||
 }
 $result = $GLOBALS['db']->select("*", "shop_goods", "`$row`='$get'", 1);
 $result = $GLOBALS['db']->fetch($result);
+$result = safe_output($result);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep2">编辑商品信息（id=<?php echo $result['good_id']; ?>）</span>

@@ -11,6 +11,11 @@ if ($username == "" || $password == "") {
 }
 $result = $GLOBALS['db']->select("*", "admin_users", "`admin_name`='$username'", 1);
 $result = $GLOBALS['db']->fetch($result);
+if ($result == false) {
+	echo "<script>alert('用户名或密码错误！');</script>";
+	echo "<meta http-equiv=\"refresh\" content=\"0; url=?\">";
+	exit();
+}
 if (!isset($result['salt'])) {
 	$salt = rand(1000, 9999);
 	$result['salt'] = $salt;

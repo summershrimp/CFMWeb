@@ -31,6 +31,7 @@ else if (isset($_POST['user_id']) && $_POST['user_id'] != "" ||
 }
 $result = $GLOBALS['db']->select("*", "order_info", "`$row`='$get'", 1);
 $result = $GLOBALS['db']->fetch($result);
+$result = safe_output($result);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep2">编辑订单信息（id=<?php echo $result['order_id']; ?>）</span>

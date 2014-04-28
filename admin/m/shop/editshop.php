@@ -20,6 +20,8 @@ $result = $GLOBALS['db']->fetch($result);
 $id = $result['owner_id'];
 $t = $GLOBALS['db']->select("provider_name", "providers", "`provider_id`='$id'", 1);
 $t = $GLOBALS['db']->fetch($t);
+$result = safe_output($result);
+$t = safe_output($t);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep2">编辑商家信息（id=<?php echo $result['shop_id']; ?>）</span>

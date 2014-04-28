@@ -12,6 +12,7 @@ if (isset($_GET['function'])) {
 }
 $result = $GLOBALS['db']->select("*", "admin_users", "`admin_name`='$username'", 1);
 $result = $GLOBALS['db']->fetch($result);
+$result = safe_output($result);
 ?>
 <div class="boxdiv">
 	<span class="titlespan dep1">账户设置<span class="commit">» 在这里设置您的账户信息</span></span>

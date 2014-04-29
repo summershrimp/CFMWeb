@@ -15,6 +15,9 @@ if(!isset($GLOBALS["HTTP_RAW_POST_DATA"]))
 }
 
 $content = json_decode($GLOBALS["HTTP_RAW_POST_DATA"],true);
+
+$content = addslashes_deep($content);
+
 // 构造返回数组
 $return = Array();
 

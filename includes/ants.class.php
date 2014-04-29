@@ -10,7 +10,7 @@ class ants extends apicommon
 {
     private $ant_id;
 
-    public function user($accesscode = NULL)
+    public function ants($accesscode = NULL)
     {
         if ($accesscode!=NULL)
         {

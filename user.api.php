@@ -15,6 +15,9 @@ if(!isset($GLOBALS["HTTP_RAW_POST_DATA"]))
 }
 
 $content = json_decode($GLOBALS["HTTP_RAW_POST_DATA"],true);
+
+$content = addslashes_deep($content);
+
 // 构造返回数组
 $return = Array();
 
@@ -30,6 +33,7 @@ if (! isset($content['accesscode']))
             $return['accesscode'] = $accesscode;
             $return['status'] = STATUS_SUCCESS;
         }
+        else $return['status'] = UNAVAIL_USER;
     }
     elseif(!isset($content['openid']))
         $return['status'] = NO_JSON_KEY;

@@ -43,7 +43,7 @@ function get_post($arr) {
 function make_page_controller($page, $table_name, $row, $cond, $pr) {
 	$result = $GLOBALS['db']->count($row, $table_name, $cond);
 	echo "<div id=\"pagecontroller\">";
-	if ($pr > $result) {
+	if ($pr > $result && $result != 0) {
 		echo "<span class='pageerror'>不正确的页！</span>";
 		echo "</div>";
 		return false;
@@ -54,6 +54,9 @@ function make_page_controller($page, $table_name, $row, $cond, $pr) {
 	echo "<span class='pagemark'>$pr</span>";
 	echo "页 / 共";
 	$result = ceil($result / PAGE_LENGTH);
+	if ($result == 0) {
+		$result = 1;
+	}
 	echo "<span class='pagemark'>$result</span>";
 	echo "页";
 	if ($pr < $result) {

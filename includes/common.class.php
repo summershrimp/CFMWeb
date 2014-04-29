@@ -17,6 +17,24 @@ class apicommon
     
     public function login($username, $password, $role)
     {
+    if ($role === Role_Shop)
+        {
+            $db_table = 'providers';
+            $db_uname_column = 'provider_name';
+            $db_id_column = 'provider_id';
+        }
+        elseif ($role === Role_Ant)
+        {
+            $db_table = 'ants';
+            $db_uname_column = 'ant_name';
+            $db_id_column = 'ant_id';
+        }
+        elseif ($role === Role_User)
+        {
+            $db_table = 'customers';
+            $db_uname_column = 'openid';
+            $db_id_column = 'user_id';
+        }
         if ($role == Role_User)
         {
             $ans = $this->check_user_exist($username, $role);
@@ -30,7 +48,8 @@ class apicommon
         else
         {
             $user_id = $this->check_login($username, $password, $role);
-            if (! $user_id)
+            $user_id;
+            if (!$user_id)
                 return false;
             $sql="UPDATE ".$GLOBALS['cfm']->table($db_table)." SET `last_ip` = '".$this->get_IP()."' Where `$db_uname_column` = '$username' LIMIT 1";
             $GLOBALS['db']->query($sql);
@@ -72,9 +91,9 @@ class apicommon
             $db_id_column = 'shop_id';
         elseif ($role === Role_User)
             $db_id_column = 'user_id';
-        $sql = "Select `order_id`, `order_sn`, `goods_amount`,`tips_amount`,`order_time`,`user_realname` From " . $GLOBALS['cfm']->table("order_info") . "Where `$db_id_column` = $id ";
+        $sql = "Select `order_id`, `order_sn`, `goods_amount`, `tips_amount`, `order_time`, `user_realname`, `order_status`, `ant_status`, `confirm_status`, `taking_status`, `shipping_status` From " . $GLOBALS['cfm']->table("order_info") . " Where `$db_id_column` = $id ";
         if (isset($p_start) && isset($p_end))
-            $limit = "And add_date Between '$p_start' And '$p_end'";
+            $limit = "And `add_date` Between '$p_start' And '$p_end'";
         else
             $limit = "LIMIT 20";
         $sql = $sql . $limit;
@@ -238,6 +257,50 @@ class apicommon
         return false;
     }
 
+    private function change_password($id, $old_pass, $new_pass, $role)
+    {
+        if ($role === Role_Shop)
+        {
+            $db_table = 'providers';
+            $db_uname_column = 'provider_name';
+            $db_id_column = 'provider_id';
+        }
+        elseif ($role === Role_Ant)
+        {
+            $db_table = 'ants';
+            $db_uname_column = 'ant_name';
+            $db_id_column = 'ant_id';
+        }
+        elseif ($role === Role_User)
+        {
+            $db_table = 'customers';
+            $db_uname_column = 'openid';
+            $db_id_column = 'user_id';
+        }
+        $sql = "Select `salt`, `password` From ".$GLOBALS['cfm']->table($db_table)." Where `$db_id_column` = '$id' LIMIT 1";
+        $result = $GLOBALS['db']->getRow($sql);
+        $update = false;
+        if(isset($result['salt']))
+        {
+            $old_pass = md5($old_pass . $result['salt']);
+            $new_pass = md5($new_pass . $result['salt']);
+            if($old_pass == $result['password']);
+                $update = true;
+        }
+        else
+        {
+            if($old_pass == $result['password']);
+            $update = true;
+        }
+        if($update)
+        {
+            $sql = "Update ".$GLOBALS['cfm']->table($db_table)." SET `password` = '$new_pass' Where `$db_id_column` = '$id' LIMIT 1";
+            if($GLOBALS['db']->affected_rows() < 1)
+                $update = false;
+        }
+        return $update;
+    }
+    
     private function check_login($username, $password, $role)
     {
         if ($role === Role_Shop)
@@ -258,14 +321,17 @@ class apicommon
             $db_uname_column = 'openid';
             $db_id_column = 'user_id';
         }
-        $sql = "Select `password` ,`salt`, `$db_id_column` From " . $GLOBALS['cfm']->table($db_table) . " Where  `$db_uname_column`  = '$username' LIMIT 1";
+
+        $sql = "Select `$db_id_column`, `password` ,`salt`, `$db_id_column` From " . $GLOBALS['cfm']->table($db_table) . " Where  `$db_uname_column`  = '$username' LIMIT 1";
         $arr = $GLOBALS['db']->getRow($sql);
         if (! isset($arr))
+        {
             return false;
+        }
         if (isset($arr['salt']))
             $password = md5($password . $arr['salt']);
         if ($password == $arr['password'])
-        {
+        { 
             $sql="UPDATE ".$GLOBALS['cfm']->table($db_table)." SET `last_ip` = '".$this->get_IP()."' Where `$db_uname_column` = '$username' LIMIT 1";
             $GLOBALS['db']->query($sql);
             return $arr[$db_id_column];

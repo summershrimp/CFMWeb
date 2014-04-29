@@ -33,7 +33,7 @@ else
 
 require (ROOT_PATH . 'data/config.php');
 require_once ROOT_PATH . 'includes/defines.inc.php';
-
+require_once ROOT_PATH . 'includes/base.lib.php';
 if (defined('DEBUG_MODE') == false)
 {
     define('DEBUG_MODE', 0);

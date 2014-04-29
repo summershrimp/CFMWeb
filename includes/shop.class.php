@@ -9,9 +9,7 @@ if (!defined('IN_CFM')) {
 	die('Hacking attempt');
 }
 
-require_once "includes/init.inc.php";
-require_once "includes/defines.inc.php";
-require_once "includes/common.class.php";
+require_once ROOT_PATH . 'includes/common.class.php';
 
 class shop extends apicommon {
 	
@@ -41,6 +39,9 @@ class shop extends apicommon {
 		return $result;
 	}
 	*/
+    /**
+     * 商店信息（销售数量和销售总额）
+     */
 	public function shop_static()
 	{
 	    $end=date("Y-m-d");
@@ -69,29 +70,8 @@ class shop extends apicommon {
 	    return $return;
 	}
 	
-	/**
-	 * 商店信息（销售数量和销售总额）
-	 */
-	/*
-	function get_shop_info($id) {
-		$cur_date = $GLOBALS['db']->getRow("SELECT CURDATE() result");
-		$cur_date = $cur_date['result'];date("Y-m-d");
-		$r = $this->history($id, Role_Shop, $cur_date, $cur_date);
-		$result['day_count'] = count($r);
-		$result['day_amount'] = $this->get_amount($r);
-		$first_day = $GLOBALS['db']->getRow("SELECT DATE_ADD(CURDATE(),INTERVAL -WEEKDAY(CURDATE()) DAY) result");
-		$first_day = $first_day['result'];
-		$r = $this->history($id, Role_Shop, $first_day, $cur_date);
-		$result['week_count'] = count($r);
-		$result['week_amount'] = $this->get_amount($r);
-		$first_day = $GLOBALS['db']->getRow("SELECT DATE_ADD(DATE_ADD(LAST_DAY(CURDATE()),INTERVAL 1 DAY),INTERVAL -1 MONTH) result");
-		$first_day = $first_day['result'];
-		$r = $this->history($id, Role_Shop, $first_day, $cur_date);
-		$result['month_count'] = count($r);
-		$result['month_amount'] = $this->get_amount($r);
-		return $result;
-	}
-	*/
+	
+	
 	/**
 	 * 获取一段时间的历史记录
 	 */
@@ -100,26 +80,6 @@ class shop extends apicommon {
 	   return $this->history($this->shop_id, Role_Shop, $p_start, $p_end);
 	}
 	
-	/*
-	function shop_history($id, $start, $end) {
-		$r = $this->history($id, Role_Shop, $start, $end);
-		$result = array();
-		foreach ($r as $item) {
-			$t = $this->details($item['order_id']);
-			$temp['order_id'] = $t['order_id'];
-			$temp['price'] = $t['goods_price'];
-			$temp['time'] = $item['pay_time'];
-			$sql = "SELECT `ant_name` FROM " . $GLOBALS['cfm']->table("providers") . "WHERE `provider_id` = " . $item['user_id'];
-			$t = $GLOBALS['db']->getOne($sql);
-			$temp['shop_name'] = $t['provider_name'];
-			$sql = "SELECT `ant_name` FROM " . $GLOBALS['cfm']->table("ants") . "WHERE `ant_id` = " . $item['ant_id'] . "LIMIT 1";
-			$t = $GLOBALS['db']->getRow($sql);
-			$temp['cust_name'] = $t['ant_name'];
-			$result[] = $temp;
-		}
-		return $result;
-	}
-	*/
 	
 	/**
 	 * 获取商店业主信息
@@ -162,6 +122,11 @@ class shop extends apicommon {
 	    if($GLOBALS['db']->affected_rows()==1)
 	        return true;
 	    return false;
+	}
+	
+	public function change_shop_pass($old_pass,$new_pass)
+	{
+	    return $this->change_password($this->id, $old_pass, $new_pass, Role_Shop);
 	}
 	
 }

@@ -26,13 +26,15 @@ if (! isset($content['accesscode']))
 {
     if ($content['act'] == 'ant_login'&&isset($content['ant_name'])&&isset($content['password']))
     {
-        $ant = new ant();
+        $ant = new ants();
         $accesscode = $ant->login($content['ant_name'], $content['password'], Role_Ant);
         if ($accesscode)
         {
             $return['accesscode'] = $accesscode;
             $return['status'] = STATUS_SUCCESS;
         }
+        else 
+            $return['status'] = UNAVAIL_USER;
     }
     elseif(!isset($content['openid']))
         $return['status'] = NO_JSON_KEY;
@@ -53,7 +55,7 @@ elseif ($content['act'] == 'get_history')
 {
     $p_st=isset($content['periodstart'])?$content['periodstart']:date("Y-m-d",mktime(0,0,0,date("m"),date("d")-7,date("Y")));
     $p_ed=isset($content['periodend'])?$content['periodend']:date("Y-m-d");
-    $arr=$user->get_history($p_st, $p_ed);
+    $arr=$ant->get_history($p_st, $p_ed);
     $return = $arr;
     $return["status"]=STATUS_SUCCESS;
 }
@@ -102,6 +104,17 @@ elseif($content['act']=='take_goods')
     {
         $return['take_status']=$ant->take_goods($content['order_id']);
         $return['status']=STATUS_SUCCESS;
+    }
+}
+elseif($content['act']=='change_password')
+{
+    if(!isset($content['old_pass'])||!isset($content['new_pass']))
+        $return['status']=NO_JSON_KEY;
+    else
+    {
+        if($ant->change_ant_password($content['old_pass'],$content['new_pass']))
+            $return['status'] = STATUS_SUCCESS;
+        else $return['status'] = SYS_BUSY;
     }
 }
 elseif($content['act']=='feedback')

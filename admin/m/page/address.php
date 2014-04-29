@@ -99,7 +99,7 @@ $_POST = safe_output($_POST);
 						echo "<td>" . $address['user_id'] . "</td>";
 						echo "<td>" . $address['user_realname'] . "</td>";
 						echo "<td>" . $address['user_phone'] . "</td>";
-						echo "<td class='tdclip'>" . $address['address'] . "</td>";
+						echo "<td class='tdclip' title='" . $address['address'] . "'>" . $address['address'] . "</td>";
 						echo "</tr>";
 					}
 				}

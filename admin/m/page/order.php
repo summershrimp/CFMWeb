@@ -162,7 +162,7 @@ $_POST = safe_output($_POST);
 						echo "<td>" . $order['order_id'] . "</td>";
 						echo "<td>" . $order['user_id'] . "</td>";
 						echo "<td>" . $order['ant_id'] . "</td>";
-						echo "<td class='tdclip'>" . $order['address'] . "</td>";
+						echo "<td class='tdclip' title='" . $order['address'] . "'>" . $order['address'] . "</td>";
 						echo "<td>" . ($order['order_status'] == 1 ? "是" : "否") . "</td>";
 						echo "<td>" . ($order['ant_status'] == 1 ? "是" : "否") . "</td>";
 						echo "<td>" . ($order['confirm_status'] == 1 ? "是" : "否") . "</td>";

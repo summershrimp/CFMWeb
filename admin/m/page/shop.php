@@ -33,6 +33,7 @@ if ($filter == true) {
 	$cond = contact_condition($cond, 'shop_pos', false);
 	$cond = contact_condition($cond, 'owner_id');
 	$cond = contact_condition($cond, 'shop_desc', false);
+	$cond = contact_condition($cond, 'isopen');
 }
 if ($cond == "") {
 	$cond = NULL;
@@ -60,6 +61,10 @@ $_POST = safe_output($_POST);
 		<span class="fixed">商家描述：</span>
 		<input class="text" type="text" name="shop_desc" placeholder="依据商家描述过滤" value="<?php if (isset($_POST['shop_desc'])) echo $_POST['shop_desc']; ?>">
 		<span class="tooltip">支持模糊搜索</span><br>
+		<span class="fixed">营业状况：</span>
+		<span><input type="radio" name="isopen" value="-1" <?php if (!isset($_POST['isopen']) || $_POST['isopen'] == -1) echo "checked"; ?>>全部</span>&nbsp;
+		<span><input type="radio" name="isopen" value="1" <?php if (isset($_POST['isopen']) && $_POST['isopen'] == 1) echo "checked"; ?>>正常营业</span>&nbsp;
+		<span><input type="radio" name="isopen" value="0" <?php if (isset($_POST['isopen']) && $_POST['isopen'] == 0) echo "checked"; ?>>全店关闭</span><br>
 		<p class="psubmit">
 			<input class="button" type="submit" value="搜索">
 			<input class="button" type="reset">
@@ -72,15 +77,16 @@ $_POST = safe_output($_POST);
 		<table style="margin-right:20px;">
 			<tr class="trtitle">
 				<td></td>
-				<td style="width:20px;">#</td>
+				<td>#</td>
 				<td>操作</td>
 				<td>ID</td>
-				<td>名称</td>
+				<td style="max-width:100px;">名称</td>
 				<td>电话</td>
 				<td>位置</td>
 				<td>业主ID</td>
 				<td>业主姓名</td>
 				<td>描述</td>
+				<td>营业状况</td>
 			</tr>
 			<?php
 			if ($show == true) {
@@ -105,12 +111,13 @@ $_POST = safe_output($_POST);
 						$t = $GLOBALS['db']->select("provider_name", "providers", "`provider_id`='$id'", 1);
 						$t = $GLOBALS['db']->fetch($t);
 						echo "<td>" . $shop['shop_id'] . "</td>";
-						echo "<td>" . $shop['shop_name'] . "</td>";
+						echo "<td class='tdclip' style='max-width:100px;'>" . $shop['shop_name'] . "</td>";
 						echo "<td>" . $shop['shop_phone'] . "</td>";
 						echo "<td class='tdclip'>" . $shop['shop_pos'] . "</td>";
 						echo "<td>$id</td>";
 						echo "<td>" . $t['provider_name'] . "</td>";
 						echo "<td class='tdclip'>" . $shop['shop_desc'] . "</td>";
+						echo "<td>" . ($shop['isopen'] == 1 ? "正常营业" : "全店关闭") . "</td>";
 						echo "</tr>";
 					}
 				}

@@ -2,7 +2,6 @@
 
 class sms
 {
-
     const ACURL = "https://oauth.api.189.cn/emp/oauth2/v3/access_token";
     const SCURL = "http://api.189.cn/v2/dm/randcode/token";
     const SMSURL = "http://api.189.cn/v2/dm/randcode/sendSms";
@@ -88,6 +87,6 @@ class sms
         app_secret=bea5b8c7025d6357d2d6c151ec017c3e";
     private $access_token;
     private $sms_token;
-
 } 
 
+?>

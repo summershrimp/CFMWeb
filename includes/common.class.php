@@ -60,6 +60,7 @@ class apicommon
         unset($arr['password']);
         unset($arr['salt']);
         unset($arr[$db_id_column]);
+
         return $arr;
     }
 
@@ -99,10 +100,8 @@ class apicommon
     {
         $sql = "Select * From " . $GLOBALS['cfm']->table('order_info') . " Where `order_id` = $order_id LIMIT 1";
         $arr = $GLOBALS['db']->getRow($sql);
-
         if (! $GLOBALS['db']->affected_rows())
             return false;
-
         $return = $arr;
         if ($is_detail)
         {
@@ -167,15 +166,12 @@ class apicommon
         return true;
     }
 
-
     private function access_code_gen($user_id, $role)
     {
         $sql = "DELETE From " . $GLOBALS['cfm']->table('tokens') . "Where `id`='$user_id' AND `role`='$role' LIMIT 1";
         $GLOBALS['db']->query($sql);
         $access_code = $this->genToken();
-
         $sql = "Insert Into " . $GLOBALS['cfm']->table('tokens') . " (`token`,`id`, `role`, `gen_time`)VALUES('$access_code', '$user_id', '$role', '".time()."')";
-		
         $GLOBALS['db']->query($sql);
         return $access_code;
     }

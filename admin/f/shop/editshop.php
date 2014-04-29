@@ -6,7 +6,8 @@ $t = $GLOBALS['db']->update("shop", "`shop_name`='" . $_POST['shop_name'] .
 	"' , `shop_phone`='" . $_POST['shop_phone'] .
 	"' , `owner_id`='" . $_POST['owner_id'] .
 	"' , `shop_pos`='" . $_POST['shop_pos'] .
-	"' , `shop_desc`='" . $_POST['shop_desc'] . "'",
+	"' , `shop_desc`='" . $_POST['shop_desc'] .
+	"' , `isopen`='" . $_POST['isopen'] . "'",
 	"`shop_id`='" . $_GET['detail'] . "'", 1
 );
 if ($t == false) {

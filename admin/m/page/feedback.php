@@ -16,7 +16,7 @@ $cond = "";
 if ($filter == true) {
 	$cond = contact_condition($cond, 'fback_id');
 	$cond = contact_condition($cond, 'id');
-	$cond = contact_condition($cond, 'role');
+	if (isset($_POST['role']) && $_POST['role'] != -1) $cond = contact_condition($cond, 'role');
 	$cond = contact_condition($cond, 'content', false);
 }
 if ($cond == "") {
@@ -35,7 +35,10 @@ $_POST = safe_output($_POST);
 		<span class="fixed">用户ID：</span>
 		<input class="text" type="text" name="id" placeholder="依据用户ID过滤" value="<?php if (isset($_POST['id'])) echo $_POST['id']; ?>"><br>
 		<span class="fixed">用户群：</span>
-		<input class="text" type="text" name="role" placeholder="依据用户群过滤" value="<?php if (isset($_POST['role'])) echo $_POST['role']; ?>"><br>
+		<span><input type="radio" name="role" value="-1" <?php if (!isset($_POST['role']) || $_POST['role'] == -1) echo "checked"; ?>>全部</span>&nbsp;
+		<span><input type="radio" name="role" value="101" <?php if (isset($_POST['role']) && $_POST['role'] == 101) echo "checked"; ?>>商家</span>&nbsp;
+		<span><input type="radio" name="role" value="102" <?php if (isset($_POST['role']) && $_POST['role'] == 102) echo "checked"; ?>>用户</span>&nbsp;
+		<span><input type="radio" name="role" value="103" <?php if (isset($_POST['role']) && $_POST['role'] == 103) echo "checked"; ?>>Ant</span><br>
 		<span class="fixed">反馈内容：</span>
 		<input class="text" type="text" name="content" placeholder="依据反馈内容过滤" value="<?php if (isset($_POST['content'])) echo $_POST['content']; ?>">
 		<span class="tooltip">支持模糊搜索</span><br>
@@ -67,7 +70,7 @@ $_POST = safe_output($_POST);
 					echo "<tr class='tr$style'>";
 					echo "<td style='width:30px;'>$count</td>";
 					echo "<td style='width:60px;'>" . $feedback['fback_id'] . "</td>";
-					echo "<td style='width:60px;'>" . $feedback['id'] . "</td>";
+					echo "<td style='width:60px;'>" . ($feedback['id'] == false ? "匿名" : $feedback['id']) . "</td>";
 					switch ($feedback['role']) {
 					case '101':
 						$role = "商家";
@@ -79,15 +82,16 @@ $_POST = safe_output($_POST);
 						$role = "Ant";
 						break;
 					default:
-						$role = "";
+						$role = "未知";
 						break;
 					}
 					echo "<td style='width:60px;'>" . $role . "</td>";
-					echo "<td class='tdclip'>" . $feedback['content'] . "</td>";
+					echo "<td class='tdclip' title='" . $feedback['content'] . "'>" . $feedback['content'] . "</td>";
 					echo "</tr>";
 				}
 			}
 		}
 		?>
 	</table>
+	<br>
 </div>

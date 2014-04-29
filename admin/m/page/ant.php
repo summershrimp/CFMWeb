@@ -105,7 +105,7 @@ $_POST = safe_output($_POST);
 						echo "<td>" . $ant['ant_id'] . "</td>";
 						echo "<td>" . $ant['ant_name'] . "</td>";
 						echo "<td>" . $ant['email'] . "</td>";
-						echo "<td class='tdclip'>" . $ant['ant_real_name'] . "</td>";
+						echo "<td class='tdclip' title='" . $ant['ant_real_name'] . "'>" . $ant['ant_real_name'] . "</td>";
 						echo "<td>" . (($ant['sex'] == 0) ? "男" : "女") . "</td>";
 						echo "<td>" . $ant['mobile_phone'] . "</td>";
 						echo "</tr>";

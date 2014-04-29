@@ -111,12 +111,12 @@ $_POST = safe_output($_POST);
 						$t = $GLOBALS['db']->select("provider_name", "providers", "`provider_id`='$id'", 1);
 						$t = $GLOBALS['db']->fetch($t);
 						echo "<td>" . $shop['shop_id'] . "</td>";
-						echo "<td class='tdclip' style='max-width:100px;'>" . $shop['shop_name'] . "</td>";
+						echo "<td class='tdclip' title='" . $shop['shop_name'] . "' style='max-width:100px;'>" . $shop['shop_name'] . "</td>";
 						echo "<td>" . $shop['shop_phone'] . "</td>";
-						echo "<td class='tdclip'>" . $shop['shop_pos'] . "</td>";
+						echo "<td class='tdclip' title='" . $shop['shop_pos'] . "'>" . $shop['shop_pos'] . "</td>";
 						echo "<td>$id</td>";
 						echo "<td>" . $t['provider_name'] . "</td>";
-						echo "<td class='tdclip'>" . $shop['shop_desc'] . "</td>";
+						echo "<td class='tdclip' title='" . $shop['shop_desc'] . "'>" . $shop['shop_desc'] . "</td>";
 						echo "<td>" . ($shop['isopen'] == 1 ? "正常营业" : "全店关闭") . "</td>";
 						echo "</tr>";
 					}

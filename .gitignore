@@ -1,7 +1,6 @@
 .settings/
 .project
-.gitignore
 .bulidpath
-/documents
-/data
-/admin
+documents/
+data/
+

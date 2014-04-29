@@ -1,6 +1,8 @@
 <?php
 // database host
 $db_host   = "127.0.0.1:3306";
+=======
+$db_host   = "localhost";
 
 // database name
 $db_name   = "carryforme";
@@ -31,7 +33,6 @@ define('AUTH_KEY', 'this is a key');
 define('OLD_AUTH_KEY', '');
 
 define('API_TIME', '');
-
 
 define('CHANNEL_API_KEY','DGv8TZhmZyGglKQojU2Uo6BI');
 

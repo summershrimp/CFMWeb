@@ -59,6 +59,8 @@ class apicommon
         $arr = $GLOBALS['db']->getRow($sql);
         unset($arr['password']);
         unset($arr['salt']);
+        unset($arr[$db_id_column]);
+
         return $arr;
     }
 
@@ -90,6 +92,7 @@ class apicommon
             $db_id_column = 'user_id';
         $sql = "Select Count(*) From " . $GLOBALS['cfm']->table("order_info") . "Where `$db_id_column` = $id ";
         $arr = $GLOBALS['db']->getOne($sql);
+
         return arr;
     }
 

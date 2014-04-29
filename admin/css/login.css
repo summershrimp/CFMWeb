@@ -1,0 +1,15 @@
+*{
+	font-family:	"微软雅黑" !important;
+}
+#login {
+	margin:	100px auto;
+	width:	350px;
+	position:	relative;
+}
+.fixed {
+	width:	60px;
+	display:	inline-block;
+	margin-left:	20px;
+	margin-right:	40px;
+	line-height:	32px;
+}

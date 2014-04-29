@@ -1,7 +1,7 @@
-.settings/
+/.settings
 .project
 .gitignore
 .bulidpath
-documents/
-data/
+/documents
+/data
 

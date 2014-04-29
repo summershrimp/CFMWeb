@@ -1,16 +1,6 @@
 <?php
 // database host
-<<<<<<< HEAD
 $db_host   = "127.0.0.1:3306";
-=======
-$db_host   = "localhost";
-=======
-<<<<<<< HEAD
-$db_host   = "127.0.0.1:3306";
-=======
-$db_host   = "localhost";
->>>>>>> rex_develop
->>>>>>> summer_develop
 
 // database name
 $db_name   = "carryforme";
@@ -42,23 +32,9 @@ define('OLD_AUTH_KEY', '');
 
 define('API_TIME', '');
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-
->>>>>>> summer_develop
 define('CHANNEL_API_KEY','DGv8TZhmZyGglKQojU2Uo6BI');
 
 define('CHANNEL_SECRET_KEY','8okSd8tTmpU8c9KVNDXGudiRiS3PlhSB');
 
-<<<<<<< HEAD
 ?>
-=======
-?>
-=======
-define('CHANNEL_API_KEY','dsad');
 
-define('CHANNEL_SECRET_KEY','123');
-?>
->>>>>>> rex_develop
->>>>>>> summer_develop

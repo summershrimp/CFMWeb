@@ -84,6 +84,15 @@ case "get_good_menu":
 	$result = $shop->get_good_menu($id);
 	$result['status'] = STATUS_SUCCESS;
 	break;
+case "change_password":
+	if(!isset($content['old_pass'])||!isset($content['new_pass']))
+	    $return['status']=NO_JSON_KEY;
+	else
+	{
+	    if($ant->change_shop_password($content['old_pass'],$content['new_pass']))
+	        $return['status'] = STATUS_SUCCESS;
+	    else $return['status'] = SYS_BUSY;
+	}
 default:
 	$result['status'] = ERROR_CONTENT;
 	break;

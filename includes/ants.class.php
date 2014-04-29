@@ -4,7 +4,7 @@ if (! defined ( 'IN_CFM' ))
     die ( 'Hacking attempt' );
 }
 
-require_once './common.class.php';
+require_once ROOT_PATH . 'includes/common.class.php';
 
 class ants extends apicommon
 {
@@ -49,11 +49,6 @@ class ants extends apicommon
         return $return;
     }
     
-    public function get_history($p_start, $p_end)
-    {
-        return $this->history($this->ant_id, Role_Ant, $p_start, $p_end);
-    }
-    
     public function get_ant_info()
     {
         $sql = "Select `email`, `sex`, `ant_name`, `ant_real_name`, `sex`, `last_time`, `last_ip`, `mobile_phone`,`pic_url`  From "
@@ -96,7 +91,10 @@ class ants extends apicommon
     {
         return $this->history($this->ant_id, Role_Ant, $p_start, $p_end);
     }
-    
+    public function change_ant_pass($old_pass,$new_pass)
+    {
+        return $this->change_password($this->id, $old_pass, $new_pass, Role_Ant);
+    }
     public function add_feedback($content)
     {
         $this->feedback($this->ant_id,Role_Ant,$content);

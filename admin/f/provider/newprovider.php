@@ -3,7 +3,7 @@ if (!defined("IN_CFM")) {
 	exit("Hacking attempt");
 }
 mt_srand((double) microtime() * 1000000);
-$_POST['salt'] = mt_rand(0, 2147483647);
+$_POST['salt'] = mt_rand(0, 9999);
 $_POST['password'] = md5("123456" . $_POST['salt']);
 $data = array("provider_name", "email", "password", "salt", "sex", "qq", "mobile_phone");
 $getpost = get_post($data);

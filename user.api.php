@@ -31,6 +31,7 @@ if (! isset($content['accesscode']))
         if ($accesscode)
         {
             $return['accesscode'] = $accesscode;
+            //TODO:返回手机号状态
             $return['status'] = STATUS_SUCCESS;
         }
         else $return['status'] = UNAVAIL_USER;

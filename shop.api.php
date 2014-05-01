@@ -93,6 +93,26 @@ case "change_password":
 	        $return['status'] = STATUS_SUCCESS;
 	    else $return['status'] = SYS_BUSY;
 	}
+
+case 'reset_shop_pass':
+    if(!isset($content['phonenumber']))
+        $return['status'] = NO_JSON_KEY;
+    if (! isset($content['confirmcode']))
+    {
+        if($ant->send_verify_code_shop($content['phonenumber']))
+            $return['status'] = STATUS_SUCCESS;
+        else $return['status'] = SYS_BUSY;
+    }
+    else
+    {
+        if(!$ant->reset_shop_pass($content['phonenumber'], $content['confirmcode'],$content['newpass']))
+            $return['status'] = ILLIGAL_PARA;
+        else
+        {
+            $return['status'] = STATUS_SUCCESS;
+            $return['phone_number'] =$content['phonenumber'];
+        }
+    }
 default:
 	$result['status'] = ERROR_CONTENT;
 	break;

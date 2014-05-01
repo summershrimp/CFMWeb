@@ -80,9 +80,7 @@ require_once ROOT_PATH . 'includes/db.class.php';
 $db = new database($db_host,$db_name, $db_user, $db_pass,  $prefix);
 $db_host = $db_user = $db_pass = $db_name = NULL;
 
-/*创建channel对象*/
-require_once ROOT_PATH . 'includes/modules/channel/Channel.class.php';
-$channel = new Channel(CHANNEL_API_KEY,CHANNEL_SECRET_KEY);
+
 
 
 

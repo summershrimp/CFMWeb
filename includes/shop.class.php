@@ -90,8 +90,7 @@ class shop extends apicommon {
 		$result['shop_name'] = $r1['shop_name'];
 		$sql = "SELECT `last_time`, `last_ip`, `mobile_phone`, `sex` FROM " . $GLOBALS['cfm']->table("providers") . " WHERE `provider_id` = " . $r1['owner_id'] . "LIMIT 1";
 		$r2 = $GLOBALS['db']->getRow($sql);
-		$result = $r2;
-		$result = $r1;
+		$result = array_merge($r1, $r2);
 		return $result;
 	}
 	/**
@@ -128,5 +127,14 @@ class shop extends apicommon {
 	{
 	    return $this->change_password($this->id, $old_pass, $new_pass, Role_Shop);
 	}
+	
+	public function send_verify_code_shop($phone)
+	{
+	    $this->send_verify_code(Role_Shop,$phone);
+	}
+	public function reset_shop_shop($phone,$verify_code,$new_pass)
+	{
+	    $this->reset_password($phone,$verify_code,$new_pass);
+	} 
 	
 }

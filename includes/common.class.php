@@ -11,10 +11,16 @@ if (! defined('IN_CFM'))
     die('Hacking attempt');
 }
 
+require_once ROOT_PATH . 'includes/modules/sms/sms.class.php';
+require_once ROOT_PATH . 'includes/modules/channel/channel.class.php';
 
 class apicommon
 {
-    
+    private $channel ;
+    function apicommon()
+    {
+        $this->channel = new Channel(CHANNEL_API_KEY,CHANNEL_SECRET_KEY);
+    }
     public function login($username, $password, $role)
     {
     if ($role === Role_Shop)
@@ -119,8 +125,9 @@ class apicommon
     {
         $sql = "Select * From " . $GLOBALS['cfm']->table('order_info') . " Where `order_id` = $order_id LIMIT 1";
         $arr = $GLOBALS['db']->getRow($sql);
-        if (! $GLOBALS['db']->affected_rows())
+        if ($GLOBALS['db']->num_rows()<1)
             return false;
+        
         $return = $arr;
         if ($is_detail)
         {
@@ -299,6 +306,94 @@ class apicommon
                 $update = false;
         }
         return $update;
+    }
+    
+    private function send_verify_code($role,$phone)
+    {
+        if ($role === Role_Shop)
+        {
+            $db_table = 'providers';
+            $db_uname_column = 'provider_name';
+            $db_id_column = 'provider_id';
+        }
+        elseif ($role === Role_Ant)
+        {
+            $db_table = 'ants';
+            $db_uname_column = 'ant_name';
+            $db_id_column = 'ant_id';
+        }
+        elseif ($role === Role_User)
+        {
+            $db_table = 'customers    ';
+            $db_uname_column = 'openid';
+            $db_id_column = 'user_id';
+        }
+        $verify_code = rand(100000, 999999);
+        
+        $sql = "Select `$db_id_column` as `id` From ".$GLOBALS['cfm']->table($db_table)." Where `mobile_phone` = '$phone' LIMIT 1";
+        $arr = $GLOBALS['db']->getRow($sql);
+        if(!isset($arr['id']))
+            return false;
+        $id = $arr['id'];
+        $sql = "Select * From ".$GLOBALS['cfm']->table('verify_code')." Where `mobile_phone` = '$phone' LIMIT 1";
+        $result = $GLOBALS['db']->getRow($sql);
+        
+        if(isset($result['mobile_phone']))
+        {
+            $sql = "Update ".$GLOBALS['cfm']->table('verify_code')." SET `verify_code` = $verify_code , `role` = $role , `id` = $id Where `mobile_phone` = $phone ";
+            $GLOBALS['db']->query($sql);
+        }
+        else
+        {
+            $sql = "Insert INTO ".$GLOBALS['cfm']->table('verify_code')."(`mobile_phone`, `verify_code`, `role`, `id`)VALUES('$phone','$verify_code','$role','$id')";
+            $GLOBALS['db']->query($sql);
+        }
+        if($GLOBALS['db']->affected_rows()>0)
+            return true;
+        return false;
+    }
+    
+    private function reset_password($phone,$verify_code,$new_pass)
+    {
+        $sql = "Select * From ".$GLOBALS['cfm']->table('verify_code')." Where `mobile_phone` = '$phone' LIMIT 1";
+        $arr = $GLOBALS['db']->getRow($sql);
+        if(!isset($arr['mobile_phone']))
+            return false;
+        
+        $role = $arr['role'];
+        $id = $arr['id'];
+        if ($role === Role_Shop)
+        {
+            $db_table = 'providers';
+            $db_uname_column = 'provider_name';
+            $db_id_column = 'provider_id';
+        }
+        elseif ($role === Role_Ant)
+        {
+            $db_table = 'ants';
+            $db_uname_column = 'ant_name';
+            $db_id_column = 'ant_id';
+        }
+        elseif ($role === Role_User)
+        {
+            $db_table = 'customers    ';
+            $db_uname_column = 'openid';
+            $db_id_column = 'user_id';
+        }
+        
+        if($verify_code == $arr['verify_code'])
+        {
+            $sql = "Select `salt` From ".$GLOBALS['cfm']->table($db_table)." Where `$db_id_column` = '$id' LIMIT 1";
+            $arr2 = $GLOBALS['db']->getRow($sql);
+            if(isset($arr2['salt']))
+                $new_pass = md5($new_pass . $arr['salt']);
+            $sql = "Update ".$GLOBALS['cfm']->table($db_table)." Set `password` = '$new_pass' Where `$db_id_column` = $id";
+            $GLOBALS['db']->query($sql);
+            if($GLOBALS['db']->affected_rows()>0)
+                return true;
+            else return false;
+        }
+        else return false;
     }
     
     private function check_login($username, $password, $role)

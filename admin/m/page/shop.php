@@ -33,7 +33,7 @@ if ($filter == true) {
 	$cond = contact_condition($cond, 'shop_pos', false);
 	$cond = contact_condition($cond, 'owner_id');
 	$cond = contact_condition($cond, 'shop_desc', false);
-	$cond = contact_condition($cond, 'isopen');
+	if (isset($_POST['isopen']) && $_POST['isopen'] != -1) $cond = contact_condition($cond, 'isopen');
 }
 if ($cond == "") {
 	$cond = NULL;

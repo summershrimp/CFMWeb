@@ -73,7 +73,7 @@ class user extends apicommon
     
     public function get_hot_menu($limit_start , $limit_end )
     {
-        $sql = "SELECT * From " . $GLOBALS['cfm']->table('shop_goods') . "Where `onsale` = '1' LIMIT $limit_start , $limit_end ";
+        $sql = "SELECT * From " . $GLOBALS['cfm']->table('shop_goods') . "Where `onsale` = '1' and `unavail` = '0' LIMIT $limit_start , $limit_end ";
         $arr = $GLOBALS['db']->getAll($sql);
         return $arr;
     }

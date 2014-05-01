@@ -123,6 +123,29 @@ elseif($content['act']=='feedback')
         $ant->add_feedback($content['content']);
     $return['status']=STATUS_SUCCESS;
 }
+
+elseif ($content['act'] == 'reset_ant_pass')
+{
+    if(!isset($content['phonenumber']))
+        $return['status'] = NO_JSON_KEY;
+    if (! isset($content['confirmcode']))
+    {
+        if($ant->send_verify_code_ant($content['phonenumber']))
+            $return['status'] = STATUS_SUCCESS;
+        else $return['status'] = SYS_BUSY;
+    }
+    else
+    {
+        if(!$ant->reset_ant_pass($content['phonenumber'], $content['confirmcode'],$content['newpass']))
+            $return['status'] = ILLIGAL_PARA;
+        else
+        {
+            $return['status'] = STATUS_SUCCESS;
+            $return['phone_number'] =$content['phonenumber'];
+        }
+    }
+}
+
 else
 {
     $return["status"]=NO_JSON_KEY;

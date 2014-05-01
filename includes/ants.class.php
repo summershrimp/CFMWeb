@@ -65,9 +65,9 @@ class ants extends apicommon
     public function take_order($order_id)
     {
         $GLOBALS['db']->query("START TRANSACTION");
-        $sql = "Select `ant_id`, `order_status` From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = $order_id  for Update";
+        $sql = "Select `ant_id`, `order_status` , `ant_status` From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = $order_id  for Update";
         $arr = $GLOBALS['db']->getRow($sql);
-        if(isset($arr) && $arr['order_status']==1 && !isset($arr['ant_id']))
+        if(isset($arr) && $arr['order_status'] == 1 && $arr['ant_status'] == 0 && !isset($arr['ant_id']))
         {
             $sql = "Update ".$GLOBALS['cfm']->table('order_info')." Set `ant_id` = $this->ant_id and `ant_time` = '".time()."' and `ant_status` = 1 ";
             $GLOBALS['db']->query($sql);
@@ -75,6 +75,46 @@ class ants extends apicommon
         }
         else $succ=false;
         $GLOBALS['db']->query("COMMIT");
+        if($succ)
+        {
+            $sql = "Select `isopen` From ".$GLOBALS['cfm']-table('shop')." LEFT JOIN ".
+                    $GLOBALS['cfm']-table('order_details')." ON ".
+                    $GLOBALS['cfm']-table('shop').".`shop_id` = ".$GLOBALS['cfm']-table('order_details')." `shop_id` Where ".
+                    $GLOBALS['cfm']-table('order_details')." `order_id` = $order_id ";
+            $result = $GLOBALS['db']->query($sql);
+            while($arr = $GLOBALS['db']->fetch_array($result))
+            {
+                if($arr['isopen'] == 0)
+                    $succ = false;
+            }
+        
+            if($succ)
+            {
+                $sql = "Select `good_id` From ".$GLOBALS['cfm']-table('order_details')." Where `order_id` = $order_id";
+                $result = $GLOBALS['db']->query($sql);
+                while($arr = $GLOBALS['db']->fetch_array($result))
+                {
+                    $sql2 = "Select `unavail` From ".$GLOBALS['cfm']->table('shop_goods')." Where `good_id` = '".$arr['good_id']."' LIMIT 1";
+                    $unavail = $GLOBALS['db']->getOne($sql2);
+                    if($unavail == 1)
+                        $succ = false;
+                }
+            }
+            
+            if(!$succ)
+            {
+                $sql3 = "Update ".$GLOBALS['cfm']->table('order_info')." SET `order_status` = 0 , `ant_status` = 0 , `ant_id` = NULL Where `order_id` = $order_id AND `order_status` = 1 AND `ant_status` = 1 LIMIT 1";
+                $GLOBALS['db']->query($sql3);
+                $succ=false;
+            }
+            else
+            {
+                $sql = "Select `shop_id` From ".$GLOBALS['cfm']->table('order_details')." Where `order_id` = $order_id GROUP BY `shop_id` ";
+                $result = $GLOBALS['db']->query($sql);
+                while($arr = $GLOBALS['db']->fetch_array($result))
+                    $this->push_to_shop($shop_id, $order_id);
+            }
+        }
         return $succ;
     }
     
@@ -94,6 +134,14 @@ class ants extends apicommon
     public function change_ant_pass($old_pass,$new_pass)
     {
         return $this->change_password($this->id, $old_pass, $new_pass, Role_Ant);
+    }
+    public function send_verify_code_ant($phone)
+    {
+        $this->send_verify_code(Role_Ant,$phone);
+    }
+    public function reset_ant_pass($phone,$verify_code,$new_pass)
+    {
+        $this->reset_password($phone,$verify_code,$new_pass);
     }
     public function add_feedback($content)
     {

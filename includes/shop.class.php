@@ -44,14 +44,32 @@ class shop extends apicommon {
      */
 	public function shop_static()
 	{
+	    $date = date("Y-m-d");  //当前日期
+	    $first=1; //$first =1 表示每周星期一为开始时间 0表示每周日为开始时间
+	    $w = date("w", strtotime($date));  //获取当前周的第几天 周日是 0 周一 到周六是 1 -6
+	    $d = $w ? $w - $first : 6;  //如果是周日 -6天
+	    $now_start = date("Y-m-d", strtotime("$date -".$d." days")); //本周开始时间
+	    $now_end = date("Y-m-d", strtotime("$now_start +6 days"));  //本周结束时间
+	    $last_start = date('Y-m-d',strtotime("$now_start - 7 days"));  //上周开始时间
+	    $last_end = date('Y-m-d',strtotime("$now_start - 1 days"));  //上周结束时间
+	    
 	    $end=date("Y-m-d");
-	    $start = date("Y-m-d",mktime(0,0,0,date("m"),date("d")-7,date("Y")));
+	    $start = $now_start;
 	    $sql="Select Count(*) as total ,Sum(tips_amount) as amount From".$GLOBALS['cfm']->table('order_info').
 	    " Where `shop_id` = '$this->shop_id' And `add_date` Between '$start' And '$end' ";
 	    $arr = $GLOBALS['db']->getRow($sql);
 	    $return["week_count"] = $arr['total'];
 	    $return["week_tips"] = $arr['amount'];
-	
+	   
+	    $end=$last_end;
+	    $start = $last_start;
+	    $sql="Select Count(*) as total ,Sum(tips_amount) as amount From".$GLOBALS['cfm']->table('order_info').
+	    " Where `shop_id` = '$this->shop_id' And `add_date` Between '$start' And '$end' ";
+	    $arr = $GLOBALS['db']->getRow($sql);
+	    $return["last_week_count"] = $arr['total'];
+	    $return["last_week_tips"] = $arr['amount'];
+	    
+	    
 	    $end=date("Y-m-d");
 	    $sql="Select Count(*) as total ,Sum(tips_amount) as amount From".$GLOBALS['cfm']->table('order_info').
 	    " Where `shop_id` = '$this->shop_id' And `add_date` = '$end' ";
@@ -66,7 +84,7 @@ class shop extends apicommon {
 	    $arr = $GLOBALS['db']->getRow($sql);
 	    $return["month_count"] = $arr['total'];
 	    $return["month_tips"] = $arr['amount'];
-	
+	    
 	    return $return;
 	}
 	

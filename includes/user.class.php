@@ -176,8 +176,16 @@ class user extends apicommon
     
     private function make_new_order($address, $tips)
     {
+        echo $sql = "Select * From ".$GLOBALS['cfm']->table('user_address')." Where `user_id` = '$this->user_id' LIMIT 1";
+        $query = $GLOBALS['db']->query($sql);
+        if($GLOBALS['db']->num_rows($query)<1)
+            $sql = "Insert INTO ".$GLOBALS['cfm']->table('user_address')." (`user_realname`,`user_phone`,`user_id`,`address`) VALUES ('".$address['user_realname']."','".$address['user_phone']."','$this->user_id','".$address['address']."')";
+        else 
+            $sql = "Update ".$GLOBALS['cfm']->table('user_address')." SET `user_realname`='".$address['user_realname']."', `user_phone`='".$address['user_phone']."', `address`='".$address['address']."' Where `user_id` = '$this->user_id' LIMIT 1";
+        $query = $GLOBALS['db']->query($sql);
+        
         $order_sn = date("Ymd").'0' . substr(str_pad(time(),20,  '0', STR_PAD_LEFT), 15, 20);
-        $sql = "Insert INTO " . $GLOBALS['cfm']->table('order_info') . " (`order_sn`, `user_id`, `user_realname`, `order_status`,`address`,`user_phone`,`tips_amount`, `add_date`) VALUES ('$order_sn', '$this->user_id', '".$address['user_realname']."', 1, '".$address['address']."', '".$address['user_phone']."', '$tips', '".date("Y-m-d")."') ";
+        echo $sql = "Insert INTO " . $GLOBALS['cfm']->table('order_info') . " (`order_sn`, `user_id`, `user_realname`, `order_status`,`address`,`user_phone`,`tips_amount`, `order_time_ms`, `add_date`) VALUES ('$order_sn', '$this->user_id', '".$address['user_realname']."', 1, '".$address['address']."', '".$address['user_phone']."', '$tips', '".microtime(true)."','".date("Y-m-d")."') ";
         $GLOBALS['db']->query($sql);
         $order_id = $GLOBALS['db']->insert_id();
         return $order_id;

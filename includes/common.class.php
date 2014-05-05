@@ -12,7 +12,7 @@ if (! defined('IN_CFM'))
 }
 
 require_once ROOT_PATH . 'includes/modules/sms/sms.class.php';
-require_once ROOT_PATH . 'includes/modules/channel/channel.class.php';
+require_once ROOT_PATH . 'includes/modules/channel/Channel.class.php';
 
 class apicommon
 {
@@ -123,12 +123,23 @@ class apicommon
 
     public function order_details($order_id, $is_detail = false)
     {
+        $sql = "START TRANSCATION";
+        $GLOBALS['db']->query($sql);
         $sql = "Select * From " . $GLOBALS['cfm']->table('order_info') . " Where `order_id` = '$order_id' LIMIT 1";
         $result = $GLOBALS['db']->query($sql);
         
         if (($GLOBALS['db']->num_rows($result))<1)
             return false;
         $arr = $GLOBALS['db']->fetchRow($result);
+        
+        $ms = floatval($result['order_time_ms']);
+        if($ms-microtime(true)>29.0 && $result['ant_status'] == 0)
+        {
+            $sql = "Update ". $GLOBALS['cfm']->table('order_info') ." SET `order_status` = '0' Where `order_id` = '$order_id' AND `order_status` = '1' AND `ant_status` = '0' LIMIT 1 ";
+            $GLOBALS['db']->query($sql);
+            $arr['order_status'] = 0;
+        }
+        $GLOBALS['db']->query("COMMIT");
         $return = $arr;
         if ($is_detail)
         {
@@ -171,7 +182,7 @@ class apicommon
     {
         $sql = "Select * From " . $GLOBALS['cfm']->table('tokens') . " Where `token` = '$token' LIMIT 1";
         $arr = $GLOBALS['db']->getRow($sql);
-        if (! isset($arr))
+        if (! isset($arr['token']))
         {
             $arr['status'] = ILLIGAL_TOKEN;
         }

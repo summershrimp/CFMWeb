@@ -46,7 +46,17 @@ class user extends apicommon
         }
         else return false;
     }
-
+    
+    public function check_verify()
+    {
+        $sql = "Select `mobile_phone` From ".$GLOBALS['cfm']->table('customers')." Where `user_id` = '$this->user_id' LIMIT 1";
+        $arr = $GLOBALS['db']->getRow($sql);
+        if(isset($arr['mobile_phone'])&&$arr['mobile_phone']!="")
+            return true;
+        else 
+            return false;
+    }
+    
     public function check_unpaid()
     {
         $sql = "SELECT `order_id` From " . $GLOBALS['cfm']->table('order_info') . " Where `pay_status` = 0 AND `user_id` = '$this->user_id' ";

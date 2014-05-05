@@ -123,11 +123,12 @@ class apicommon
 
     public function order_details($order_id, $is_detail = false)
     {
-        $sql = "Select * From " . $GLOBALS['cfm']->table('order_info') . " Where `order_id` = $order_id LIMIT 1";
-        $arr = $GLOBALS['db']->getRow($sql);
-        if ($GLOBALS['db']->num_rows()<1)
-            return false;
+        $sql = "Select * From " . $GLOBALS['cfm']->table('order_info') . " Where `order_id` = '$order_id' LIMIT 1";
+        $result = $GLOBALS['db']->query($sql);
         
+        if (($GLOBALS['db']->num_rows($result))<1)
+            return false;
+        $arr = $GLOBALS['db']->fetchRow($result);
         $return = $arr;
         if ($is_detail)
         {

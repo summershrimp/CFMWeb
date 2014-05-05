@@ -23,7 +23,7 @@ class sms
 		$plaintext = implode("&",$param);
         $param['sign'] = "sign=".rawurlencode(base64_encode(hash_hmac("sha1", $plaintext, $this::APPSEC, $raw_output=True)));
         ksort($param);
-        $url .= implode("&",$param);
+        $url = implode("&",$param);
         $url = $this::SCURL . "?" . $url;
 		$ret = $this->curl_get($url);
         $content=json_decode($ret,true);

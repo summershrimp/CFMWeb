@@ -113,6 +113,16 @@ case 'reset_shop_pass':
             $return['phone_number'] =$content['phonenumber'];
         }
     }
+case "reg_channel":
+    if(isset($content['channel_id'])&&isset($content['channel_user_id']))
+    {
+        if( $shop->shop_reg_channel($content['channel_id'],$content['channel_user_id']))
+            $result['status'] = STATUS_SUCCESS;
+        else 
+            $result['status'] = SYS_BUSY;
+    }
+    else $result['status'] = NO_JSON_KEY;
+    break;
 default:
 	$result['status'] = ERROR_CONTENT;
 	break;

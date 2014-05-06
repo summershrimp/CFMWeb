@@ -7,11 +7,14 @@ if (! defined('IN_CFM'))
 
 require_once ROOT_PATH . 'includes/common.class.php';
 require_once ROOT_PATH . 'includes/modules/sms/sms.class.php';
+require_once ROOT_PATH . 'includes/modules/channel/Channel.class.php';
+
 class user extends apicommon
 {
 
-    public $user_id;
-
+    private $user_id;
+    
+    
     public function user($accesscode = NULL)
     {
         if ($accesscode!=NULL)
@@ -25,7 +28,7 @@ class user extends apicommon
 
     public function send_confirm($phone_number)
     {
-        $sms=new sms();
+        $sms=new sms(SMS_APP_ID,SMS_APP_SEC);
         $verify_code = rand(100000,999999);
         $sql="UPDATE ".$GLOBALS['cfm']->table("customers")." SET `verify_code` = '$verify_code' , `mobile_phone` = '$phone_number' Where `user_id` = '$this->user_id' LIMIT 1";
         $GLOBALS['db']->query($sql);
@@ -100,9 +103,9 @@ class user extends apicommon
         return $arr;
     }
 
-    public function place_order($carts, $address, $tips)
+    public function place_order($carts, $address, $tips, $nonce)
     {
-        $order_id = $this->make_new_order($address, $tips);
+        $order_id = $this->make_new_order($address, $tips,$nonce);
         if($order_id<=0)
             return false;
         $total_price=0;
@@ -131,7 +134,19 @@ class user extends apicommon
         $sql="UPDATE ".$GLOBALS['cfm']->table('order_info')." Set `goods_amount` = $total_price Where `order_id` = '$order_id' LIMIT 1 ";
         $GLOBALS['db']->query($sql);
         if($GLOBALS['db']->affected_rows()>0)
+        {
+            $channel = new Channel(CHANNEL_API_KEY,CHANNEL_SECRET_KEY);
+            $options[Channel::TAG_NAME] = 'ants';
+            $message = Array(
+            	'act'=>'new_order',
+            	'order_id'=>$order_id,
+                'tips'=>$tips ,
+                'address'=>$address['address']
+            );
+            $channel->pushMessage(Channel::PUSH_TO_TAG, $messages, 'toAnt'.$order_id,$options);
+            
             return $order_id;
+        }
         else 
         {
             $this->delete_new_order($order_id);
@@ -174,18 +189,25 @@ class user extends apicommon
         $this->feedback($this->user_id,Role_User,$content);
     }
     
-    private function make_new_order($address, $tips)
+    private function make_new_order($address, $tips, $nonce)
     {
-        echo $sql = "Select * From ".$GLOBALS['cfm']->table('user_address')." Where `user_id` = '$this->user_id' LIMIT 1";
+        $sql = "Select `order_id` From ". $GLOBALS['cfm']->table('order_info') ." Where `nonce` = $nonce";
+        $query = $GLOBALS['db']->query($sql);
+        if($GLOBALS['db']->num_rows()>0)
+        {
+            $arr = $GLOBALS['db']->fetchRow($sql);
+            return $order_id;
+        }
+        $sql = "Select * From ".$GLOBALS['cfm']->table('user_address')." Where `user_id` = '$this->user_id' LIMIT 1";
         $query = $GLOBALS['db']->query($sql);
         if($GLOBALS['db']->num_rows($query)<1)
             $sql = "Insert INTO ".$GLOBALS['cfm']->table('user_address')." (`user_realname`,`user_phone`,`user_id`,`address`) VALUES ('".$address['user_realname']."','".$address['user_phone']."','$this->user_id','".$address['address']."')";
         else 
             $sql = "Update ".$GLOBALS['cfm']->table('user_address')." SET `user_realname`='".$address['user_realname']."', `user_phone`='".$address['user_phone']."', `address`='".$address['address']."' Where `user_id` = '$this->user_id' LIMIT 1";
         $query = $GLOBALS['db']->query($sql);
-        
-        $order_sn = date("Ymd").'0' . substr(str_pad(time(),20,  '0', STR_PAD_LEFT), 15, 20);
-        echo $sql = "Insert INTO " . $GLOBALS['cfm']->table('order_info') . " (`order_sn`, `user_id`, `user_realname`, `order_status`,`address`,`user_phone`,`tips_amount`, `order_time_ms`, `add_date`) VALUES ('$order_sn', '$this->user_id', '".$address['user_realname']."', 1, '".$address['address']."', '".$address['user_phone']."', '$tips', '".microtime(true)."','".date("Y-m-d")."') ";
+        srand($this->gen_token());
+        $order_sn = date("Ymd").substr(time(true), -5) . rand(1000, 9999) . intval($this->user_id)%8999 + 1001;
+        echo $sql = "Insert INTO " . $GLOBALS['cfm']->table('order_info') . " (`order_sn`, `user_id`, `user_realname`, `order_status`,`address`,`user_phone`,`tips_amount`, `order_time_ms`, `add_date`,`nonce`) VALUES ('$order_sn', '$this->user_id', '".$address['user_realname']."', 1, '".$address['address']."', '".$address['user_phone']."', '$tips', '".microtime(true)."','".date("Y-m-d")."','$nonce') ";
         $GLOBALS['db']->query($sql);
         $order_id = $GLOBALS['db']->insert_id();
         return $order_id;

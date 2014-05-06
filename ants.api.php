@@ -145,7 +145,17 @@ elseif ($content['act'] == 'reset_ant_pass')
         }
     }
 }
-
+elseif ($content['act'] == 'reg_channel')
+{
+    if(isset($content['channel_id'])&&isset($content['channel_user_id']))
+    {
+        if( $ant->ant_reg_channel($content['channel_id'],$content['channel_user_id']))
+            $result['status'] = STATUS_SUCCESS;
+        else
+            $result['status'] = SYS_BUSY;
+    }
+    else $result['status'] = NO_JSON_KEY;
+}
 else
 {
     $return["status"]=NO_JSON_KEY;

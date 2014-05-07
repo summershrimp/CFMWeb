@@ -128,7 +128,7 @@ class apicommon
         $arr = $GLOBALS['db']->fetchRow($result);
         
         $ms = floatval($result['order_time_ms']);
-        if($ms-microtime(true)>29.0 && $result['ant_status'] == 0)
+        if($ms-time()>29 && $result['ant_status'] == 0)
         {
             $sql = "Update ". $GLOBALS['cfm']->table('order_info') ." SET `order_status` = '0' Where `order_id` = '$order_id' AND `order_status` = '1' AND `ant_status` = '0' LIMIT 1 ";
             $GLOBALS['db']->query($sql);
@@ -177,6 +177,7 @@ class apicommon
     {
         $sql = "Select * From " . $GLOBALS['cfm']->table('tokens') . " Where `token` = '$token' LIMIT 1";
         $arr = $GLOBALS['db']->getRow($sql);
+        
         if (! isset($arr['token']))
         {
             $arr['status'] = ILLIGAL_TOKEN;
@@ -184,7 +185,7 @@ class apicommon
         else
         {
             $arr['status'] = STATUS_SUCCESS;
-            if ($arr['gen_time'] > time() + 86400 * 2)
+            if ($arr['gen_time']  < (time() - 86400 * 2 ))
                 $arr['status'] = TIMEOUT_ACCESS_TOKEN;
             unset($arr['gen_time']);
             unset($arr['token']);

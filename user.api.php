@@ -74,16 +74,9 @@ if ($content['act'] == 'confirm_user_phone')
 elseif ($content['act'] == 'check_unpaid')
 {
     $ans = $user->check_unpaid();
-    if ($ans)
-    {
-        $return['status'] = STATUS_SUCCESS;
-        $return['unpaid'] = $ans;
-    }
-    else
-    {
-        $return['status'] = STATUS_SUCCESS;
-        $return['unpaid'] = STATUS_SUCCESS;
-    }
+    $return['status'] = STATUS_SUCCESS;
+    $return['unpaid'] = $ans;
+   
 }
 elseif ($content['act'] == 'get_shop_menu')
 {

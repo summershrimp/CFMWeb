@@ -210,7 +210,7 @@ class apicommon
         return $access_code;
     }
 
-    private function genToken($len = 32, $md5 = true)
+    public function genToken($len = 32, $md5 = true)
     {
         // Seed random number generator
         // Only needed for PHP versions prior to 4.2

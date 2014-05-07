@@ -193,7 +193,7 @@ class user extends apicommon
     {
         $sql = "Select `order_id` From ". $GLOBALS['cfm']->table('order_info') ." Where `nonce` = $nonce";
         $query = $GLOBALS['db']->query($sql);
-        if($GLOBALS['db']->num_rows()>0)
+        if($GLOBALS['db']->num_rows($query)>0)
         {
             $arr = $GLOBALS['db']->fetchRow($sql);
             return $order_id;
@@ -205,7 +205,7 @@ class user extends apicommon
         else 
             $sql = "Update ".$GLOBALS['cfm']->table('user_address')." SET `user_realname`='".$address['user_realname']."', `user_phone`='".$address['user_phone']."', `address`='".$address['address']."' Where `user_id` = '$this->user_id' LIMIT 1";
         $query = $GLOBALS['db']->query($sql);
-        srand($this->gen_token());
+        srand($this->genToken());
         $order_sn = date("Ymd").substr(time(true), -5) . rand(1000, 9999) . intval($this->user_id)%8999 + 1001;
         echo $sql = "Insert INTO " . $GLOBALS['cfm']->table('order_info') . " (`order_sn`, `user_id`, `user_realname`, `order_status`,`address`,`user_phone`,`tips_amount`, `order_time_ms`, `add_date`,`nonce`) VALUES ('$order_sn', '$this->user_id', '".$address['user_realname']."', 1, '".$address['address']."', '".$address['user_phone']."', '$tips', '".time()."','".date("Y-m-d")."','$nonce') ";
         $GLOBALS['db']->query($sql);

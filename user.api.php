@@ -74,16 +74,9 @@ if ($content['act'] == 'confirm_user_phone')
 elseif ($content['act'] == 'check_unpaid')
 {
     $ans = $user->check_unpaid();
-    if ($ans)
-    {
-        $return['status'] = STATUS_SUCCESS;
-        $return['unpaid'] = $ans;
-    }
-    else
-    {
-        $return['status'] = STATUS_SUCCESS;
-        $return['unpaid'] = STATUS_SUCCESS;
-    }
+    $return['status'] = STATUS_SUCCESS;
+    $return['unpaid'] = $ans;
+   
 }
 elseif ($content['act'] == 'get_shop_menu')
 {
@@ -161,11 +154,12 @@ elseif ($content['act'] == 'place_order')
 {
     if(!$user->check_unpaid())
     {
-        $order_id = $user->place_order($content['cart'], $content['address'], $content['tips']);
+        $order_id = $user->place_order($content['cart'], $content['address'], $content['tips'],$content['nonce']);
         $order_sn = $user->get_order_sn($order_id);
         $return['status'] = STATUS_SUCCESS;
         $return['order_id'] = $order_id;
         $return['order_sn'] = $order_sn;
+        $return['nonce'] = $content['nonce'];
     }
     else 
         $return['status'] = UNAVAIL_NEW_ORDER;

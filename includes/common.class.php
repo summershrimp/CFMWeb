@@ -12,22 +12,17 @@ if (! defined('IN_CFM'))
 }
 
 require_once ROOT_PATH . 'includes/modules/sms/sms.class.php';
-require_once ROOT_PATH . 'includes/modules/channel/Channel.class.php';
 
 class apicommon
 {
-    private $channel ;
-    function apicommon()
-    {
-        $this->channel = new Channel(CHANNEL_API_KEY,CHANNEL_SECRET_KEY);
-    }
+    
     public function login($username, $password, $role)
     {
-    if ($role === Role_Shop)
+        if ($role === Role_Shop)
         {
             $db_table = 'providers';
             $db_uname_column = 'provider_name';
-            $db_id_column = 'provider_id';
+            $db_id_column = 'shop_id';
         }
         elseif ($role === Role_Ant)
         {
@@ -68,7 +63,7 @@ class apicommon
         if ($role === Role_Shop)
         {
             $db_table = 'providers';
-            $db_id_column = 'provider_id';
+            $db_id_column = 'shop_id';
         }
         elseif ($role === Role_Ant)
         {
@@ -97,7 +92,7 @@ class apicommon
             $db_id_column = 'shop_id';
         elseif ($role === Role_User)
             $db_id_column = 'user_id';
-        $sql = "Select `order_id`, `order_sn`, `goods_amount`, `tips_amount`, `order_time`, `user_realname`, `order_status`, `ant_status`, `confirm_status`, `taking_status`, `shipping_status` From " . $GLOBALS['cfm']->table("order_info") . " Where `$db_id_column` = $id ";
+        $sql = "Select `order_id`, `order_sn`, `goods_amount`, `tips_amount`, `order_time`, `user_realname`, `order_status`, `ant_status`, `confirm_status`, `taking_status`, `shipping_status` From " . $GLOBALS['cfm']->table("order_info") . " Where `$db_id_column` = $id AND `order_status` = 1 ";
         if (isset($p_start) && isset($p_end))
             $limit = "And `add_date` Between '$p_start' And '$p_end'";
         else
@@ -133,7 +128,7 @@ class apicommon
         $arr = $GLOBALS['db']->fetchRow($result);
         
         $ms = floatval($result['order_time_ms']);
-        if($ms-microtime(true)>29.0 && $result['ant_status'] == 0)
+        if($ms-time()>29 && $result['ant_status'] == 0)
         {
             $sql = "Update ". $GLOBALS['cfm']->table('order_info') ." SET `order_status` = '0' Where `order_id` = '$order_id' AND `order_status` = '1' AND `ant_status` = '0' LIMIT 1 ";
             $GLOBALS['db']->query($sql);
@@ -182,6 +177,7 @@ class apicommon
     {
         $sql = "Select * From " . $GLOBALS['cfm']->table('tokens') . " Where `token` = '$token' LIMIT 1";
         $arr = $GLOBALS['db']->getRow($sql);
+        
         if (! isset($arr['token']))
         {
             $arr['status'] = ILLIGAL_TOKEN;
@@ -189,7 +185,7 @@ class apicommon
         else
         {
             $arr['status'] = STATUS_SUCCESS;
-            if ($arr['gen_time'] > time() + 86400 * 2)
+            if ($arr['gen_time']  < (time() - 86400 * 2 ))
                 $arr['status'] = TIMEOUT_ACCESS_TOKEN;
             unset($arr['gen_time']);
             unset($arr['token']);
@@ -214,7 +210,7 @@ class apicommon
         return $access_code;
     }
 
-    private function genToken($len = 32, $md5 = true)
+    public function genToken($len = 32, $md5 = true)
     {
         // Seed random number generator
         // Only needed for PHP versions prior to 4.2
@@ -249,7 +245,7 @@ class apicommon
         {
             $db_table = 'providers';
             $db_uname_column = 'provider_name';
-            $db_id_column = 'provider_id';
+            $db_id_column = 'shop_id';
         }
         elseif ($role === Role_Ant)
         {
@@ -282,7 +278,7 @@ class apicommon
         {
             $db_table = 'providers';
             $db_uname_column = 'provider_name';
-            $db_id_column = 'provider_id';
+            $db_id_column = 'shop_id';
         }
         elseif ($role === Role_Ant)
         {
@@ -326,7 +322,7 @@ class apicommon
         {
             $db_table = 'providers';
             $db_uname_column = 'provider_name';
-            $db_id_column = 'provider_id';
+            $db_id_column = 'shop_id';
         }
         elseif ($role === Role_Ant)
         {
@@ -361,7 +357,12 @@ class apicommon
             $GLOBALS['db']->query($sql);
         }
         if($GLOBALS['db']->affected_rows()>0)
+        {
+
+            $sms=new sms(SMS_APP_ID,SMS_APP_SEC);
+            $sms->send_sms($phone, $verify_code);
             return true;
+        }
         return false;
     }
     
@@ -378,7 +379,7 @@ class apicommon
         {
             $db_table = 'providers';
             $db_uname_column = 'provider_name';
-            $db_id_column = 'provider_id';
+            $db_id_column = 'shop_id';
         }
         elseif ($role === Role_Ant)
         {
@@ -414,7 +415,7 @@ class apicommon
         {
             $db_table = 'providers';
             $db_uname_column = 'provider_name';
-            $db_id_column = 'provider_id';
+            $db_id_column = 'shop_id';
         }
         elseif ($role === Role_Ant)
         {
@@ -429,7 +430,7 @@ class apicommon
             $db_id_column = 'user_id';
         }
 
-        $sql = "Select `$db_id_column`, `password` ,`salt`, `$db_id_column` From " . $GLOBALS['cfm']->table($db_table) . " Where  `$db_uname_column`  = '$username' LIMIT 1";
+        $sql = "Select `$db_id_column`, `password` ,`salt` From " . $GLOBALS['cfm']->table($db_table) . " Where  `$db_uname_column`  = '$username' LIMIT 1";
         $arr = $GLOBALS['db']->getRow($sql);
         if (! isset($arr))
         {
@@ -446,6 +447,30 @@ class apicommon
         else
             return false;
     }
+    
+    private function reg_channel($role,$id,$channel_id,$channel_user_id)
+    {
+        if ($role === Role_Shop)
+        {
+            $db_table = 'providers';
+            $db_uname_column = 'provider_name';
+            $db_id_column = 'shop_id';
+        }
+        elseif ($role === Role_Ant)
+        {
+            $db_table = 'ants';
+            $db_uname_column = 'ant_name';
+            $db_id_column = 'ant_id';
+        }
+        else return false;
+        
+        $sql = "Update ".$GLOBALS['cfm']->table($db_table)." SET `channel_id` = '$channel_id', `channel_user_id` = '$channel_user_id' Where `$db_id_column` = '$id' LIMIT 1";
+        $GLOBALS['db']->query($sql);
+        if($GLOBALS['db']->affected_rows()>0)
+            return true;
+        else return false;
+    }
+    
     private function get_IP() 
     { 
         if (@$_SERVER["HTTP_X_FORWARDED_FOR"]) 

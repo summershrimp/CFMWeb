@@ -36,5 +36,9 @@ define('CHANNEL_API_KEY','DGv8TZhmZyGglKQojU2Uo6BI');
 
 define('CHANNEL_SECRET_KEY','8okSd8tTmpU8c9KVNDXGudiRiS3PlhSB');
 
+define('SMS_APP_ID',"391791200000035308");
+
+define('SMS_APP_SEC',"bea5b8c7025d6357d2d6c151ec017c3e");
+
 ?>
 

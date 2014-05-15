@@ -137,6 +137,22 @@ class ants extends apicommon
         return $succ;
     }
     
+    private function push_to_shop($shop_id,$order_id)
+    {
+        $sql = "Select `channel_id`,`channel_user_id` From ".$GLOBALS['ecs']->table('providers')." Where `shop_id` = $shop_id LIMIT 1";
+        $arr = $GLOBALS['db']->getRow($sql);
+        $channel = new Channel(CHANNEL_API_KEY,CHANNEL_SECRET_KEY);
+        $options[Channel::USER_ID] = $arr['channel_user_id'];
+        $options[Channel::CHANNEL_ID] = $arr['channel_id'];
+        $message = Array(
+            'act'=>'new_order_check',
+            'order_id'=>$order_id
+        );
+        $channel->pushMessage(Channel::PUSH_TO_USER, $messages, 'toShop'.$order_id,$options);
+        
+        return $order_id;
+    }
+    
     public function take_goods($order_id)
     {
         $sql = "update ".$GLOBALS['cfm']->table('order_info')." Set `taking_status` = 1 Where `order_id` = '$order_id' AND `ant_id` = '$this->ant_id' AND `order_status` = 1 AND `ant_status` = 1";
@@ -146,24 +162,34 @@ class ants extends apicommon
         return true;
     }
     
+    public function ant_reg_channel($channel_id,$channel_user_id)
+    {
+        $this->reg_channel(Role_Ant,$this->ant_id,$channel_id,$channel_user_id);
+    }
+    
     public function get_history($p_start, $p_end)
     {
         return $this->history($this->ant_id, Role_Ant, $p_start, $p_end);
     }
+    
     public function change_ant_pass($old_pass,$new_pass)
     {
         return $this->change_password($this->id, $old_pass, $new_pass, Role_Ant);
     }
+    
     public function send_verify_code_ant($phone)
     {
         $this->send_verify_code(Role_Ant,$phone);
     }
+    
     public function reset_ant_pass($phone,$verify_code,$new_pass)
     {
         $this->reset_password($phone,$verify_code,$new_pass);
     }
+    
     public function add_feedback($content)
     {
         $this->feedback($this->ant_id,Role_Ant,$content);
     }
+    
 }

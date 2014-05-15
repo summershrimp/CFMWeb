@@ -5,23 +5,26 @@ class sms
     const ACURL = "https://oauth.api.189.cn/emp/oauth2/v3/access_token";
     const SCURL = "http://api.189.cn/v2/dm/randcode/token";
     const SMSURL = "http://api.189.cn/v2/dm/randcode/sendSms";
-    function sms()
+    function sms($appid,$appSecret)
     {
+        $this->appid = $appid;
+        $this->appSecret = $appSecret;
+        $acdata="grant_type=client_credentials&app_id=$appid&app_secret=$appSecret";
         $option=Array(
             CURLOPT_SSL_VERIFYPEER => FALSE,
             CURLOPT_SSL_VERIFYHOST => FALSE
         );
-        $ret = $this->curl_post($this::ACURL,$this::ACDATA,$option);
+        $ret = $this->curl_post($this::ACURL,$acdata,$option);
         $content = json_decode($ret,true);
         if($content['res_code']==0)
             $this->access_token=$content['access_token'];
         $param=Array(
 			"access_token" => "access_token=" . $this->access_token,
-			"app_id"=> "app_id=" . $this::APPID,
+			"app_id"=> "app_id=" . $appid,
 			"timestamp"=> "timestamp=" . date("Y-m-d H:i:s")
         );
 		$plaintext = implode("&",$param);
-        $param['sign'] = "sign=".rawurlencode(base64_encode(hash_hmac("sha1", $plaintext, $this::APPSEC, $raw_output=True)));
+        $param['sign'] = "sign=".rawurlencode(base64_encode(hash_hmac("sha1", $plaintext, $appSecret, $raw_output=True)));
         ksort($param);
         $url = implode("&",$param);
         $url = $this::SCURL . "?" . $url;
@@ -37,7 +40,7 @@ class sms
     {
         $url = "http://api.189.cn/v2/dm/randcode/sendSms";
         
-        $param['app_id']= "app_id=".$this::APPID;
+        $param['app_id']= "app_id=".$this->appid;
         $param['access_token'] = "access_token=".$this->access_token;
         $param['timestamp'] = "timestamp=".date("Y-m-d H:i:s");
         $param['token'] = "token=".$this->sms_token;
@@ -46,7 +49,7 @@ class sms
         $param['exp_time'] = "exp_time=";
         ksort($param);
         $plaintext = implode("&",$param);
-        $param['sign'] = "sign=".rawurlencode(base64_encode(hash_hmac("sha1", $plaintext, $this::APPSEC, $raw_output=True)));
+        $param['sign'] = "sign=".rawurlencode(base64_encode(hash_hmac("sha1", $plaintext, $this->appSecret, $raw_output=True)));
         ksort($param);
         $str = implode("&",$param);
         $result = $this->curl_post($url,$str);
@@ -82,10 +85,11 @@ class sms
         return $data;
     }
     
-    const APPID="391791200000035308";
-    const APPSEC="bea5b8c7025d6357d2d6c151ec017c3e";
+
     
-    const ACDATA="grant_type=client_credentials&app_id=391791200000035308&app_secret=bea5b8c7025d6357d2d6c151ec017c3e";
+    private $appid;
+    private $appSecret;
+    
     private $access_token;
     private $sms_token;
 } 

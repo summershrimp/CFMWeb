@@ -124,12 +124,53 @@ class shop extends apicommon {
 	/**
 	 * 商店接单
 	 */
-	function accept_order($order_id) {
-		$sql = "UPDATE " . $GLOBALS['cfm']->table("order_info") . "SET `order_status` = 1 WHERE `order_id` = $order_id AND `order_status` = 0 LIMIT 1";
+	function accept_order($order_id) { 
+		$sql = "UPDATE " . $GLOBALS['cfm']->table("order_info") . "SET `order_status` = 1 WHERE `order_id` = $order_id AND `order_status` = 0 AND `shop_id` = '$shop_id'  LIMIT 1";
 		$t = $GLOBALS['db']->query($sql);
 		if($GLOBALS['db']->affected_rows()==1)
+		{
+		    $sql = "Select `ant_id` From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = $order_id LIMIT 1";
+		    $ant_id = $GLOBALS['db']->getOne($sql);
+		    $this->push_to_ant($ant_id, $order_id, 1);
 		    return 1;
+		}
 		else return 0;
+	}
+	
+	function cancel_order($order_id) {
+	    $sql = "UPDATE " . $GLOBALS['cfm']->table("order_info") . "SET `order_status` = -1 WHERE `order_id` = $order_id AND `order_status` = 0 AND `shop_id` = '$shop_id' LIMIT 1";
+	    $t = $GLOBALS['db']->query($sql);
+	    if($GLOBALS['db']->affected_rows()==1)
+	    {
+	        $sql = "Select `ant_id` From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = $order_id LIMIT 1";
+	        $ant_id = $GLOBALS['db']->getOne($sql);
+	        $this->push_to_ant($ant_id, $order_id, -1);
+	        return 1;
+	    }
+	    else return 0;
+	}
+	
+	
+	private function push_to_ant($ant_id,$order_id,$order_status)
+	{
+	    $sql = "Select `channel_id`,`channel_user_id` From ".$GLOBALS['ecs']->table('ants')." Where `ant_id` = $ant_id LIMIT 1";
+	    $arr = $GLOBALS['db']->getRow($sql);
+	    $channel = new Channel(CHANNEL_API_KEY,CHANNEL_SECRET_KEY);
+	    $options[Channel::USER_ID] = $arr['channel_user_id'];
+	    $options[Channel::CHANNEL_ID] = $arr['channel_id'];
+	    $message = Array(
+	        'act'=>'new_order_confirm',
+	        'order_id'=>$order_id,
+	        'order_status'=>$order_status
+	    );
+	    $channel->pushMessage(Channel::PUSH_TO_USER, $messages, 'toAntConfirm'.$order_id,$options);
+	
+	    return $order_id;
+	}
+	
+	public function shop_reg_channel($channel_id,$channel_user_id)
+	{
+	    $this->reg_channel(Role_Shop,$this->shop_id,$channel_id,$channel_user_id);
 	}
 	
 	public function switch_shop_status($status)

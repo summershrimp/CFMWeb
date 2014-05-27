@@ -109,29 +109,31 @@ class user extends apicommon
         if($order_id<=0)
             return false;
         $total_price=0;
+        $last_id = -1;
         foreach ($carts as $good)
         {
-            $sql = "Select `good_name`, `price`, `unavail` From " . $GLOBALS['cfm']->table('shop_goods') . " Where `good_id` = '" . trim($good['good_id']) . "'";
+            $sql = "Select `good_name`, `price`, `unavail`, `shop_id` From " . $GLOBALS['cfm']->table('shop_goods') . " Where `good_id` = '" . trim($good['good_id']) . "'";
             $arr = $GLOBALS['db']->getRow($sql);
+            if($last_id = -1) $last_id = $arr['shop_id'];
             if(!isset($arr['unavail']))
-                $arr['unavail']=1;
-            if($arr['unavail']==1)
+                $arr['unavail']=0;
+            if($arr['unavail']==1||$last_id!=$arr['shop_id'])
             {
                 $this->delete_new_order($order_id);
                 return false;
             }
             $good_price = $arr['price'];
             $good_name = $arr['good_name'];
-            
+            if($last_id = -1) $last_id = $arr['shop_id'];
             $total_price+=floatval($good_price);
             
             $sql = "Insert INTO " . $GLOBALS['cfm']->table('order_details') . " (`order_id`, `good_id`,`good_name`,`good_number`,`good_price`) 
-             VALUES('" . $order_id . "','" . $good['good_id'] . "','" . $good_name . "', '" . $good['amount'] . "',
-               '" . $good_price . "' )";
+             VALUES('" . $order_id . "','" . $good['good_id'] . "','" . $good_name . "', '" . $good['amount'] . "','" . $good_price . "' )";
             $GLOBALS['db']->query($sql);
+            $last_id = $arr['this_id'];
             
         }
-        $sql="UPDATE ".$GLOBALS['cfm']->table('order_info')." Set `goods_amount` = $total_price Where `order_id` = '$order_id' LIMIT 1 ";
+        $sql="UPDATE ".$GLOBALS['cfm']->table('order_info')." Set `goods_amount` = $total_price , `shop_id` = '$last_id' Where `order_id` = '$order_id' LIMIT 1 ";
         $GLOBALS['db']->query($sql);
         if($GLOBALS['db']->affected_rows()>0)
         {

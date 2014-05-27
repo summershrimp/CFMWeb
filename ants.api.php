@@ -36,8 +36,6 @@ if (! isset($content['accesscode']))
         else 
             $return['status'] = UNAVAIL_USER;
     }
-    elseif(!isset($content['openid']))
-        $return['status'] = NO_JSON_KEY;
     else
         $return['status'] = NO_TOKEN_PARA;
     echo json_encode($return);
@@ -82,7 +80,7 @@ elseif($content['act']=='switch_status')
     }
     else 
     {
-        $return = $ant->switch_status($status);
+        $return = $ant->switch_status($content['ant_status']);
         $return ['status']=STATUS_SUCCESS; 
     }
 }

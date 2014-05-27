@@ -63,7 +63,7 @@ class apicommon
         if ($role === Role_Shop)
         {
             $db_table = 'providers';
-            $db_id_column = 'shop_id';
+            $db_id_column = 'provider_id';
         }
         elseif ($role === Role_Ant)
         {
@@ -93,6 +93,7 @@ class apicommon
         elseif ($role === Role_User)
             $db_id_column = 'user_id';
         $sql = "Select `order_id`, `order_sn`, `goods_amount`, `tips_amount`, `order_time`, `user_realname`, `order_status`, `ant_status`, `confirm_status`, `taking_status`, `shipping_status` From " . $GLOBALS['cfm']->table("order_info") . " Where `$db_id_column` = $id AND `order_status` = 1 ";
+       
         if (isset($p_start) && isset($p_end))
             $limit = "And `add_date` Between '$p_start' And '$p_end'";
         else
@@ -193,7 +194,7 @@ class apicommon
         return $arr;
     }
     
-    private function feedback($id, $role, $content)
+    public function feedback($id, $role, $content)
     {
         $sql = "Insert INTO ".$GLOBALS['cfm']->table("feedback")." (`id`,`role`,`content`,) VALUES ('$id', '$role', '$content') ";
         $GLOBALS['db']->query($sql);
@@ -272,7 +273,7 @@ class apicommon
         return false;
     }
 
-    private function change_password($id, $old_pass, $new_pass, $role)
+    public function change_password($id, $old_pass, $new_pass, $role)
     {
         if ($role === Role_Shop)
         {
@@ -316,7 +317,7 @@ class apicommon
         return $update;
     }
     
-    private function send_verify_code($role,$phone)
+    public function send_verify_code($role,$phone)
     {
         if ($role === Role_Shop)
         {
@@ -366,7 +367,7 @@ class apicommon
         return false;
     }
     
-    private function reset_password($phone,$verify_code,$new_pass)
+    public function reset_password($phone,$verify_code,$new_pass)
     {
         $sql = "Select * From ".$GLOBALS['cfm']->table('verify_code')." Where `mobile_phone` = '$phone' LIMIT 1";
         $arr = $GLOBALS['db']->getRow($sql);
@@ -415,7 +416,7 @@ class apicommon
         {
             $db_table = 'providers';
             $db_uname_column = 'provider_name';
-            $db_id_column = 'shop_id';
+            $db_id_column = 'provider_id';
         }
         elseif ($role === Role_Ant)
         {
@@ -448,7 +449,7 @@ class apicommon
             return false;
     }
     
-    private function reg_channel($role,$id,$channel_id,$channel_user_id)
+    public function reg_channel($role,$id,$channel_id,$channel_user_id)
     {
         if ($role === Role_Shop)
         {

@@ -42,7 +42,7 @@ class shop extends apicommon {
     /**
      * 商店信息（销售数量和销售总额）
      */
-	public function shop_static()
+	public function shop_static()//TODO:统计函数存在问题，待修改
 	{
 	    $date = date("Y-m-d");  //当前日期
 	    $first=1; //$first =1 表示每周星期一为开始时间 0表示每周日为开始时间
@@ -55,35 +55,35 @@ class shop extends apicommon {
 	    
 	    $end=date("Y-m-d");
 	    $start = $now_start;
-	    $sql="Select Count(*) as total ,Sum(tips_amount) as amount From".$GLOBALS['cfm']->table('order_info').
+	    $sql="Select Count(*) as total ,Sum(goods_amount) as amount From".$GLOBALS['cfm']->table('order_info').
 	    " Where `shop_id` = '$this->shop_id' And `add_date` Between '$start' And '$end' ";
 	    $arr = $GLOBALS['db']->getRow($sql);
 	    $return["week_count"] = $arr['total'];
-	    $return["week_tips"] = $arr['amount'];
+	    $return["week_amount"] = $arr['amount'];
 	   
 	    $end=$last_end;
 	    $start = $last_start;
-	    $sql="Select Count(*) as total ,Sum(tips_amount) as amount From".$GLOBALS['cfm']->table('order_info').
+	    $sql="Select Count(*) as total ,Sum(goods_amount) as amount From".$GLOBALS['cfm']->table('order_info').
 	    " Where `shop_id` = '$this->shop_id' And `add_date` Between '$start' And '$end' ";
 	    $arr = $GLOBALS['db']->getRow($sql);
 	    $return["last_week_count"] = $arr['total'];
-	    $return["last_week_tips"] = $arr['amount'];
+	    $return["last_week_amount"] = $arr['amount'];
 	    
 	    
 	    $end=date("Y-m-d");
-	    $sql="Select Count(*) as total ,Sum(tips_amount) as amount From".$GLOBALS['cfm']->table('order_info').
+	    $sql="Select Count(*) as total ,Sum(goods_amount) as amount From".$GLOBALS['cfm']->table('order_info').
 	    " Where `shop_id` = '$this->shop_id' And `add_date` = '$end' ";
 	    $arr = $GLOBALS['db']->getRow($sql);
 	    $return["day_count"] = $arr['total'];
-	    $return["day_tips"] = $arr['amount'];
+	    $return["day_amount"] = $arr['amount'];
 	
 	    $end=date("Y-m-d");
 	    $start = date("Y-m-d",mktime(0,0,0,date("m"),1,date("Y")));
-	    $sql="Select Count(*) as total ,Sum(tips_amount) as amount From".$GLOBALS['cfm']->table('order_info').
+	    $sql="Select Count(*) as total ,Sum(goods_amount) as amount From".$GLOBALS['cfm']->table('order_info').
 	    " Where `shop_id` = '$this->shop_id' And `add_date` Between '$start' And '$end' ";
 	    $arr = $GLOBALS['db']->getRow($sql);
 	    $return["month_count"] = $arr['total'];
-	    $return["month_tips"] = $arr['amount'];
+	    $return["month_amount"] = $arr['amount'];
 	    
 	    return $return;
 	}
@@ -102,11 +102,11 @@ class shop extends apicommon {
 	/**
 	 * 获取商店业主信息
 	 */
-	function get_shop_info($id) {
-		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("shop") . " WHERE `shop_id` = $id LIMIT 1";
+	function get_shop_info() {
+
+		$sql = "SELECT * FROM " . $GLOBALS['cfm']->table("shop") . " WHERE `shop_id` = $this->shop_id LIMIT 1";
 		$r1 = $GLOBALS['db']->getRow($sql);
-		$result['shop_name'] = $r1['shop_name'];
-		$sql = "SELECT `last_time`, `last_ip`, `mobile_phone`, `sex` FROM " . $GLOBALS['cfm']->table("providers") . " WHERE `provider_id` = " . $r1['owner_id'] . "LIMIT 1";
+		$sql = "SELECT `last_time`, `last_ip`, `mobile_phone`, `sex` FROM " . $GLOBALS['cfm']->table("providers") . " WHERE `provider_id` = " . $r1['owner_id'] . " LIMIT 1";
 		$r2 = $GLOBALS['db']->getRow($sql);
 		$result = array_merge($r1, $r2);
 		return $result;
@@ -125,8 +125,8 @@ class shop extends apicommon {
 	 * 商店接单
 	 */
 	function accept_order($order_id) { 
-		$sql = "UPDATE " . $GLOBALS['cfm']->table("order_info") . "SET `order_status` = 1 WHERE `order_id` = $order_id AND `order_status` = 0 AND `shop_id` = '$shop_id'  LIMIT 1";
-		$t = $GLOBALS['db']->query($sql);
+		$sql = "UPDATE " . $GLOBALS['cfm']->table("order_info") . "SET `confirm_status` = 1 WHERE `order_id` = $order_id AND `order_status` = 1 AND `shop_id` = '$this->shop_id'  LIMIT 1";
+		$GLOBALS['db']->query($sql);
 		if($GLOBALS['db']->affected_rows()==1)
 		{
 		    $sql = "Select `ant_id` From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = $order_id LIMIT 1";
@@ -145,7 +145,7 @@ class shop extends apicommon {
 	        $sql = "Select `ant_id` From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = $order_id LIMIT 1";
 	        $ant_id = $GLOBALS['db']->getOne($sql);
 	        $this->push_to_ant($ant_id, $order_id, -1);
-	        return 1;
+	        return -1;
 	    }
 	    else return 0;
 	}
@@ -177,11 +177,12 @@ class shop extends apicommon {
 	{
 	    $sql = "UPDATE " . $GLOBALS['cfm']->table('shop') . " SET `isopen` = '$status' Where `shop_id` = '$this->shop_id' LIMIT 1";
 	    $GLOBALS['db']->query($sql);
-	    if($GLOBALS['db']->affected_rows()==1)
-	        return true;
-	    return false;
+	    return $status;
 	}
-	
+	public function shop_good_menu($limit_s=0,$limit_e=20)
+	{
+	    return $this->get_good_menu($this->shop_id,$limit_s,$limit_e);
+	}
 	public function change_shop_pass($old_pass,$new_pass)
 	{
 	    return $this->change_password($this->id, $old_pass, $new_pass, Role_Shop);
@@ -195,5 +196,9 @@ class shop extends apicommon {
 	{
 	    $this->reset_password($phone,$verify_code,$new_pass);
 	} 
+	public function add_feedback($content)
+	{
+	    $this->feedback($this->shop_id,Role_Shop,$content);
+	}
 	
 }

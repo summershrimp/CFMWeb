@@ -5,6 +5,8 @@ if (! defined ( 'IN_CFM' ))
 }
 
 require_once ROOT_PATH . 'includes/common.class.php';
+require_once ROOT_PATH . 'includes/modules/sms/sms.class.php';
+require_once ROOT_PATH . 'includes/modules/channel/Channel.class.php';
 
 class ants extends apicommon
 {
@@ -42,7 +44,7 @@ class ants extends apicommon
         */
         
         $end=$last_end;
-        $start = last_start;
+        $start = $last_start;
         $sql="Select Count(*) as total ,Sum(tips_amount) as amount From".$GLOBALS['cfm']->table('order_info').
         " Where `ant_id` = '$this->ant_id' And `add_date` Between '$start' And '$end' ";
         $arr = $GLOBALS['db']->getRow($sql);
@@ -77,14 +79,17 @@ class ants extends apicommon
     
     public function switch_status($status)
     {
-        $sql = "Update ".$GLOBALS['cfm']->table('ant')." Set `ant_online` = $status";
+        $sql = "Update ".$GLOBALS['cfm']->table('ants')." Set `ant_online` = $status Where `ant_id` = '".$this->ant_id."'";
         $GLOBALS['db']->query($sql);
+        $sql = "Select `ant_online` From ".$GLOBALS['cfm']->table('ants')." Where `ant_id` = '".$this->ant_id."' LIMIT 1";
+        return $GLOBALS['db']->getRow($sql);
+        
     }
     
     public function take_order($order_id)
     {
         $GLOBALS['db']->query("START TRANSACTION");
-        $sql = "Select `ant_id`, `order_status` , `ant_status` From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = $order_id  for Update";
+        $sql = "Select `ant_id`, `order_status` , `ant_status` From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = $order_id LIMIT 1 for Update";
         $arr = $GLOBALS['db']->getRow($sql);
         if(isset($arr) && $arr['order_status'] == 1 && $arr['ant_status'] == 0 && !isset($arr['ant_id']))
         {
@@ -92,16 +97,29 @@ class ants extends apicommon
             $GLOBALS['db']->query($sql);
             $succ=true;
         }
+        if(isset($arr) && $arr['ant_id'] = $this->ant_id)
+        {
+            $succ = true;
+            return $succ;
+        }
         else $succ=false;
         $GLOBALS['db']->query("COMMIT");
         if($succ)
         {
-            $sql = "Select `isopen` From ".$GLOBALS['cfm']-table('shop')." LEFT JOIN ".
-                    $GLOBALS['cfm']-table('order_details')." ON ".
-                    $GLOBALS['cfm']-table('shop').".`shop_id` = ".$GLOBALS['cfm']-table('order_details')." `shop_id` Where ".
-                    $GLOBALS['cfm']-table('order_details')." `order_id` = $order_id ";
+            $sql = "Select `isopen` ".
+                   "From ".$GLOBALS['cfm']->table('shop')." ".
+                   "RIGHT JOIN (".
+                        "Select `shop_id` ".
+                        "From ".$GLOBALS['cfm']->table('shop_goods')." ".
+                        "LEFT JOIN ".$GLOBALS['cfm']->table('order_details')." ".
+                        "On ".$GLOBALS['cfm']->table('shop_goods').".`good_id` = ".$GLOBALS['cfm']->table('shop_goods').".`good_id` ".
+                        "Where ".$GLOBALS['cfm']->table('order_details').".`order_id` = '$order_id' ".
+                        "GROUP BY `shop_id`".
+                   ") as `ua` ".
+                   "On `ua`.`shop_id` = ".$GLOBALS['cfm']->table('shop').".`shop_id`";
+            echo $sql;
             $result = $GLOBALS['db']->query($sql);
-            while($arr = $GLOBALS['db']->fetch_array($result))
+            while($arr = $GLOBALS['db']->fetchRow($result))
             {
                 if($arr['isopen'] == 0)
                     $succ = false;
@@ -109,29 +127,36 @@ class ants extends apicommon
         
             if($succ)
             {
-                $sql = "Select `good_id` From ".$GLOBALS['cfm']-table('order_details')." Where `order_id` = $order_id";
+                $sql = "Select `unavail` ".
+                       "From ".$GLOBALS['cfm']->table('shop_goods')." ".
+                       "LEFT JOIN ".$GLOBALS['cfm']->table('order_details')." ".
+                       "On ".$GLOBALS['cfm']->table('shop_goods').".`good_id` = ".$GLOBALS['cfm']->table('order_details').".`good_id`".
+                       "Where ".$GLOBALS['cfm']->table('order_details').".`order_id` = $order_id";
                 $result = $GLOBALS['db']->query($sql);
-                while($arr = $GLOBALS['db']->fetch_array($result))
+                while($arr = $GLOBALS['db']->fetchRow($result))
                 {
-                    $sql2 = "Select `unavail` From ".$GLOBALS['cfm']->table('shop_goods')." Where `good_id` = '".$arr['good_id']."' LIMIT 1";
-                    $unavail = $GLOBALS['db']->getOne($sql2);
-                    if($unavail == 1)
+                    if($arr['unavail'] == 1)
                         $succ = false;
                 }
             }
             
             if(!$succ)
             {
-                $sql3 = "Update ".$GLOBALS['cfm']->table('order_info')." SET `order_status` = 0 , `ant_status` = 0 , `ant_id` = NULL Where `order_id` = $order_id AND `order_status` = 1 AND `ant_status` = 1 LIMIT 1";
-                $GLOBALS['db']->query($sql3);
+                $sql = "Update ".$GLOBALS['cfm']->table('order_info')." SET `order_status` = 0 , `ant_status` = 0 , `ant_id` = NULL Where `order_id` = $order_id AND `order_status` = 1 AND `ant_status` = 1 LIMIT 1";
+                $GLOBALS['db']->query($sql);
                 $succ=false;
             }
             else
             {
-                $sql = "Select `shop_id` From ".$GLOBALS['cfm']->table('order_details')." Where `order_id` = $order_id GROUP BY `shop_id` ";
+                $sql = "Select `shop_id` ".
+                        "From ".$GLOBALS['cfm']->table('shop_goods')." ".
+                        "LEFT JOIN ".$GLOBALS['cfm']->table('order_details')." ".
+                        "On ".$GLOBALS['cfm']->table('shop_goods').".`good_id` = ".$GLOBALS['cfm']->table('shop_goods').".`good_id` ".
+                        "Where ".$GLOBALS['cfm']->table('order_details').".`order_id` = '$order_id' ".
+                        "GROUP BY `shop_id`";
                 $result = $GLOBALS['db']->query($sql);
-                while($arr = $GLOBALS['db']->fetch_array($result))
-                    $this->push_to_shop($shop_id, $order_id);
+                while($arr = $GLOBALS['db']->fetchRow($result))
+                    $this->push_to_shop($arr['shop_id'], $order_id);
             }
         }
         return $succ;
@@ -139,12 +164,12 @@ class ants extends apicommon
     
     private function push_to_shop($shop_id,$order_id)
     {
-        $sql = "Select `channel_id`,`channel_user_id` From ".$GLOBALS['ecs']->table('providers')." Where `shop_id` = $shop_id LIMIT 1";
+        $sql = "Select `channel_id`,`channel_user_id` From ".$GLOBALS['cfm']->table('providers')." Where `shop_id` = $shop_id LIMIT 1";
         $arr = $GLOBALS['db']->getRow($sql);
         $channel = new Channel(CHANNEL_API_KEY,CHANNEL_SECRET_KEY);
         $options[Channel::USER_ID] = $arr['channel_user_id'];
         $options[Channel::CHANNEL_ID] = $arr['channel_id'];
-        $message = Array(
+        $messages = Array(
             'act'=>'new_order_check',
             'order_id'=>$order_id
         );

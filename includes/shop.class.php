@@ -171,7 +171,7 @@ class shop extends apicommon {
 	
 	public function shop_reg_channel($channel_id,$channel_user_id)
 	{
-	    $this->reg_channel(Role_Shop,$this->shop_id,$channel_id,$channel_user_id);
+	    return $this->reg_channel(Role_Shop,$this->shop_id,$channel_id,$channel_user_id);
 	}
 	
 	public function switch_shop_status($status)

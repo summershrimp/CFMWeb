@@ -152,7 +152,7 @@ elseif ($content['act'] == 'get_address')
 }
 elseif ($content['act'] == 'place_order')
 {
-    if(!$user->check_unpaid())
+    if(!$user->check_unpaid($content['nonce']))
     {
         $order_id = $user->place_order($content['cart'], $content['address'], $content['tips'],$content['nonce']);
         $order_sn = $user->get_order_sn($order_id);

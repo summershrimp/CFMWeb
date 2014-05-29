@@ -124,14 +124,14 @@ class shop extends apicommon {
 	/**
 	 * 商店接单
 	 */
-	function accept_order($order_id) { 
-		$sql = "UPDATE " . $GLOBALS['cfm']->table("order_info") . "SET `confirm_status` = 1 WHERE `order_id` = $order_id AND `order_status` = 1 AND `shop_id` = '$this->shop_id'  LIMIT 1";
+	function accept_order($order_id, $disp_id) { 
+		$sql = "UPDATE " . $GLOBALS['cfm']->table("order_info") . "SET `confirm_status` = 1 AND `disp_id` = $disp_id WHERE `order_id` = $order_id AND `order_status` = 1 AND `shop_id` = '$this->shop_id'  LIMIT 1";
 		$GLOBALS['db']->query($sql);
 		if($GLOBALS['db']->affected_rows()==1)
 		{
 		    $sql = "Select `ant_id` From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = $order_id LIMIT 1";
 		    $ant_id = $GLOBALS['db']->getOne($sql);
-		    $this->push_to_ant($ant_id, $order_id, 1);
+		    $this->push_to_ant($ant_id, $order_id, 1,$disp_id);
 		    return 1;
 		}
 		else return 0;
@@ -151,7 +151,7 @@ class shop extends apicommon {
 	}
 	
 	
-	private function push_to_ant($ant_id,$order_id,$order_status)
+	private function push_to_ant($ant_id, $order_id, $order_status, $disp_id = -1)
 	{
 	    $sql = "Select `channel_id`,`channel_user_id` From ".$GLOBALS['ecs']->table('ants')." Where `ant_id` = $ant_id LIMIT 1";
 	    $arr = $GLOBALS['db']->getRow($sql);
@@ -160,6 +160,7 @@ class shop extends apicommon {
 	    $options[Channel::CHANNEL_ID] = $arr['channel_id'];
 	    $message = Array(
 	        'act'=>'new_order_confirm',
+	        'disp_id'=>$disp_id,
 	        'order_id'=>$order_id,
 	        'order_status'=>$order_status
 	    );

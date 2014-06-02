@@ -158,7 +158,7 @@ class shop extends apicommon {
 	    $channel = new Channel(CHANNEL_API_KEY,CHANNEL_SECRET_KEY);
 	    $options[Channel::USER_ID] = $arr['channel_user_id'];
 	    $options[Channel::CHANNEL_ID] = $arr['channel_id'];
-	    $message = Array(
+	    $messages = Array(
 	        'act'=>'new_order_confirm',
 	        'disp_id'=>$disp_id,
 	        'order_id'=>$order_id,

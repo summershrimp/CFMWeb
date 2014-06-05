@@ -203,7 +203,7 @@ class apicommon
 
     private function access_code_gen($user_id, $role)
     {
-        $sql = "DELETE From " . $GLOBALS['cfm']->table('tokens') . "Where `id`='$user_id' AND `role`='$role' LIMIT 1";
+        $sql = "DELETE From " . $GLOBALS['cfm']->table('tokens') . "Where `id`='$user_id' AND `role`='$role' ";
         $GLOBALS['db']->query($sql);
         $access_code = $this->genToken();
         $sql = "Insert Into " . $GLOBALS['cfm']->table('tokens') . " (`token`,`id`, `role`, `gen_time`)VALUES('$access_code', '$user_id', '$role', '".time()."')";

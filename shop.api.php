@@ -81,7 +81,7 @@ case "switch_shop_status":
    
     break;
 case "accept_order":
-	$result['confirm_status'] = $shop->accept_order($content['order_id']);
+	$result['confirm_status'] = $shop->accept_order($content['order_id'],$content['disp_id']);
 	$result['status'] = STATUS_SUCCESS;
 	break;
 case "cancel_order":

@@ -203,7 +203,7 @@ class apicommon
 
     private function access_code_gen($user_id, $role)
     {
-        $sql = "DELETE From " . $GLOBALS['cfm']->table('tokens') . "Where `id`='$user_id' AND `role`='$role' LIMIT 1";
+        $sql = "DELETE From " . $GLOBALS['cfm']->table('tokens') . "Where `id`='$user_id' AND `role`='$role' ";
         $GLOBALS['db']->query($sql);
         $access_code = $this->genToken();
         $sql = "Insert Into " . $GLOBALS['cfm']->table('tokens') . " (`token`,`id`, `role`, `gen_time`)VALUES('$access_code', '$user_id', '$role', '".time()."')";
@@ -323,7 +323,7 @@ class apicommon
         {
             $db_table = 'providers';
             $db_uname_column = 'provider_name';
-            $db_id_column = 'shop_id';
+            $db_id_column = 'provider_id';
         }
         elseif ($role === Role_Ant)
         {
@@ -354,7 +354,7 @@ class apicommon
         }
         else
         {
-            $sql = "Insert INTO ".$GLOBALS['cfm']->table('verify_code')."(`mobile_phone`, `verify_code`, `role`, `id`)VALUES('$phone','$verify_code','$role','$id')";
+            $sql = "Insert INTO ".$GLOBALS['cfm']->table('verify_code')." (`mobile_phone`, `verify_code`, `role`, `id`)VALUES('$phone','$verify_code','$role','$id')";
             $GLOBALS['db']->query($sql);
         }
         if($GLOBALS['db']->affected_rows()>0)
@@ -380,7 +380,7 @@ class apicommon
         {
             $db_table = 'providers';
             $db_uname_column = 'provider_name';
-            $db_id_column = 'shop_id';
+            $db_id_column = 'provider_id';
         }
         elseif ($role === Role_Ant)
         {
@@ -390,7 +390,7 @@ class apicommon
         }
         elseif ($role === Role_User)
         {
-            $db_table = 'customers    ';
+            $db_table = 'customers';
             $db_uname_column = 'openid';
             $db_id_column = 'user_id';
         }
@@ -466,8 +466,8 @@ class apicommon
         else return false;
         
         $sql = "Update ".$GLOBALS['cfm']->table($db_table)." SET `channel_id` = '$channel_id', `channel_user_id` = '$channel_user_id' Where `$db_id_column` = '$id' LIMIT 1";
-        $GLOBALS['db']->query($sql);
-        if($GLOBALS['db']->affected_rows()>0)
+
+        if($GLOBALS['db']->query($sql))
             return true;
         else return false;
     }

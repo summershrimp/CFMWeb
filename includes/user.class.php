@@ -60,10 +60,12 @@ class user extends apicommon
             return false;
     }
     
-    public function check_unpaid()
+    public function check_unpaid($nonce)
     {
-        $sql = "SELECT `order_id` From " . $GLOBALS['cfm']->table('order_info') . " Where `pay_status` = 0 AND `order_status` = 1 AND `user_id` = '$this->user_id' ";
+        $sql = "SELECT `order_id`,`nonce` From " . $GLOBALS['cfm']->table('order_info') . " Where `pay_status` = 0 AND `order_status` = 1 AND `user_id` = '$this->user_id' ";
         $arr = $GLOBALS['db']->getRow($sql);
+        if( isset($arr['nonce']) && $arr['nonce'] = $nonce)
+            return false;
         if (isset($arr['order_id']))
             return $arr['order_id'];
         else
@@ -105,10 +107,17 @@ class user extends apicommon
 
     public function place_order($carts, $address, $tips, $nonce)
     {
+        $sql = "Select `order_id` From ". $GLOBALS['cfm']->table('order_info') ." Where `nonce` = '$nonce' ";
+        $query = $GLOBALS['db']->query($sql);
+        if(($GLOBALS['db']->num_rows($query))>0)
+        {
+            $arr = $GLOBALS['db']->fetchRow($query);
+            return $arr['order_id'];
+        }
         $order_id = $this->make_new_order($address, $tips,$nonce);
         if($order_id<=0)
             return false;
-        $total_price=0;
+        $total_price = 0;
         $last_id = -1;
         foreach ($carts as $good)
         {
@@ -130,7 +139,7 @@ class user extends apicommon
             $sql = "Insert INTO " . $GLOBALS['cfm']->table('order_details') . " (`order_id`, `good_id`,`good_name`,`good_number`,`good_price`) 
              VALUES('" . $order_id . "','" . $good['good_id'] . "','" . $good_name . "', '" . $good['amount'] . "','" . $good_price . "' )";
             $GLOBALS['db']->query($sql);
-            $last_id = $arr['this_id'];
+            $last_id = $arr['shop_id'];
             
         }
         $sql="UPDATE ".$GLOBALS['cfm']->table('order_info')." Set `goods_amount` = $total_price , `shop_id` = '$last_id' Where `order_id` = '$order_id' LIMIT 1 ";
@@ -193,13 +202,6 @@ class user extends apicommon
     
     private function make_new_order($address, $tips, $nonce)
     {
-        $sql = "Select `order_id` From ". $GLOBALS['cfm']->table('order_info') ." Where `nonce` = '$nonce' ";
-        $query = $GLOBALS['db']->query($sql);
-        if($GLOBALS['db']->num_rows($query)>0)
-        {
-            $arr = $GLOBALS['db']->fetchRow($sql);
-            return $order_id;
-        }
         $sql = "Select * From ".$GLOBALS['cfm']->table('user_address')." Where `user_id` = '$this->user_id' LIMIT 1";
         $query = $GLOBALS['db']->query($sql);
         if($GLOBALS['db']->num_rows($query)<1)

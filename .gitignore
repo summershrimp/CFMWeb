@@ -1,6 +1,7 @@
 /.settings
+.gitignore
 .project
 .bulidpath
 /documents
 /data
-
+testpush.php

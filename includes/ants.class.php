@@ -156,13 +156,13 @@ class ants extends apicommon
                         "GROUP BY `shop_id`";
                 $result = $GLOBALS['db']->query($sql);
                 while($arr = $GLOBALS['db']->fetchRow($result))
-                    $this->push_to_shop($arr['shop_id'], $order_id);
+                    $this->push_order_accept($arr['shop_id'], $order_id);
             }
         }
         return $succ;
     }
     
-    private function push_to_shop($shop_id,$order_id)
+    private function push_order_accept($shop_id,$order_id)
     {
         $sql = "Select `channel_id`,`channel_user_id` From ".$GLOBALS['cfm']->table('providers')." Where `shop_id` = $shop_id LIMIT 1";
         $arr = $GLOBALS['db']->getRow($sql);
@@ -178,12 +178,30 @@ class ants extends apicommon
         return $order_id;
     }
     
+    private function push_goods_taken($order_id)
+    {
+        $sql = "Select `shop_id` From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = '$order_id' LIMIT 1";
+        $shop_id = $GLOBALS['db']->getOne($sql);
+        $sql = "Select `channel_id`,`channel_user_id` From ".$GLOBALS['cfm']->table('providers')." Where `shop_id` = $shop_id LIMIT 1";
+        $arr = $GLOBALS['db']->getRow($sql);
+        $channel = new Channel(CHANNEL_API_KEY,CHANNEL_SECRET_KEY);
+        $options[Channel::USER_ID] = $arr['channel_user_id'];
+        $options[Channel::CHANNEL_ID] = $arr['channel_id'];
+        $messages = Array(
+            'act'=>'order_taken',
+            'order_id'=>$order_id
+        );
+        $channel->pushMessage(Channel::PUSH_TO_USER, $messages, 'toShop'.$order_id,$options);
+    
+        return $order_id;
+    }
+    
     public function take_goods($order_id)
     {
-        $sql = "update ".$GLOBALS['cfm']->table('order_info')." Set `taking_status` = 1 Where `order_id` = '$order_id' AND `ant_id` = '$this->ant_id' AND `order_status` = 1 AND `ant_status` = 1";
-        $GLOBALS['db']->query($sql);
-        if($GLOBALS['db']->affected_rows()<1)
+        $sql = "Update ".$GLOBALS['cfm']->table('order_info')." Set `taking_status` = 1 Where `order_id` = '$order_id' AND `ant_id` = '$this->ant_id' AND `order_status` = 1 AND `ant_status` = 1";
+        if(!$GLOBALS['db']->query($sql))
             return false;
+        $this->push_goods_taken($order_id);
         return true;
     }
     

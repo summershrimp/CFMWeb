@@ -49,15 +49,15 @@ if($content['act']=='ant_static')
     $return = $ant->ant_static();
     $return["status"]=STATUS_SUCCESS;
 }
-elseif ($content['act'] == 'get_history')
+elseif ($content['act'] == 'ant_history')
 {
     $p_st=isset($content['periodstart'])?$content['periodstart']:date("Y-m-d",mktime(0,0,0,date("m"),date("d")-7,date("Y")));
     $p_ed=isset($content['periodend'])?$content['periodend']:date("Y-m-d");
     $arr=$ant->get_history($p_st, $p_ed);
-    $return = $arr;
+    $return['orders'] = $arr;
     $return["status"]=STATUS_SUCCESS;
 }
-elseif ($content['act'] == 'order_detail')
+elseif ($content['act'] == 'order_details')
 {
     if(!isset($content['is_detail']))
         $content['is_detail']=false;
@@ -65,7 +65,7 @@ elseif ($content['act'] == 'order_detail')
     $return = $arr;
     $return['status'] = STATUS_SUCCESS;
 }
-elseif($content['act']=='get_person_info')
+elseif($content['act']=='ant_person_info')
 {
     $return = $ant->get_ant_info();
     $return['status'] = STATUS_SUCCESS;

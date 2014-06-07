@@ -162,7 +162,7 @@ class shop extends apicommon {
 	        'act'=>'new_order_confirm',
 	        'disp_id'=>$disp_id,
 	        'order_id'=>$order_id,
-	        'order_status'=>$order_status
+	        'confirm_status'=>$order_status
 	    );
 	    $channel->pushMessage(Channel::PUSH_TO_USER, $messages, 'toAntConfirm'.$order_id,$options);
 	

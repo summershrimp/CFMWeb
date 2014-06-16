@@ -136,6 +136,9 @@ class apicommon
             $arr['order_status'] = 0;
         }
         $GLOBALS['db']->query("COMMIT");
+        $sql = "Select `ant_real_name`, `mobile_phone` as `ant_phone` From ".$GLOBALS['db']->table('ants')." Where `ant_id` = '".$arr["ant_id"]."' LIMIT 1" ;
+        $arr2 = $GLOBALS['db']->getRow(sql);
+        $arr = array_merge($arr,$arr2);
         $return = $arr;
         if ($is_detail)
         {

@@ -63,6 +63,7 @@ case "shop_history":
 	$result['status'] = STATUS_SUCCESS;
 	break;
 case "order_details":
+    (isset($content['is_detail'])&&$content['is_detail']==1)?$content['is_detail']=1:$content['is_detail']=0;
 	$result = $shop->order_details($content['order_id'], $content['is_detail']);
 	$result['status'] = STATUS_SUCCESS;
 	break;

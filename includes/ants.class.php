@@ -180,8 +180,10 @@ class ants extends apicommon
     
     private function push_goods_taken($order_id)
     {
-        $sql = "Select `shop_id` From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = '$order_id' LIMIT 1";
-        $shop_id = $GLOBALS['db']->getOne($sql);
+        $sql = "Select `shop_id`, `disp_id` From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = '$order_id' LIMIT 1";
+        $arr = $GLOBALS['db']->getRow($sql);
+        $shop_id = $arr['shop_id'];
+        $disp_id = $arr['disp_id'];
         $sql = "Select `channel_id`,`channel_user_id` From ".$GLOBALS['cfm']->table('providers')." Where `shop_id` = $shop_id LIMIT 1";
         $arr = $GLOBALS['db']->getRow($sql);
         $channel = new Channel(CHANNEL_API_KEY,CHANNEL_SECRET_KEY);
@@ -189,7 +191,8 @@ class ants extends apicommon
         $options[Channel::CHANNEL_ID] = $arr['channel_id'];
         $messages = Array(
             'act'=>'order_taken',
-            'order_id'=>$order_id
+            'order_id'=>$order_id,
+            'disp_id' =>$disp_id
         );
         $channel->pushMessage(Channel::PUSH_TO_USER, $messages, 'toShop'.$order_id,$options);
     

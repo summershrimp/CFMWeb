@@ -92,7 +92,7 @@ class apicommon
             $db_id_column = 'shop_id';
         elseif ($role === Role_User)
             $db_id_column = 'user_id';
-        $sql = "Select `order_id`, `order_sn`, `goods_amount`, `tips_amount`, `order_time`, `user_realname`, `order_status`, `ant_status`, `confirm_status`, `taking_status`, `shipping_status` From " . $GLOBALS['cfm']->table("order_info") . " Where `$db_id_column` = $id AND `order_status` = 1 ";
+        $sql = "Select `order_id`, `order_sn`, `goods_amount`, `tips_amount`, `order_time`, `user_realname`, `order_status`, `ant_status`, `confirm_status`, `taking_status`, `shipping_status`, `shop_id` From " . $GLOBALS['cfm']->table("order_info") . " Where `$db_id_column` = $id AND `order_status` = 1 ";
        
         if (isset($p_start) && isset($p_end))
             $limit = "And `add_date` Between '$p_start' And '$p_end'";
@@ -100,6 +100,10 @@ class apicommon
             $limit = "LIMIT 20";
         $sql = $sql . $limit;
         $arr = $GLOBALS['db']->getAll($sql);
+        
+        $sql = "Select `shop_name` From ".$GLOBALS['cfm']->table('shop')." Where `shop_id` = '".$arr['shop_id']."'";
+        $arr2 = $GLOBALS['db']->getRow($sql);
+        $arr = array_merge($arr,$arr2);
         return $arr;
     }
     
@@ -136,8 +140,11 @@ class apicommon
             $arr['order_status'] = 0;
         }
         $GLOBALS['db']->query("COMMIT");
-        $sql = "Select `ant_real_name`, `mobile_phone` as `ant_phone` From ".$GLOBALS['db']->table('ants')." Where `ant_id` = '".$arr["ant_id"]."' LIMIT 1" ;
-        $arr2 = $GLOBALS['db']->getRow(sql);
+        $sql = "Select `shop_name` From ".$GLOBALS['cfm']->table('shop')." Where `shop_id` = '".$arr['shop_id']."'";
+        $arr2 = $GLOBALS['db']->getRow($sql);
+        $arr = array_merge($arr,$arr2);
+        $sql = "Select `ant_real_name`, `mobile_phone` as `ant_phone` From ".$GLOBALS['cfm']->table('ants')." Where `ant_id` = '".$arr["ant_id"]."' LIMIT 1" ;
+        $arr2 = $GLOBALS['db']->getRow($sql);
         $arr = array_merge($arr,$arr2);
         $return = $arr;
         if ($is_detail)
@@ -419,7 +426,7 @@ class apicommon
         {
             $db_table = 'providers';
             $db_uname_column = 'provider_name';
-            $db_id_column = 'provider_id';
+            $db_id_column = 'shop_id';
         }
         elseif ($role === Role_Ant)
         {

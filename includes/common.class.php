@@ -92,7 +92,7 @@ class apicommon
             $db_id_column = 'shop_id';
         elseif ($role === Role_User)
             $db_id_column = 'user_id';
-        $sql = "Select `order_id`, `order_sn`, `goods_amount`, `tips_amount`, `order_time`, `user_realname`, `order_status`, `ant_status`, `confirm_status`, `taking_status`, `shipping_status`, `shop_id` From " . $GLOBALS['cfm']->table("order_info") . " Where `$db_id_column` = $id AND `order_status` = 1 ";
+        $sql = "Select `order_id`, `order_sn`, `goods_amount`, `tips_amount`, `order_time`, `user_realname`, `order_status`, `ant_status`, `confirm_status`, `taking_status`, `shipping_status`, `pay_status`, `shop_id` From " . $GLOBALS['cfm']->table("order_info") . " Where `$db_id_column` = $id AND `order_status` = 1 ";
        
         if (isset($p_start) && isset($p_end))
             $limit = "And `add_date` Between '$p_start' And '$p_end'";

@@ -48,23 +48,23 @@ class ants extends apicommon
         $sql="Select Count(*) as total ,Sum(tips_amount) as amount From".$GLOBALS['cfm']->table('order_info').
         " Where `ant_id` = '$this->ant_id' And `add_date` Between '$start' And '$end' ";
         $arr = $GLOBALS['db']->getRow($sql);
-        $return["last_week_count"] = $arr['total'];
-        $return["last_week_tips"] = $arr['amount'];
+        $return["last_week_count"] = ($arr['total']!=NULL)?$arr['total']:0;
+        $return["last_week_tips"] = ($arr['amount']!=NULL)?$arr['amount']:0;
         
         $end=date("Y-m-d");
         $sql="Select Count(*) as total ,Sum(tips_amount) as amount From".$GLOBALS['cfm']->table('order_info').
              " Where `ant_id` = '$this->ant_id' And `add_date` = '$end' ";
         $arr = $GLOBALS['db']->getRow($sql);
-        $return["day_count"] = $arr['total'];
-        $return["day_tips"] = $arr['amount'];
+        $return["day_count"] = ($arr['total']!=NULL)?$arr['total']:0;
+        $return["day_tips"] = ($arr['amount']!=NULL)?$arr['amount']:0;
         
         $end=date("Y-m-d");
         $start = date("Y-m-d",mktime(0,0,0,date("m"),1,date("Y")));
         $sql="Select Count(*) as total ,Sum(tips_amount) as amount From".$GLOBALS['cfm']->table('order_info').
              " Where `ant_id` = '$this->ant_id' And `add_date` Between '$start' And '$end' ";
         $arr = $GLOBALS['db']->getRow($sql);
-        $return["month_count"] = $arr['total'];
-        $return["month_tips"] = $arr['amount'];
+        $return["month_count"] = ($arr['total']!=NULL)?$arr['total']:0;
+        $return["month_tips"] = ($arr['amount']!=NULL)?$arr['amount']:0;
         
         
         return $return;

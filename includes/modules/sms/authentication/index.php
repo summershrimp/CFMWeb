@@ -1,4 +1,4 @@
-﻿<html>
+<html>
 <head>
 <title>天翼开放平台OAuth2.0认证授权接口示例</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -73,6 +73,7 @@
             RefreshToken:<input id= "refresh_token" name="refresh_token" type="text" value="" />
             <input name="btn_refresh" type="submit" value="认证授权" onclick="return checkRefresh_token();" />
         </fieldset>
+        </div>
     </form>	
 </body>
 </html>

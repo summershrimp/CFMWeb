@@ -92,18 +92,19 @@ class apicommon
             $db_id_column = 'shop_id';
         elseif ($role === Role_User)
             $db_id_column = 'user_id';
-        $sql = "Select `order_id`, `order_sn`, `goods_amount`, `tips_amount`, `order_time`, `user_realname`, `order_status`, `ant_status`, `confirm_status`, `taking_status`, `shipping_status`, `pay_status`, `shop_id` From " . $GLOBALS['cfm']->table("order_info") . " Where `$db_id_column` = $id AND `order_status` = 1 ";
+        $sql = "Select " . $GLOBALS['cfm']->table("order_info") . ".`order_id`, " . $GLOBALS['cfm']->table("order_info") . ".`order_sn`, " . $GLOBALS['cfm']->table("order_info") . ".`goods_amount`, " . $GLOBALS['cfm']->table("order_info") . ".`tips_amount`, " . $GLOBALS['cfm']->table("order_info") . ".`order_time`, " . $GLOBALS['cfm']->table("order_info") . ".`user_realname`, " . $GLOBALS['cfm']->table("order_info") . ".`order_status`, " . $GLOBALS['cfm']->table("order_info") . ".`ant_status`, " . $GLOBALS['cfm']->table("order_info") . ".`confirm_status`, " . $GLOBALS['cfm']->table("order_info") . ".`taking_status`, " . $GLOBALS['cfm']->table("order_info") . ".`shipping_status`, " . $GLOBALS['cfm']->table("order_info") . ".`pay_status`, " . $GLOBALS['cfm']->table("order_info") . ".`address`, " . $GLOBALS['cfm']->table("shop") . ".`shop_name` " . 
+        	   "From " . $GLOBALS['cfm']->table("order_info") . " ".
+        	   "Left Join " . $GLOBALS['cfm']->table("shop") . " ".
+        	   "On ". $GLOBALS['cfm']->table("order_info") .".`shop_id` = ". $GLOBALS['cfm']->table("shop").".`shop_id` ".
+        	   "Where " . $GLOBALS['cfm']->table("order_info") . ".`$db_id_column` = $id AND `order_status` = 1 ";
        
         if (isset($p_start) && isset($p_end))
-            $limit = "And `add_date` Between '$p_start' And '$p_end'";
+            $limit = " And `add_date` Between '$p_start' And '$p_end'";
         else
-            $limit = "LIMIT 20";
+            $limit = " LIMIT 20";
         $sql = $sql . $limit;
         $arr = $GLOBALS['db']->getAll($sql);
         
-        $sql = "Select `shop_name` From ".$GLOBALS['cfm']->table('shop')." Where `shop_id` = '".$arr['shop_id']."'";
-        $arr2 = $GLOBALS['db']->getRow($sql);
-        $arr = array_merge($arr,$arr2);
         return $arr;
     }
     
@@ -143,9 +144,20 @@ class apicommon
         $sql = "Select `shop_name` From ".$GLOBALS['cfm']->table('shop')." Where `shop_id` = '".$arr['shop_id']."'";
         $arr2 = $GLOBALS['db']->getRow($sql);
         $arr = array_merge($arr,$arr2);
-        $sql = "Select `ant_real_name`, `mobile_phone` as `ant_phone` From ".$GLOBALS['cfm']->table('ants')." Where `ant_id` = '".$arr["ant_id"]."' LIMIT 1" ;
+        $sql = "Select `sex` as `user_sex` From ".$GLOBALS['cfm']->table('users')." Where `user_id` = '".$arr['user_id']."'";
         $arr2 = $GLOBALS['db']->getRow($sql);
         $arr = array_merge($arr,$arr2);
+        if(isset($arr["ant_id"])&&$arr["ant_id"]!="")
+        {
+        	$sql = "Select `ant_real_name`, `mobile_phone` as `ant_phone` From ".$GLOBALS['cfm']->table('ants')." Where `ant_id` = '".$arr["ant_id"]."' LIMIT 1" ;
+        	$arr2 = $GLOBALS['db']->getRow($sql);
+        	$arr = array_merge($arr,$arr2);
+        }
+        else
+        {
+        	$arr['ant_real_name'] = "尚未抢单";
+        	$arr['ant_phone'] = -1;	
+        }
         $return = $arr;
         if ($is_detail)
         {

@@ -64,7 +64,7 @@ class user extends apicommon
     {
         $sql = "SELECT `order_id`,`nonce` From " . $GLOBALS['cfm']->table('order_info') . " Where `pay_status` = 0 AND `order_status` = 1 AND `user_id` = '$this->user_id' ";
         $arr = $GLOBALS['db']->getRow($sql);
-        if( isset($arr['nonce']) && $arr['nonce'] = $nonce)
+        if( isset($arr['nonce']) && $arr['nonce'] == $nonce)
             return false;
         if (isset($arr['order_id']))
             return $arr['order_id'];
@@ -107,62 +107,66 @@ class user extends apicommon
 
     public function place_order($carts, $address, $tips, $nonce)
     {
-        $sql = "Select `order_id` From ". $GLOBALS['cfm']->table('order_info') ." Where `nonce` = '$nonce' ";
-        $query = $GLOBALS['db']->query($sql);
-        if(($GLOBALS['db']->num_rows($query))>0)
-        {
-            $arr = $GLOBALS['db']->fetchRow($query);
-            return $arr['order_id'];
-        }
-        $order_id = $this->make_new_order($address, $tips,$nonce);
-        if($order_id<=0)
-            return false;
-        $total_price = 0;
-        $last_id = -1;
-        foreach ($carts as $good)
-        {
-            $sql = "Select `good_name`, `price`, `unavail`, `shop_id` From " . $GLOBALS['cfm']->table('shop_goods') . " Where `good_id` = '" . trim($good['good_id']) . "'";
-            $arr = $GLOBALS['db']->getRow($sql);
-            if($last_id = -1) $last_id = $arr['shop_id'];
-            if(!isset($arr['unavail']))
-                $arr['unavail']=0;
-            if($arr['unavail']==1||$last_id!=$arr['shop_id'])
-            {
-                $this->delete_new_order($order_id);
-                return false;
-            }
-            $good_price = $arr['price'];
-            $good_name = $arr['good_name'];
-            if($last_id = -1) $last_id = $arr['shop_id'];
-            $total_price+=floatval($good_price);
-            
-            $sql = "Insert INTO " . $GLOBALS['cfm']->table('order_details') . " (`order_id`, `good_id`,`good_name`,`good_number`,`good_price`) 
-             VALUES('" . $order_id . "','" . $good['good_id'] . "','" . $good_name . "', '" . $good['amount'] . "','" . $good_price . "' )";
-            $GLOBALS['db']->query($sql);
-            $last_id = $arr['shop_id'];
-            
-        }
-        $sql="UPDATE ".$GLOBALS['cfm']->table('order_info')." Set `goods_amount` = $total_price , `shop_id` = '$last_id' Where `order_id` = '$order_id' LIMIT 1 ";
-        $GLOBALS['db']->query($sql);
-        if($GLOBALS['db']->affected_rows()>0)
-        {
-            $channel = new Channel(CHANNEL_API_KEY,CHANNEL_SECRET_KEY);
-            $options[Channel::TAG_NAME] = 'ants';
-            $messages = Array(
-            	'act'=>'new_order',
-            	'order_id'=>$order_id,
-                'tips'=>$tips ,
-                'address'=>$address['address']
-            );
-            $channel->pushMessage(Channel::PUSH_TO_TAG, $messages, 'toAnt'.$order_id,$options);
-            
-            return $order_id;
-        }
-        else 
-        {
-            $this->delete_new_order($order_id);
-            return false;
-        }
+    	if(!$this->check_unpaid($nonce))
+    	{
+	        $sql = "Select `order_id` From ". $GLOBALS['cfm']->table('order_info') ." Where `nonce` = '$nonce' ";
+	        $query = $GLOBALS['db']->query($sql);
+	        if(($GLOBALS['db']->num_rows($query))>0)
+	        {
+	            $arr = $GLOBALS['db']->fetchRow($query);
+	            return $arr['order_id'];
+	        }
+	        $order_id = $this->make_new_order($address, $tips,$nonce);
+	        if($order_id<=0)
+	            return false;
+	        $total_price = 0;
+	        $last_id = -1;
+	        foreach ($carts as $good)
+	        {
+	            $sql = "Select `good_name`, `price`, `unavail`, `shop_id` From " . $GLOBALS['cfm']->table('shop_goods') . " Where `good_id` = '" . trim($good['good_id']) . "'";
+	            $arr = $GLOBALS['db']->getRow($sql);
+	            if($last_id = -1) $last_id = $arr['shop_id'];
+	            if(!isset($arr['unavail']))
+	                $arr['unavail']=0;
+	            if($arr['unavail']==1||$last_id!=$arr['shop_id'])
+	            {
+	                $this->delete_new_order($order_id);
+	                return false;
+	            }
+	            $good_price = $arr['price'];
+	            $good_name = $arr['good_name'];
+	            if($last_id = -1) $last_id = $arr['shop_id'];
+	            $total_price+=floatval($good_price);
+	            
+	            $sql = "Insert INTO " . $GLOBALS['cfm']->table('order_details') . " (`order_id`, `good_id`,`good_name`,`good_number`,`good_price`) 
+	             VALUES('" . $order_id . "','" . $good['good_id'] . "','" . $good_name . "', '" . $good['amount'] . "','" . $good_price . "' )";
+	            $GLOBALS['db']->query($sql);
+	            $last_id = $arr['shop_id'];
+	            
+	        }
+	        $sql="UPDATE ".$GLOBALS['cfm']->table('order_info')." Set `goods_amount` = $total_price , `shop_id` = '$last_id' Where `order_id` = '$order_id' LIMIT 1 ";
+	        $GLOBALS['db']->query($sql);
+	        if($GLOBALS['db']->affected_rows()>0)
+	        {
+	            $channel = new Channel(CHANNEL_API_KEY,CHANNEL_SECRET_KEY);
+	            $options[Channel::TAG_NAME] = 'ants';
+	            $messages = Array(
+	            	'act'=>'new_order',
+	            	'order_id'=>$order_id,
+	                'tips'=>$tips ,
+	                'address'=>$address['address']
+	            );
+	            $channel->pushMessage(Channel::PUSH_TO_TAG, $messages, 'toAnt'.$order_id,$options);
+	            
+	            return $order_id;
+	        }
+	        else 
+	        {
+	            $this->delete_new_order($order_id);
+	            return false;
+	        }
+    	}
+    	else return false;
     }
 
     public function cancel_order($order_id)

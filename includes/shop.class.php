@@ -58,32 +58,32 @@ class shop extends apicommon {
 	    $sql="Select Count(*) as total ,Sum(goods_amount) as amount From".$GLOBALS['cfm']->table('order_info').
 	    " Where `shop_id` = '$this->shop_id' And `add_date` Between '$start' And '$end' ";
 	    $arr = $GLOBALS['db']->getRow($sql);
-	    $return["week_count"] = $arr['total'];
-	    $return["week_amount"] = $arr['amount'];
+	    $return["week_count"] = ($arr['total']!=NULL)?$arr['total']:0;
+	    $return["week_amount"] = ($arr['amount']!=NULL)?$arr['amount']:0;
 	   
 	    $end=$last_end;
 	    $start = $last_start;
 	    $sql="Select Count(*) as total ,Sum(goods_amount) as amount From".$GLOBALS['cfm']->table('order_info').
 	    " Where `shop_id` = '$this->shop_id' And `add_date` Between '$start' And '$end' ";
 	    $arr = $GLOBALS['db']->getRow($sql);
-	    $return["last_week_count"] = $arr['total'];
-	    $return["last_week_amount"] = $arr['amount'];
+	    $return["last_week_count"] = ($arr['total']!=NULL)?$arr['total']:0;
+	    $return["last_week_amount"] = ($arr['amount']!=NULL)?$arr['amount']:0;
 	    
 	    
 	    $end=date("Y-m-d");
 	    $sql="Select Count(*) as total ,Sum(goods_amount) as amount From".$GLOBALS['cfm']->table('order_info').
 	    " Where `shop_id` = '$this->shop_id' And `add_date` = '$end' ";
 	    $arr = $GLOBALS['db']->getRow($sql);
-	    $return["day_count"] = $arr['total'];
-	    $return["day_amount"] = $arr['amount'];
+	    $return["day_count"] = ($arr['total']!=NULL)?$arr['total']:0;
+	    $return["day_amount"] = ($arr['amount']!=NULL)?$arr['amount']:0;
 	
 	    $end=date("Y-m-d");
 	    $start = date("Y-m-d",mktime(0,0,0,date("m"),1,date("Y")));
 	    $sql="Select Count(*) as total ,Sum(goods_amount) as amount From".$GLOBALS['cfm']->table('order_info').
 	    " Where `shop_id` = '$this->shop_id' And `add_date` Between '$start' And '$end' ";
 	    $arr = $GLOBALS['db']->getRow($sql);
-	    $return["month_count"] = $arr['total'];
-	    $return["month_amount"] = $arr['amount'];
+	    $return["month_count"] = ($arr['total']!=NULL)?$arr['total']:0;
+	    $return["month_amount"] = ($arr['amount']!=NULL)?$arr['amount']:0;
 	    
 	    return $return;
 	}
@@ -115,11 +115,12 @@ class shop extends apicommon {
 	 * 切换商品状态
 	 */
 	function switch_good_status($good_id, $good_status) {
-		$sql = "UPDATE " . $GLOBALS['cfm']->table("shop_goods") . " SET `onsale` = $good_status WHERE `good_id` = $good_id LIMIT 1";
-		$t = $GLOBALS['db']->query($sql);
-		if($GLOBALS['db']->affected_rows()==1)
-		    return $good_status;
-		else return !$good_status;
+		$good_status = !$good_status;
+		$sql = "UPDATE " . $GLOBALS['cfm']->table("shop_goods") . " SET `unavail` = $good_status WHERE `good_id` = $good_id LIMIT 1";
+		$GLOBALS['db']->query($sql);
+		$sql = "SELECT `unavail` From " . $GLOBALS['cfm']->table("shop_goods") . " WHERE `good_id` = $good_id LIMIT 1";
+		$arr = $GLOBALS['db']->getRow($sql);
+		return !$arr['unavail'];
 	}
 	/**
 	 * 商店接单

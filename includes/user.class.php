@@ -60,7 +60,7 @@ class user extends apicommon
             return false;
     }
     
-    public function check_unpaid($nonce)
+    public function check_unpaid($nonce = NULL)
     {
         $sql = "SELECT `order_id`,`nonce` From " . $GLOBALS['cfm']->table('order_info') . " Where `pay_status` = 0 AND `order_status` = 1 AND `user_id` = '$this->user_id' ";
         $arr = $GLOBALS['db']->getRow($sql);
@@ -107,7 +107,7 @@ class user extends apicommon
 
     public function place_order($carts, $address, $tips, $nonce)
     {
-    	if(!$this->check_unpaid($nonce))
+    	if(!$this->check_unpaid($nonce) && $this->check_verify())
     	{
 	        $sql = "Select `order_id` From ". $GLOBALS['cfm']->table('order_info') ." Where `nonce` = '$nonce' ";
 	        $query = $GLOBALS['db']->query($sql);

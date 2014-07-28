@@ -92,7 +92,14 @@ class apicommon
             $db_id_column = 'shop_id';
         elseif ($role === Role_User)
             $db_id_column = 'user_id';
-        $sql = "Select " . $GLOBALS['cfm']->table("order_info") . ".`order_id`, " . $GLOBALS['cfm']->table("order_info") . ".`order_sn`, " . $GLOBALS['cfm']->table("order_info") . ".`goods_amount`, " . $GLOBALS['cfm']->table("order_info") . ".`tips_amount`, " . $GLOBALS['cfm']->table("order_info") . ".`order_time`, " . $GLOBALS['cfm']->table("order_info") . ".`user_realname`, " . $GLOBALS['cfm']->table("order_info") . ".`order_status`, " . $GLOBALS['cfm']->table("order_info") . ".`ant_status`, " . $GLOBALS['cfm']->table("order_info") . ".`confirm_status`, " . $GLOBALS['cfm']->table("order_info") . ".`taking_status`, " . $GLOBALS['cfm']->table("order_info") . ".`shipping_status`, " . $GLOBALS['cfm']->table("order_info") . ".`pay_status`, " . $GLOBALS['cfm']->table("order_info") . ".`address`, " . $GLOBALS['cfm']->table("shop") . ".`shop_name` " . 
+        $sql = "Select " . $GLOBALS['cfm']->table("order_info") . ".`order_id`, " . $GLOBALS['cfm']->table("order_info") . ".`order_sn`, " . 
+          			$GLOBALS['cfm']->table("order_info") . ".`goods_amount`, " . $GLOBALS['cfm']->table("order_info") . ".`tips_amount`, " . 
+          			$GLOBALS['cfm']->table("order_info") . ".`order_time`, " . $GLOBALS['cfm']->table("order_info") . ".`user_realname`, " . 
+          			$GLOBALS['cfm']->table("order_info") . ".`order_status`, " . $GLOBALS['cfm']->table("order_info") . ".`ant_status`, " . 
+          			$GLOBALS['cfm']->table("order_info") . ".`confirm_status`, " . $GLOBALS['cfm']->table("order_info") . ".`taking_status`, " . 
+          			$GLOBALS['cfm']->table("order_info") . ".`shipping_status`, " . $GLOBALS['cfm']->table("order_info") . ".`pay_status`, " . 
+          			$GLOBALS['cfm']->table("order_info") . ".`address`, " . $GLOBALS['cfm']->table("shop") . ".`shop_name` " . 
+          			$GLOBALS['cfm']->table("shop") . ".`shop_pos` " . 
         	   "From " . $GLOBALS['cfm']->table("order_info") . " ".
         	   "Left Join " . $GLOBALS['cfm']->table("shop") . " ".
         	   "On ". $GLOBALS['cfm']->table("order_info") .".`shop_id` = ". $GLOBALS['cfm']->table("shop").".`shop_id` ".

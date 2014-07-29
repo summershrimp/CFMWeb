@@ -194,10 +194,10 @@ class user extends apicommon
         return $this->history($this->user_id, Role_User, $p_start, $p_end);
     }
     
-    public function check_ant_accept($order_id)
+    public function check_status($order_id)
     {
     	$GLOBALS['db']->query("START TRANSCATION");
-    	$sql = "Select `order_status`, `ant_status`, `order_time_ms` From " . $GLOBALS['cfm']->table('order_info') . " Where `order_id` = '$order_id' LIMIT 1";
+    	$sql = "Select `order_status`, `ant_status`, `confirm_status`, `order_time_ms` From " . $GLOBALS['cfm']->table('order_info') . " Where `order_id` = '$order_id' LIMIT 1";
     	$result = $GLOBALS['db']->query($sql);
     	
     	if (($GLOBALS['db']->num_rows($result))<1)

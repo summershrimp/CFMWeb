@@ -198,13 +198,13 @@ elseif ($content['act'] == 'order_detail')
     $return = $arr;
     $return['status'] = STATUS_SUCCESS;
 }
-elseif ($content['act'] == 'check_ant_accept')
+elseif ($content['act'] == 'check_status')
 {
 	if(!isset($content['order_id']))
 		$return['status'] = ERROR_CONTENT;
 	else
 	{
-		$arr = $user->check_ant_accept($content['order_id']);
+		$arr = $user->check_status($content['order_id']);
 		$return = $arr;
 		$return['status'] = STATUS_SUCCESS;
 	}

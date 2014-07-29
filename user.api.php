@@ -198,6 +198,17 @@ elseif ($content['act'] == 'order_detail')
     $return = $arr;
     $return['status'] = STATUS_SUCCESS;
 }
+elseif ($content['act'] == 'check_ant_accept')
+{
+	if(!isset($content['order_id']))
+		$return['status'] = ERROR_CONTENT;
+	else
+	{
+		$arr = $user->check_ant_accept($content['order_id']);
+		$return = $arr;
+		$return['status'] = STATUS_SUCCESS;
+	}
+}
 elseif ($content['act'] == 'get_history')
 {
     $p_st=isset($content['periodstart'])?$content['periodstart']:date("Y-m-d",mktime(0,0,0,date("m"),date("d")-7,date("Y")));

@@ -194,6 +194,27 @@ class user extends apicommon
         return $this->history($this->user_id, Role_User, $p_start, $p_end);
     }
     
+    public function check_ant_accept($order_id)
+    {
+    	$GLOBALS['db']->query("START TRANSCATION");
+    	$sql = "Select `order_status`, `ant_status`, `order_time_ms` From " . $GLOBALS['cfm']->table('order_info') . " Where `order_id` = '$order_id' LIMIT 1";
+    	$result = $GLOBALS['db']->query($sql);
+    	
+    	if (($GLOBALS['db']->num_rows($result))<1)
+    		return false;
+    	$arr = $GLOBALS['db']->fetchRow($result);
+    	$ms = floatval($result['order_time_ms']);
+    	if(time()-$ms>90 && $result['ant_status'] == 0)
+    	{
+    		$sql = "Update ". $GLOBALS['cfm']->table('order_info') ." SET `order_status` = '0' Where `order_id` = '$order_id' AND `order_status` = '1' AND `ant_status` = '0' LIMIT 1 ";
+    		$GLOBALS['db']->query($sql);
+    		$arr['order_status'] = 0;
+    	}
+    	$GLOBALS['db']->query("COMMIT");
+    	unset($arr['order_time_ms']);
+    	return $arr;
+    }
+    
     public function pay($order_id)
     {
         // TODO:看完接口再写

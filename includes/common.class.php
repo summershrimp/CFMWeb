@@ -139,9 +139,8 @@ class apicommon
         if (($GLOBALS['db']->num_rows($result))<1)
             return false;
         $arr = $GLOBALS['db']->fetchRow($result);
-        
         $ms = floatval($result['order_time_ms']);
-        if($ms-time()>29 && $result['ant_status'] == 0)
+        if(time()-$ms>90 && $result['ant_status'] == 0)
         {
             $sql = "Update ". $GLOBALS['cfm']->table('order_info') ." SET `order_status` = '0' Where `order_id` = '$order_id' AND `order_status` = '1' AND `ant_status` = '0' LIMIT 1 ";
             $GLOBALS['db']->query($sql);
@@ -154,7 +153,7 @@ class apicommon
         $sql = "Select `sex` as `user_sex` From ".$GLOBALS['cfm']->table('customers')." Where `user_id` = '".$arr['user_id']."'";
         $arr2 = $GLOBALS['db']->getRow($sql);
         $arr = array_merge($arr,$arr2);
-        if(isset($arr["ant_id"])&&$arr["ant_id"]!="")
+        if(isset($arr["ant_id"])&&$arr["ant_id"]!="0")
         {
         	$sql = "Select `ant_real_name`, `mobile_phone` as `ant_phone` From ".$GLOBALS['cfm']->table('ants')." Where `ant_id` = '".$arr["ant_id"]."' LIMIT 1" ;
         	$arr2 = $GLOBALS['db']->getRow($sql);

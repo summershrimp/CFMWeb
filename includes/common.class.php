@@ -98,7 +98,7 @@ class apicommon
           			$GLOBALS['cfm']->table("order_info") . ".`order_status`, " . $GLOBALS['cfm']->table("order_info") . ".`ant_status`, " . 
           			$GLOBALS['cfm']->table("order_info") . ".`confirm_status`, " . $GLOBALS['cfm']->table("order_info") . ".`taking_status`, " . 
           			$GLOBALS['cfm']->table("order_info") . ".`shipping_status`, " . $GLOBALS['cfm']->table("order_info") . ".`pay_status`, " . 
-          			$GLOBALS['cfm']->table("order_info") . ".`address`, " . $GLOBALS['cfm']->table("shop") . ".`shop_name` " . 
+          			$GLOBALS['cfm']->table("order_info") . ".`address`, " . $GLOBALS['cfm']->table("shop") . ".`shop_name`, " . 
           			$GLOBALS['cfm']->table("shop") . ".`shop_pos` " . 
         	   "From " . $GLOBALS['cfm']->table("order_info") . " ".
         	   "Left Join " . $GLOBALS['cfm']->table("shop") . " ".

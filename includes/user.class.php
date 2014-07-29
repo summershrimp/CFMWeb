@@ -136,7 +136,7 @@ class user extends apicommon
 	            $good_price = $arr['price'];
 	            $good_name = $arr['good_name'];
 	            if($last_id = -1) $last_id = $arr['shop_id'];
-	            $total_price+=floatval($good_price);
+	            $total_price+=(floatval($good_price) * intval($good['amount']));
 	            
 	            $sql = "Insert INTO " . $GLOBALS['cfm']->table('order_details') . " (`order_id`, `good_id`,`good_name`,`good_number`,`good_price`) 
 	             VALUES('" . $order_id . "','" . $good['good_id'] . "','" . $good_name . "', '" . $good['amount'] . "','" . $good_price . "' )";

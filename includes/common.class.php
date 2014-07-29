@@ -151,7 +151,7 @@ class apicommon
         $sql = "Select `shop_name` From ".$GLOBALS['cfm']->table('shop')." Where `shop_id` = '".$arr['shop_id']."'";
         $arr2 = $GLOBALS['db']->getRow($sql);
         $arr = array_merge($arr,$arr2);
-        $sql = "Select `sex` as `user_sex` From ".$GLOBALS['cfm']->table('users')." Where `user_id` = '".$arr['user_id']."'";
+        $sql = "Select `sex` as `user_sex` From ".$GLOBALS['cfm']->table('customers')." Where `user_id` = '".$arr['user_id']."'";
         $arr2 = $GLOBALS['db']->getRow($sql);
         $arr = array_merge($arr,$arr2);
         if(isset($arr["ant_id"])&&$arr["ant_id"]!="")

@@ -214,7 +214,7 @@ elseif ($content['act'] == 'get_history')
     $p_st=isset($content['periodstart'])?$content['periodstart']:date("Y-m-d",mktime(0,0,0,date("m"),date("d")-7,date("Y")));
     $p_ed=isset($content['periodend'])?$content['periodend']:date("Y-m-d");
     $arr=$user->get_history($p_st, $p_ed);
-    $return = $arr;
+    $return['orders'] = $arr;
     $return["status"]=STATUS_SUCCESS;
 }
 elseif($content['act']=='feedback')

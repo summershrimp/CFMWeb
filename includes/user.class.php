@@ -250,3 +250,4 @@ class user extends apicommon
         $GLOBALS['db']->query($sql);
     }
 }
+?>

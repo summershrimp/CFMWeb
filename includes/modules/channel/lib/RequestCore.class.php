@@ -769,3 +769,4 @@ class ResponseCore {
  */
 class RequestCore_Exception extends Exception {
 }
+?>

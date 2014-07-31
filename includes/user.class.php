@@ -203,8 +203,8 @@ class user extends apicommon
     	if (($GLOBALS['db']->num_rows($result))<1)
     		return false;
     	$arr = $GLOBALS['db']->fetchRow($result);
-    	$ms = floatval($result['order_time_ms']);
-    	if(time()-$ms>90 && $result['ant_status'] == 0)
+    	$ms = intval($arr['order_time_ms']);
+    	if((time()-$ms)>90 && $arr['ant_status'] == 0)
     	{
     		$sql = "Update ". $GLOBALS['cfm']->table('order_info') ." SET `order_status` = '0' Where `order_id` = '$order_id' AND `order_status` = '1' AND `ant_status` = '0' LIMIT 1 ";
     		$GLOBALS['db']->query($sql);

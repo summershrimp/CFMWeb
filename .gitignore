@@ -1,7 +1,7 @@
 /.settings
 .gitignore
 .project
-.bulidpath
+.buildpath
 /documents
 /data
 testpush.php

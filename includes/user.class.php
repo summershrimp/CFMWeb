@@ -196,7 +196,7 @@ class user extends apicommon
     
     public function get_order_details($order_id, $is_detail = false)
     {
-    	return $this->order_details($order_id, Role_User, $this->user_id);
+    	return $this->order_details($order_id, Role_User, $this->user_id, $is_detail);
     }
     
     public function check_status($order_id)

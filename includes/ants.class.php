@@ -220,7 +220,7 @@ class ants extends apicommon
     
     public function get_order_details($order_id, $is_detail = false)
     {
-    	return $this->order_details($order_id, Role_Ant, $this->ant_id);
+    	return $this->order_details($order_id, Role_Ant, $this->ant_id, $is_detail);
     }
     
     public function change_ant_pass($old_pass,$new_pass)

@@ -101,7 +101,7 @@ class shop extends apicommon {
 	
 	public function get_order_details($order_id, $is_detail = false)
 	{
-		return $this->order_details($order_id, Role_Shop, $this->shop_id);
+		return $this->order_details($order_id, Role_Shop, $this->shop_id, $is_detail);
 	}
 	
 	/**

@@ -24,7 +24,7 @@ $return = Array();
 // 登录操作
 if (! isset($content['accesscode']))
 {
-    if ($content['act'] == 'user_login'&&isset($content['openid']))
+    if ($content['act'] == 'user_login'&&isset($content['openid'])&&$content['openid']!="")
     {
         $user = new user();
         $accesscode = $user->login($content['openid'], '', Role_User);
@@ -32,7 +32,7 @@ if (! isset($content['accesscode']))
         {
             $return['accesscode'] = $accesscode;
             $user = new user($accesscode);
-            $return['isverify'] = $user->check_verify();//TODO:返回手机号状态
+            $return['isverify'] = $user->check_verify();
             $return['status'] = STATUS_SUCCESS;
         }
         else $return['status'] = UNAVAIL_USER;

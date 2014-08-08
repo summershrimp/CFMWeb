@@ -121,11 +121,11 @@ class shop extends apicommon {
 	 */
 	function switch_good_status($good_id, $good_status) {
 		$good_status = !$good_status;
-		$sql = "UPDATE " . $GLOBALS['cfm']->table("shop_goods") . " SET `unavail` = $good_status WHERE `good_id` = $good_id LIMIT 1";
+		$sql = "UPDATE " . $GLOBALS['cfm']->table("shop_goods") . " SET `unavail` = $good_status WHERE `good_id` = $good_id AND `shop_id` = '$this->shop_id' LIMIT 1";
 		$GLOBALS['db']->query($sql);
-		$sql = "SELECT `unavail` From " . $GLOBALS['cfm']->table("shop_goods") . " WHERE `good_id` = $good_id LIMIT 1";
+		$sql = "SELECT `unavail` From " . $GLOBALS['cfm']->table("shop_goods") . " WHERE `good_id` = $good_id AND `shop_id` = '$this->shop_id' LIMIT 1";
 		$arr = $GLOBALS['db']->getRow($sql);
-		return !$arr['unavail'];
+		return isset($arr['unavail'])?(!$arr['unavail']):false;
 	}
 	/**
 	 * 商店接单

@@ -147,7 +147,7 @@ class apicommon
             $arr['order_status'] = 0;
         }
         $GLOBALS['db']->query("COMMIT");
-        $sql = "Select `shop_name` From ".$GLOBALS['cfm']->table('shop')." Where `shop_id` = '".$arr['shop_id']."'";
+        $sql = "Select `shop_name`, `shop_pos`, `shop_phone` From ".$GLOBALS['cfm']->table('shop')." Where `shop_id` = '".$arr['shop_id']."'";
         $arr2 = $GLOBALS['db']->getRow($sql);
         $arr = array_merge($arr,$arr2);
         $sql = "Select `sex` as `user_sex` From ".$GLOBALS['cfm']->table('customers')." Where `user_id` = '".$arr['user_id']."'";

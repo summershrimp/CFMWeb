@@ -218,6 +218,11 @@ class ants extends apicommon
         return $this->history($this->ant_id, Role_Ant, $p_start, $p_end);
     }
     
+    public function get_order_details($order_id, $is_detail = false)
+    {
+    	return $this->order_details($order_id, Role_Ant, $this->ant_id);
+    }
+    
     public function change_ant_pass($old_pass,$new_pass)
     {
         return $this->change_password($this->id, $old_pass, $new_pass, Role_Ant);

@@ -194,6 +194,11 @@ class user extends apicommon
         return $this->history($this->user_id, Role_User, $p_start, $p_end);
     }
     
+    public function get_order_details($order_id, $is_detail = false)
+    {
+    	return $this->order_details($order_id, Role_User, $this->user_id);
+    }
+    
     public function check_status($order_id)
     {
     	$GLOBALS['db']->query("START TRANSCATION");

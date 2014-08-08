@@ -93,11 +93,16 @@ class shop extends apicommon {
 	/**
 	 * 获取一段时间的历史记录
 	 */
-	function shop_history($p_start, $p_end)
+	public function shop_history($p_start, $p_end)
 	{
 	   return $this->history($this->shop_id, Role_Shop, $p_start, $p_end);
 	}
 	
+	
+	public function get_order_details($order_id, $is_detail = false)
+	{
+		return $this->order_details($order_id, Role_Shop, $this->shop_id);
+	}
 	
 	/**
 	 * 获取商店业主信息

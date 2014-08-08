@@ -103,7 +103,7 @@ class apicommon
         	   "From " . $GLOBALS['cfm']->table("order_info") . " ".
         	   "Left Join " . $GLOBALS['cfm']->table("shop") . " ".
         	   "On ". $GLOBALS['cfm']->table("order_info") .".`shop_id` = ". $GLOBALS['cfm']->table("shop").".`shop_id` ".
-        	   "Where " . $GLOBALS['cfm']->table("order_info") . ".`$db_id_column` = $id AND `order_status` = 1 ";
+        	   "Where " . $GLOBALS['cfm']->table("order_info") . ".`$db_id_column` = $id AND " . $GLOBALS['cfm']->table("order_info") . " `order_status` = 1 ";
        
         if (isset($p_start) && isset($p_end))
             $limit = " And `add_date` Between '$p_start' And '$p_end'";
@@ -129,11 +129,18 @@ class apicommon
         return arr;
     }
 
-    public function order_details($order_id, $is_detail = false)
+    public function order_details($order_id, $role, $id, $is_detail = false)
     {
+    	if ($role === Role_Ant)
+    		$db_id_column = 'ant_id';
+    	elseif ($role === Role_Shop)
+    		$db_id_column = 'shop_id';
+    	elseif ($role === Role_User)
+    		$db_id_column = 'user_id';
+    	
         $sql = "START TRANSCATION";
         $GLOBALS['db']->query($sql);
-        $sql = "Select * From " . $GLOBALS['cfm']->table('order_info') . " Where `order_id` = '$order_id' LIMIT 1";
+        $sql = "Select * From " . $GLOBALS['cfm']->table('order_info') . " Where `order_id` = '$order_id' AND `$db_id_column` = '$id' LIMIT 1";
         $result = $GLOBALS['db']->query($sql);
         
         if (($GLOBALS['db']->num_rows($result))<1)

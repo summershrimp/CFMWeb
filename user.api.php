@@ -190,11 +190,11 @@ elseif ($content['act'] == 'confirm_sent')
             $return['status'] = NO_ORDER_ID;
     }
 }
-elseif ($content['act'] == 'order_detail')
+elseif ($content['act'] == 'order_details')
 {
     if(!isset($content['is_detail']))
         $content['is_detail']=false;
-    $arr = $user->order_details($content['order_id'], $content['is_detail']);
+    $arr = $user->get_order_details($content['order_id'], $content['is_detail']);
     $return = $arr;
     $return['status'] = STATUS_SUCCESS;
 }

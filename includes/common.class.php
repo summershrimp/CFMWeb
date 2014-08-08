@@ -103,7 +103,7 @@ class apicommon
         	   "From " . $GLOBALS['cfm']->table("order_info") . " ".
         	   "Left Join " . $GLOBALS['cfm']->table("shop") . " ".
         	   "On ". $GLOBALS['cfm']->table("order_info") .".`shop_id` = ". $GLOBALS['cfm']->table("shop").".`shop_id` ".
-        	   "Where " . $GLOBALS['cfm']->table("order_info") . ".`$db_id_column` = $id AND " . $GLOBALS['cfm']->table("order_info") . " `order_status` = 1 ";
+        	   "Where " . $GLOBALS['cfm']->table("order_info") . ".`$db_id_column` = $id AND " . $GLOBALS['cfm']->table("order_info") . ".`order_status` = 1 ";
        
         if (isset($p_start) && isset($p_end))
             $limit = " And `add_date` Between '$p_start' And '$p_end'";

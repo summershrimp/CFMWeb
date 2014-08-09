@@ -140,12 +140,19 @@ class apicommon
     	
         $sql = "START TRANSCATION";
         $GLOBALS['db']->query($sql);
-        $sql = "Select * From " . $GLOBALS['cfm']->table('order_info') . " Where `order_id` = '$order_id' AND `$db_id_column` = '$id' LIMIT 1";
+        $sql = "Select * From " . $GLOBALS['cfm']->table('order_info') . " Where `order_id` = '$order_id' LIMIT 1";
         $result = $GLOBALS['db']->query($sql);
-        
         if (($GLOBALS['db']->num_rows($result))<1)
             return false;
         $arr = $GLOBALS['db']->fetchRow($result);
+        if($role!=Role_Ant)
+        {
+        	if($arr[$db_id_column]!=$id) return false;
+        }
+        elseif($arr['ant_status'] != 0)
+        {
+        	if($arr[$db_id_column]!=$id) return false;
+        }
         $ms = intval($arr['order_time_ms']);
         if((time()-$ms)>90 && $arr['ant_status'] == 0)
         {

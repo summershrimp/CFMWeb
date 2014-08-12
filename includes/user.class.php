@@ -128,9 +128,9 @@ class user extends apicommon
 	            $arr = $GLOBALS['db']->getRow($sql);
 	            if($is_open == -1)
 	            {
-	            	$tsql = "Select `is_open` From ".$GLOBALS['cfm']->table('shop'). " Where `shop_id` = '".$arr['shop_id']."' LIMIT 1";
+	            	$tsql = "Select `isopen` From ".$GLOBALS['cfm']->table('shop'). " Where `shop_id` = '".$arr['shop_id']."' LIMIT 1";
 	            	$tarr = $GLOBALS['db']->getRow($tsql);
-	            	$is_open = $tarr['is_open'];
+	            	$is_open = $tarr['isopen'];
 	            	if($is_open == 0)
 	            	{
 	            		$this->delete_new_order($order_id);

@@ -21,7 +21,10 @@ class user extends apicommon
         {
             $ans = $this->check_access_code($accesscode);
             if ($ans['status'] == STATUS_SUCCESS)
-            $this->user_id = intval($ans['id']);
+            {
+            	$this->user_id = intval($ans['id']);
+            	$this->check_status($this->check_unpaid());
+            }
             else die(json_encode($ans));
         }
     }

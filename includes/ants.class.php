@@ -88,21 +88,15 @@ class ants extends apicommon
     
     public function take_order($order_id)
     {
-        $GLOBALS['db']->query("START TRANSACTION");
+        $GLOBALS['db']->query("START TRANSCATION");
         $sql = "Select `ant_id`, `order_status` , `ant_status` From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = $order_id LIMIT 1 for Update";
         $arr = $GLOBALS['db']->getRow($sql);
         if(isset($arr) && $arr['order_status'] == 1 && $arr['ant_status'] == 0 && !isset($arr['ant_id']))
         {
-            $sql = "Update ".$GLOBALS['cfm']->table('order_info')." Set `ant_id` = $this->ant_id and `ant_time` = '".time()."' and `ant_status` = 1 ";
+            $sql = "Update ".$GLOBALS['cfm']->table('order_info')." Set `ant_id` = $this->ant_id and `ant_time` = '".time()."' and `ant_status` = 1 Where `order_id` = $order_id LIMIT 1";
             $GLOBALS['db']->query($sql);
             $succ=true;
         }
-        if(isset($arr) && $arr['ant_id'] = $this->ant_id)
-        {
-            $succ = true;
-            return $succ;
-        }
-        else $succ=false;
         $GLOBALS['db']->query("COMMIT");
         if($succ)
         {
@@ -117,7 +111,6 @@ class ants extends apicommon
                         "GROUP BY `shop_id`".
                    ") as `ua` ".
                    "On `ua`.`shop_id` = ".$GLOBALS['cfm']->table('shop').".`shop_id`";
-            echo $sql;
             $result = $GLOBALS['db']->query($sql);
             while($arr = $GLOBALS['db']->fetchRow($result))
             {

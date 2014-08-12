@@ -97,7 +97,6 @@ class ants extends apicommon
             $GLOBALS['db']->query($sql);
             $succ=true;
         }
-        $GLOBALS['db']->query("COMMIT");
         if($succ)
         {
             $sql = "Select `isopen` ".
@@ -152,6 +151,7 @@ class ants extends apicommon
                     $this->push_order_accept($arr['shop_id'], $order_id);
             }
         }
+        $GLOBALS['db']->query("COMMIT");
         return $succ;
     }
     

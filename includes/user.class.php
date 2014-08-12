@@ -121,10 +121,22 @@ class user extends apicommon
 	            return false;
 	        $total_price = 0;
 	        $last_id = -1;
+	        $is_open = -1;
 	        foreach ($carts as $good_id => $good_amount)
 	        {
 	            $sql = "Select `good_name`, `price`, `unavail`, `shop_id` From " . $GLOBALS['cfm']->table('shop_goods') . " Where `good_id` = '" . trim($good_id) . "'";
 	            $arr = $GLOBALS['db']->getRow($sql);
+	            if($is_open == -1)
+	            {
+	            	$tsql = "Select `is_open` From ".$GLOBALS['cfm']->table('shop'). " Where `shop_id` = '".$arr['shop_id']."' LIMIT 1";
+	            	$tarr = $GLOBALS['db']->getRow($tsql);
+	            	$is_open = $tarr['is_open'];
+	            	if($is_open == 0)
+	            	{
+	            		$this->delete_new_order($order_id);
+	            		return false;
+	            	}
+	            }
 	            if($last_id = -1) $last_id = $arr['shop_id'];
 	            if(!isset($arr['unavail']))
 	                $arr['unavail']=0;
@@ -171,7 +183,7 @@ class user extends apicommon
 
     public function cancel_order($order_id)
     {
-        $sql = "UPDATE " . $GLOBALS['cfm']->table('order_info') . "SET `order_status` = 0 Where `order_id` = ' $order_id ' AND `ant_status` = 0 AND `order_status` = 1 AND `user_id` = $this->user_id LIMIT 1";
+        $sql = "UPDATE " . $GLOBALS['cfm']->table('order_info') . "SET `order_status` = 0 Where `order_id` = '$order_id' AND `ant_status` = 0 AND `order_status` = 1 AND `user_id` = '$this->user_id' LIMIT 1";
         $GLOBALS['db']->query($sql);
         if (! $GLOBALS['db']->affected_rows())
             return false;

@@ -93,7 +93,7 @@ class ants extends apicommon
         $arr = $GLOBALS['db']->getRow($sql);
         if(isset($arr) && $arr['order_status'] == 1 && $arr['ant_status'] == 0 && !isset($arr['ant_id']))
         {
-            $sql = "Update ".$GLOBALS['cfm']->table('order_info')." Set `ant_id` = $this->ant_id and `ant_time` = '".time()."' and `ant_status` = 1 Where `order_id` = $order_id LIMIT 1";
+            $sql = "Update ".$GLOBALS['cfm']->table('order_info')." Set `ant_id` = $this->ant_id , `ant_time` = '".time()."' , `ant_status` = 1 Where `order_id` = $order_id LIMIT 1";
             $GLOBALS['db']->query($sql);
             $succ=true;
         }
@@ -105,7 +105,7 @@ class ants extends apicommon
                         "Select `shop_id` ".
                         "From ".$GLOBALS['cfm']->table('shop_goods')." ".
                         "LEFT JOIN ".$GLOBALS['cfm']->table('order_details')." ".
-                        "On ".$GLOBALS['cfm']->table('shop_goods').".`good_id` = ".$GLOBALS['cfm']->table('shop_goods').".`good_id` ".
+                        "On ".$GLOBALS['cfm']->table('order_details').".`good_id` = ".$GLOBALS['cfm']->table('shop_goods').".`good_id` ".
                         "Where ".$GLOBALS['cfm']->table('order_details').".`order_id` = '$order_id' ".
                         "GROUP BY `shop_id`".
                    ") as `ua` ".
@@ -143,7 +143,7 @@ class ants extends apicommon
                 $sql = "Select `shop_id` ".
                         "From ".$GLOBALS['cfm']->table('shop_goods')." ".
                         "LEFT JOIN ".$GLOBALS['cfm']->table('order_details')." ".
-                        "On ".$GLOBALS['cfm']->table('shop_goods').".`good_id` = ".$GLOBALS['cfm']->table('shop_goods').".`good_id` ".
+                        "On ".$GLOBALS['cfm']->table('order_details').".`good_id` = ".$GLOBALS['cfm']->table('shop_goods').".`good_id` ".
                         "Where ".$GLOBALS['cfm']->table('order_details').".`order_id` = '$order_id' ".
                         "GROUP BY `shop_id`";
                 $result = $GLOBALS['db']->query($sql);

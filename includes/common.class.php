@@ -92,14 +92,26 @@ class apicommon
             $db_id_column = 'shop_id';
         elseif ($role === Role_User)
             $db_id_column = 'user_id';
-        $sql = "Select `order_id`, `order_sn`, `goods_amount`, `tips_amount`, `order_time`, `user_realname`, `order_status`, `ant_status`, `confirm_status`, `taking_status`, `shipping_status` From " . $GLOBALS['cfm']->table("order_info") . " Where `$db_id_column` = $id AND `order_status` = 1 ";
+        $sql = "Select " . $GLOBALS['cfm']->table("order_info") . ".`order_id`, " . $GLOBALS['cfm']->table("order_info") . ".`order_sn`, " . 
+          			$GLOBALS['cfm']->table("order_info") . ".`goods_amount`, " . $GLOBALS['cfm']->table("order_info") . ".`tips_amount`, " . 
+          			$GLOBALS['cfm']->table("order_info") . ".`order_time`, " . $GLOBALS['cfm']->table("order_info") . ".`user_realname`, " . 
+          			$GLOBALS['cfm']->table("order_info") . ".`order_status`, " . $GLOBALS['cfm']->table("order_info") . ".`ant_status`, " . 
+          			$GLOBALS['cfm']->table("order_info") . ".`confirm_status`, " . $GLOBALS['cfm']->table("order_info") . ".`taking_status`, " . 
+          			$GLOBALS['cfm']->table("order_info") . ".`shipping_status`, " . $GLOBALS['cfm']->table("order_info") . ".`pay_status`, " . 
+          			$GLOBALS['cfm']->table("order_info") . ".`address`, " . $GLOBALS['cfm']->table("shop") . ".`shop_name`, " . 
+          			$GLOBALS['cfm']->table("shop") . ".`shop_pos` " . 
+        	   "From " . $GLOBALS['cfm']->table("order_info") . " ".
+        	   "Left Join " . $GLOBALS['cfm']->table("shop") . " ".
+        	   "On ". $GLOBALS['cfm']->table("order_info") .".`shop_id` = ". $GLOBALS['cfm']->table("shop").".`shop_id` ".
+        	   "Where " . $GLOBALS['cfm']->table("order_info") . ".`$db_id_column` = $id AND " . $GLOBALS['cfm']->table("order_info") . ".`order_status` = 1 ";
        
         if (isset($p_start) && isset($p_end))
-            $limit = "And `add_date` Between '$p_start' And '$p_end'";
+            $limit = " And `add_date` Between '$p_start' And '$p_end'";
         else
-            $limit = "LIMIT 20";
+            $limit = " LIMIT 20";
         $sql = $sql . $limit;
         $arr = $GLOBALS['db']->getAll($sql);
+        
         return $arr;
     }
     
@@ -117,25 +129,55 @@ class apicommon
         return arr;
     }
 
-    public function order_details($order_id, $is_detail = false)
+    public function order_details($order_id, $role, $id, $is_detail = false)
     {
+    	if ($role === Role_Ant)
+    		$db_id_column = 'ant_id';
+    	elseif ($role === Role_Shop)
+    		$db_id_column = 'shop_id';
+    	elseif ($role === Role_User)
+    		$db_id_column = 'user_id';
+    	
         $sql = "START TRANSCATION";
         $GLOBALS['db']->query($sql);
         $sql = "Select * From " . $GLOBALS['cfm']->table('order_info') . " Where `order_id` = '$order_id' LIMIT 1";
         $result = $GLOBALS['db']->query($sql);
-        
         if (($GLOBALS['db']->num_rows($result))<1)
             return false;
         $arr = $GLOBALS['db']->fetchRow($result);
-        
-        $ms = floatval($result['order_time_ms']);
-        if($ms-time()>29 && $result['ant_status'] == 0)
+        if($role!=Role_Ant)
+        {
+        	if($arr[$db_id_column]!=$id) return false;
+        }
+        elseif($arr['ant_status'] != 0)
+        {
+        	if($arr[$db_id_column]!=$id) return false;
+        }
+        $ms = intval($arr['order_time_ms']);
+        if((time()-$ms)>90 && $arr['ant_status'] == 0)
         {
             $sql = "Update ". $GLOBALS['cfm']->table('order_info') ." SET `order_status` = '0' Where `order_id` = '$order_id' AND `order_status` = '1' AND `ant_status` = '0' LIMIT 1 ";
             $GLOBALS['db']->query($sql);
             $arr['order_status'] = 0;
         }
         $GLOBALS['db']->query("COMMIT");
+        $sql = "Select `shop_name`, `shop_pos`, `shop_phone` From ".$GLOBALS['cfm']->table('shop')." Where `shop_id` = '".$arr['shop_id']."'";
+        $arr2 = $GLOBALS['db']->getRow($sql);
+        $arr = array_merge($arr,$arr2);
+        $sql = "Select `sex` as `user_sex` From ".$GLOBALS['cfm']->table('customers')." Where `user_id` = '".$arr['user_id']."'";
+        $arr2 = $GLOBALS['db']->getRow($sql);
+        $arr = array_merge($arr,$arr2);
+        if(isset($arr["ant_id"])&&$arr["ant_id"]!="0")
+        {
+        	$sql = "Select `ant_real_name`, `mobile_phone` as `ant_phone` From ".$GLOBALS['cfm']->table('ants')." Where `ant_id` = '".$arr["ant_id"]."' LIMIT 1" ;
+        	$arr2 = $GLOBALS['db']->getRow($sql);
+        	$arr = array_merge($arr,$arr2);
+        }
+        else
+        {
+        	$arr['ant_real_name'] = "尚未抢单";
+        	$arr['ant_phone'] = -1;	
+        }
         $return = $arr;
         if ($is_detail)
         {
@@ -416,7 +458,7 @@ class apicommon
         {
             $db_table = 'providers';
             $db_uname_column = 'provider_name';
-            $db_id_column = 'provider_id';
+            $db_id_column = 'shop_id';
         }
         elseif ($role === Role_Ant)
         {

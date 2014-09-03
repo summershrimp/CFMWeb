@@ -24,7 +24,7 @@ $return = Array();
 // 登录操作
 if (! isset($content['accesscode']))
 {
-    if ($content['act'] == 'user_login'&&isset($content['openid']))
+    if ($content['act'] == 'user_login'&&isset($content['openid'])&&$content['openid']!="")
     {
         $user = new user();
         $accesscode = $user->login($content['openid'], '', Role_User);
@@ -32,7 +32,7 @@ if (! isset($content['accesscode']))
         {
             $return['accesscode'] = $accesscode;
             $user = new user($accesscode);
-            $return['isverify'] = $user->check_verify();//TODO:返回手机号状态
+            $return['isverify'] = $user->check_verify();
             $return['status'] = STATUS_SUCCESS;
         }
         else $return['status'] = UNAVAIL_USER;
@@ -190,20 +190,31 @@ elseif ($content['act'] == 'confirm_sent')
             $return['status'] = NO_ORDER_ID;
     }
 }
-elseif ($content['act'] == 'order_detail')
+elseif ($content['act'] == 'order_details')
 {
     if(!isset($content['is_detail']))
         $content['is_detail']=false;
-    $arr = $user->order_details($content['order_id'], $content['is_detail']);
+    $arr = $user->get_order_details($content['order_id'], $content['is_detail']);
     $return = $arr;
     $return['status'] = STATUS_SUCCESS;
+}
+elseif ($content['act'] == 'check_status')
+{
+	if(!isset($content['order_id']))
+		$return['status'] = ERROR_CONTENT;
+	else
+	{
+		$arr = $user->check_status($content['order_id']);
+		$return = $arr;
+		$return['status'] = STATUS_SUCCESS;
+	}
 }
 elseif ($content['act'] == 'get_history')
 {
     $p_st=isset($content['periodstart'])?$content['periodstart']:date("Y-m-d",mktime(0,0,0,date("m"),date("d")-7,date("Y")));
     $p_ed=isset($content['periodend'])?$content['periodend']:date("Y-m-d");
     $arr=$user->get_history($p_st, $p_ed);
-    $return = $arr;
+    $return['orders'] = $arr;
     $return["status"]=STATUS_SUCCESS;
 }
 elseif($content['act']=='feedback')

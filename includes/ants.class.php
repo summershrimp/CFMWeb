@@ -48,23 +48,23 @@ class ants extends apicommon
         $sql="Select Count(*) as total ,Sum(tips_amount) as amount From".$GLOBALS['cfm']->table('order_info').
         " Where `ant_id` = '$this->ant_id' And `add_date` Between '$start' And '$end' ";
         $arr = $GLOBALS['db']->getRow($sql);
-        $return["last_week_count"] = $arr['total'];
-        $return["last_week_tips"] = $arr['amount'];
+        $return["last_week_count"] = ($arr['total']!=NULL)?$arr['total']:0;
+        $return["last_week_tips"] = ($arr['amount']!=NULL)?$arr['amount']:0;
         
         $end=date("Y-m-d");
         $sql="Select Count(*) as total ,Sum(tips_amount) as amount From".$GLOBALS['cfm']->table('order_info').
              " Where `ant_id` = '$this->ant_id' And `add_date` = '$end' ";
         $arr = $GLOBALS['db']->getRow($sql);
-        $return["day_count"] = $arr['total'];
-        $return["day_tips"] = $arr['amount'];
+        $return["day_count"] = ($arr['total']!=NULL)?$arr['total']:0;
+        $return["day_tips"] = ($arr['amount']!=NULL)?$arr['amount']:0;
         
         $end=date("Y-m-d");
         $start = date("Y-m-d",mktime(0,0,0,date("m"),1,date("Y")));
         $sql="Select Count(*) as total ,Sum(tips_amount) as amount From".$GLOBALS['cfm']->table('order_info').
              " Where `ant_id` = '$this->ant_id' And `add_date` Between '$start' And '$end' ";
         $arr = $GLOBALS['db']->getRow($sql);
-        $return["month_count"] = $arr['total'];
-        $return["month_tips"] = $arr['amount'];
+        $return["month_count"] = ($arr['total']!=NULL)?$arr['total']:0;
+        $return["month_tips"] = ($arr['amount']!=NULL)?$arr['amount']:0;
         
         
         return $return;
@@ -88,22 +88,15 @@ class ants extends apicommon
     
     public function take_order($order_id)
     {
-        $GLOBALS['db']->query("START TRANSACTION");
+        $GLOBALS['db']->query("START TRANSCATION");
         $sql = "Select `ant_id`, `order_status` , `ant_status` From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = $order_id LIMIT 1 for Update";
         $arr = $GLOBALS['db']->getRow($sql);
         if(isset($arr) && $arr['order_status'] == 1 && $arr['ant_status'] == 0 && !isset($arr['ant_id']))
         {
-            $sql = "Update ".$GLOBALS['cfm']->table('order_info')." Set `ant_id` = $this->ant_id and `ant_time` = '".time()."' and `ant_status` = 1 ";
+            $sql = "Update ".$GLOBALS['cfm']->table('order_info')." Set `ant_id` = $this->ant_id and `ant_time` = '".time()."' and `ant_status` = 1 Where `order_id` = $order_id LIMIT 1";
             $GLOBALS['db']->query($sql);
             $succ=true;
         }
-        if(isset($arr) && $arr['ant_id'] = $this->ant_id)
-        {
-            $succ = true;
-            return $succ;
-        }
-        else $succ=false;
-        $GLOBALS['db']->query("COMMIT");
         if($succ)
         {
             $sql = "Select `isopen` ".
@@ -117,7 +110,6 @@ class ants extends apicommon
                         "GROUP BY `shop_id`".
                    ") as `ua` ".
                    "On `ua`.`shop_id` = ".$GLOBALS['cfm']->table('shop').".`shop_id`";
-            echo $sql;
             $result = $GLOBALS['db']->query($sql);
             while($arr = $GLOBALS['db']->fetchRow($result))
             {
@@ -159,6 +151,7 @@ class ants extends apicommon
                     $this->push_order_accept($arr['shop_id'], $order_id);
             }
         }
+        $GLOBALS['db']->query("COMMIT");
         return $succ;
     }
     
@@ -180,8 +173,10 @@ class ants extends apicommon
     
     private function push_goods_taken($order_id)
     {
-        $sql = "Select `shop_id` From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = '$order_id' LIMIT 1";
-        $shop_id = $GLOBALS['db']->getOne($sql);
+        $sql = "Select `shop_id`, `disp_id` From ".$GLOBALS['cfm']->table('order_info')." Where `order_id` = '$order_id' LIMIT 1";
+        $arr = $GLOBALS['db']->getRow($sql);
+        $shop_id = $arr['shop_id'];
+        $disp_id = $arr['disp_id'];
         $sql = "Select `channel_id`,`channel_user_id` From ".$GLOBALS['cfm']->table('providers')." Where `shop_id` = $shop_id LIMIT 1";
         $arr = $GLOBALS['db']->getRow($sql);
         $channel = new Channel(CHANNEL_API_KEY,CHANNEL_SECRET_KEY);
@@ -189,7 +184,8 @@ class ants extends apicommon
         $options[Channel::CHANNEL_ID] = $arr['channel_id'];
         $messages = Array(
             'act'=>'order_taken',
-            'order_id'=>$order_id
+            'order_id'=>$order_id,
+            'disp_id' =>$disp_id
         );
         $channel->pushMessage(Channel::PUSH_TO_USER, $messages, 'toShop'.$order_id,$options);
     
@@ -215,6 +211,11 @@ class ants extends apicommon
         return $this->history($this->ant_id, Role_Ant, $p_start, $p_end);
     }
     
+    public function get_order_details($order_id, $is_detail = false)
+    {
+    	return $this->order_details($order_id, Role_Ant, $this->ant_id, $is_detail);
+    }
+    
     public function change_ant_pass($old_pass,$new_pass)
     {
         return $this->change_password($this->id, $old_pass, $new_pass, Role_Ant);
@@ -236,3 +237,4 @@ class ants extends apicommon
     }
     
 }
+?>

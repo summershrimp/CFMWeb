@@ -61,7 +61,7 @@ elseif ($content['act'] == 'order_details')
 {
     if(!isset($content['is_detail']))
         $content['is_detail']=false;
-    $arr = $ant->order_details($content['order_id'], $content['is_detail']);
+    $arr = $ant->get_order_details($content['order_id'], $content['is_detail']);
     $return = $arr;
     $return['status'] = STATUS_SUCCESS;
 }

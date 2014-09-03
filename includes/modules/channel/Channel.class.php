@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * 百度云消息通道服务 PHP SDK
  * 
@@ -1318,3 +1318,4 @@ class Channel extends BaeBase
 		$this->_requestId = 0;
 	}
 }
+?>
